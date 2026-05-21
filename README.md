@@ -1,2 +1,2 @@
-# MTGSouting
+# MTGScouting
 MTG Playgroup Scouting Report
