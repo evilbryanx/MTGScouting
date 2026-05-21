@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commander Profile - Volo, Guide to Monsters</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      background-color: #f8fafc;
+      margin: 0;
+      padding: 15px;
+      line-height: 1.4;
+      font-size: 13px;
+    }
+    .sheet-container {
+      background-color: #ffffff;
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2, h3 {
+      margin: 0;
+      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .header-container {
+      border-bottom: 3px solid #475569;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    @media (min-width: 600px) {
+      .header-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+    }
+    .main-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1e293b;
+    }
+    .deck-title {
+      font-weight: 700;
+      color: #475569;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .deck-title-value {
+      font-weight: 800;
+      color: #1e293b;
+      text-transform: none;
+      letter-spacing: normal;
+      font-size: 18px;
+      margin-left: 6px;
+    }
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-bottom: 12px;
+    }
+    @media (min-width: 650px) {
+      .profile-grid {
+        grid-template-columns: 240px 1fr;
+      }
+    }
+    .visual-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .card-frame {
+      width: 230px;
+      height: 321px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      background: #0f172a url('https://cards.scryfall.io/large/front/c/9/c9ae01f9-7461-47b4-aa1e-93bd6ff1bf9e.jpg?1627709617') no-repeat center/cover;
+    }
+    .score-badge {
+      margin-top: 15px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 15px;
+      border-radius: 8px;
+      text-align: center;
+      width: 180px;
+    }
+    .score-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #94a3b8;
+    }
+    .score-num {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+    .data-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+    .label {
+      font-weight: 700;
+      color: #475569;
+      width: 110px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    @media (min-width: 400px) {
+      .label { width: 140px; font-size: 11px; }
+    }
+    .value {
+      color: #0f172a;
+      font-size: 13px;
+    }
+    .decklist-btn {
+      display: inline-block;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .decklist-btn:hover {
+      text-decoration: underline;
+    }
+    .callout-box {
+      background-color: #f8fafc;
+      border-left: 4px solid #475569;
+      padding: 12px 15px;
+      border-radius: 0 8px 8px 0;
+      margin-top: 5px;
+    }
+    .callout-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #334155;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+    }
+    .callout-text {
+      font-size: 12.5px;
+      color: #334155;
+      font-style: italic;
+    }
+    .section-heading {
+      font-size: 14px;
+      font-weight: 700;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      color: #334155;
+    }
+    .pillar-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .pillar-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+    .pillar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .pillar-name {
+      font-weight: 700;
+      font-size: 13px;
+      color: #1e293b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .pillar-score {
+      font-weight: 800;
+      font-size: 12px;
+      background: #f1f5f9;
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: #0f172a;
+    }
+    .pillar-desc {
+      font-size: 12.5px;
+      color: #334155;
+      text-align: justify;
+      line-height: 1.5;
+    }
+    .pillar-desc ul {
+      margin: 8px 0 0 0;
+      padding-left: 20px;
+    }
+    .pillar-desc li {
+      margin-bottom: 6px;
+    }
+    @media print {
+      @page {
+        size: letter;
+        margin: 0.4in 0.5in 0.4in 0.5in;
+      }
+      body {
+        background-color: #ffffff;
+        padding: 0;
+      }
+      .sheet-container {
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      .profile-grid {
+        grid-template-columns: 240px 1fr !important;
+      }
+      .header-container {
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: flex-end !important;
+      }
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sheet-container">
+    <div class="header-container">
+      <div class="main-title">Volo, Guide to Monsters</div>
+      <div class="deck-title">Deck Name <span class="deck-title-value">Monster Mash</span></div>
+    </div>
+
+    <div class="profile-grid">
+      <div class="visual-column">
+        <div class="card-frame"></div>
+        <div class="score-badge">
+          <div class="score-title">Power Rank Score</div>
+          <div class="score-num">7 <span style="font-size: 14px; color: #64748b;">/10</span></div>
+        </div>
+      </div>
+
+      <div>
+        <table class="data-table">
+          <tr>
+            <td class="label">Archetype</td>
+            <td class="value">Simic Creature Midrange / Tribal-Antithesis Tokens</td>
+          </tr>
+          <tr>
+            <td class="label">Power Bracket</td>
+            <td class="value">High-Power Casual (Optimized Tier)</td>
+          </tr>
+          <tr>
+            <td class="label">Est. Turn to Win</td>
+            <td class="value">Turn 6 – 7</td>
+          </tr>
+          <tr>
+            <td class="label">Archidekt Link</td>
+            <td class="value">
+              <a class="decklist-btn" href="https://archidekt.com/decks/18255039/monster_mash_20" target="_blank">↗ View Full Decklist</a>
+            </td>
+          </tr>
+        </table>
+
+        <div class="callout-box">
+          <div class="callout-title">Definitive Playstyle Mechanics & Win Conditions</div>
+          <div class="callout-text">
+            This deck abuses <strong>Volo, Guide to Monsters</strong> to duplicate creatures with unique, non-overlapping types, generating <strong>jaw-dropping casual card advantage</strong> and doubling down on enters-the-battlefield (ETB) triggers. It rapidly stabilizes the board with cloned utility threats, then moves in for a <strong>table-shattering lethal stampede</strong> using massive combat multipliers or overwhelming token duplication.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-heading">Strategic Pillar Breakdown</div>
+    
+    <div class="pillar-stack">
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">1. Synergy & Engine</span>
+          <span class="pillar-score">9 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          The internal mechanical cohesion of this deck is a beautiful masterclass in creature-type management! You have done a stellar job ensuring that your creature types do not overlap, which keeps your commander firing at maximum efficiency.
+          <ul>
+             <li><strong>Value Engine Overload:</strong> Your creature choices provide back-breaking value when doubled. For instance, dropping <strong>Beast Whisperer</strong> (Elf) gives you a backup draw engine, while <strong>Curator of Destinies</strong> (Sphinx) creates a double mini-Fact or Fiction on ETB, netting you an uncounterable influx of cards. High-impact threats like <strong>Apex Devastator</strong> (Chimera) and <strong>Anticausal Vestige</strong> (Eldrazi) push the value engine into overdrive, cascading or cheating massive permanents onto the board simultaneously.</li>
+             <li><strong>The Clone and Flicker Package:</strong> <strong>Spark Double</strong> and <strong>Phyrexian Metamorph</strong> are brilliant inclusions. Since they copy Volo but keep their own identity (or lack a creature type on the stack), they don't break your type restrictions and allow you to double up on your commander's ability. Blinking these targets with <strong>Ghostly Flicker</strong> or <strong>Illusionist's Stratagem</strong> retriggers your ETBs for sickening amounts of value.</li>
+             <li><strong>Minor Vulnerability:</strong> The only thing holding this back from a perfect 10 is its heavy reliance on Volo. If opponents systematically remove him, the deck slows down significantly, though cards like <strong>Temur Sabertooth</strong> help bounce your creatures to pivot into a hand-cast value plan.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">2. Interaction & Board Control</span>
+          <span class="pillar-score">7 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          You have built a highly synergistic removal suite that leans heavily on creatures to keep the board clear, allowing Volo to double your defensive plays.
+          <ul>
+             <li><strong>Asymmetrical Blowouts:</strong> <strong>Junk Winder</strong> (Serpent) is an absolute superstar here. Because you are generating tokens via Volo and your token multipliers, Junk Winder triggers repeatedly, locking down opposing boards under a mountain

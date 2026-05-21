@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commander Profile - Oloro, Ageless Ascetic</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      background-color: #f8fafc;
+      margin: 0;
+      padding: 15px;
+      line-height: 1.4;
+      font-size: 13px;
+    }
+    .sheet-container {
+      background-color: #ffffff;
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2, h3 {
+      margin: 0;
+      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .header-container {
+      border-bottom: 3px solid #475569;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    @media (min-width: 600px) {
+      .header-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+    }
+    .main-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1e293b;
+    }
+    .deck-title {
+      font-weight: 700;
+      color: #475569;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .deck-title-value {
+      font-weight: 800;
+      color: #1e293b;
+      text-transform: none;
+      letter-spacing: normal;
+      font-size: 18px;
+      margin-left: 6px;
+    }
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-bottom: 12px;
+    }
+    @media (min-width: 650px) {
+      .profile-grid {
+        grid-template-columns: 240px 1fr;
+      }
+    }
+    .visual-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .card-frame {
+      width: 230px;
+      height: 321px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      background: #0f172a url('https://cards.scryfall.io/large/front/a/b/abf8df47-405c-42d8-be9e-0f0d0a49589b.jpg?1562931285') no-repeat center/cover;
+    }
+    .score-badge {
+      margin-top: 15px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 15px;
+      border-radius: 8px;
+      text-align: center;
+      width: 180px;
+    }
+    .score-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #94a3b8;
+    }
+    .score-num {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+    .data-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+    .label {
+      font-weight: 700;
+      color: #475569;
+      width: 110px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    @media (min-width: 400px) {
+      .label { width: 140px; font-size: 11px; }
+    }
+    .value {
+      color: #0f172a;
+      font-size: 13px;
+    }
+    .decklist-btn {
+      display: inline-block;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .decklist-btn:hover {
+      text-decoration: underline;
+    }
+    .callout-box {
+      background-color: #f8fafc;
+      border-left: 4px solid #475569;
+      padding: 12px 15px;
+      border-radius: 0 8px 8px 0;
+      margin-top: 5px;
+    }
+    .callout-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #334155;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+    }
+    .callout-text {
+      font-size: 12.5px;
+      color: #334155;
+      font-style: italic;
+    }
+    .section-heading {
+      font-size: 14px;
+      font-weight: 700;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      color: #334155;
+    }
+    .pillar-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .pillar-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+    .pillar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .pillar-name {
+      font-weight: 700;
+      font-size: 13px;
+      color: #1e293b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .pillar-score {
+      font-weight: 800;
+      font-size: 12px;
+      background: #f1f5f9;
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: #0f172a;
+    }
+    .pillar-desc {
+      font-size: 12.5px;
+      color: #334155;
+      text-align: justify;
+      line-height: 1.5;
+    }
+    .pillar-desc ul {
+      margin: 8px 0 0 0;
+      padding-left: 20px;
+    }
+    .pillar-desc li {
+      margin-bottom: 6px;
+    }
+    @media print {
+      @page {
+        size: letter;
+        margin: 0.4in 0.5in 0.4in 0.5in;
+      }
+      body {
+        background-color: #ffffff;
+        padding: 0;
+      }
+      .sheet-container {
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      .profile-grid {
+        grid-template-columns: 240px 1fr !important;
+      }
+      .header-container {
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: flex-end !important;
+      }
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sheet-container">
+    <div class="header-container">
+      <div class="main-title">Oloro, Ageless Ascetic</div>
+      <div class="deck-title">Deck Name <span class="deck-title-value">The Game of Life</span></div>
+    </div>
+
+    <div class="profile-grid">
+      <div class="visual-column">
+        <div class="card-frame"></div>
+        <div class="score-badge">
+          <div class="score-title">Power Rank Score</div>
+          <div class="score-num">7.5 <span style="font-size: 14px; color: #64748b;">/10</span></div>
+        </div>
+      </div>
+
+      <div>
+        <table class="data-table">
+          <tr>
+            <td class="label">Archetype</td>
+            <td class="value">Esper Lifegain Control Engine</td>
+          </tr>
+          <tr>
+            <td class="label">Power Bracket</td>
+            <td class="value">High-Power Casual</td>
+          </tr>
+          <tr>
+            <td class="label">Est. Turn to Win</td>
+            <td class="value">Turns 8–10 (Late Game Attrition)</td>
+          </tr>
+          <tr>
+            <td class="label">Archidekt Link</td>
+            <td class="value">
+              <a class="decklist-btn" href="https://archidekt.com/decks/22317375/bill_deck_oloro" target="_blank">↗ View Full Decklist</a>
+            </td>
+          </tr>
+        </table>
+
+        <div class="callout-box">
+          <div class="callout-title">Definitive Playstyle Mechanics & Win Conditions</div>
+          <div class="callout-text">
+            The deck operates as a Lifegain Control Engine, weaponizing passive life generation from the command zone into card draw, massive creature tokens, and targeted removal. It systematically starves opponents of momentum using tax effects and premium sweepers before closing out the game with overwhelming board presence via token stampedes, massive lifegain-scaled beatsticks, or draining the table with <strong>Exquisite Blood</strong>.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-heading">Strategic Pillar Breakdown</div>
+     
+    <div class="pillar-stack">
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">1. Synergy & Engine</span>
+          <span class="pillar-score">8.5 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          The sheer density of your internal synergy is spectacular, leveraging guaranteed life increments every single turn without ever needing your commander to leave the zone.
+          <ul>
+            <li><strong>Jaw-Dropping Card Advantage:</strong> <strong>Well of Lost Dreams</strong>, <strong>Alhammarret's Archive</strong>, and <strong>Insight Engine</strong> turn your passive life ticks into an avalanche of extra cards. <strong>Alhammarret's Archive</strong> in particular acts as a geometric multiplier.</li>
+            <li><strong>Stat Monsters:</strong> Low-drop threats convert life into raw power instantly. <strong>Karlov of the Ghost Council</strong> and <strong>Elenda's Hierophant</strong> grow at a terrifying, accelerated pace, becoming lethal threats in just a couple of turn rotations.</li>
+            <li><strong>The Horse Lord:</strong> <strong>Crested Sunmare</strong> is an absolute powerhouse here. Because your lifegain triggers on each end step, you can rapidly build a table-shattering army of 5/5 indestructible Horses using continuous triggers from <strong>Authority of the Consuls</strong> or <strong>Creeping Bloodsucker</strong>.</li>
+            <li><strong>Structural Redundancy:</strong> If an opponent manages to lock down your card draw, your backup pieces are incredibly resilient. <strong>Auriok Champion</strong>, <strong>Angel of Vitality</strong>, and <strong>Sheoldred, the Apocalypse</strong> ensure your engine hums perfectly even if <strong>Oloro, Ageless Ascetic</strong> gets hit with an unpayable commander tax.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">2. Interaction & Board Control</span>
+          <span class="pillar-score">9.0 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          Esper is the premier shard for removing problematic permanents, and your interaction package is exceptionally sharp, versatile, and punishing.
+          <ul>
+            <li><strong>Spot Removal Excellence:</strong> Your single-target removal suite is flawless. <strong>Swords to Plowshares</strong>, <strong>Anguished Unmaking</strong>, <strong>Void Rend</strong>, and <strong>Despark</strong> ensure that no permanent type is safe.</li>
+            <li><strong>Flexible Tech Choice:</strong> The inclusion of <strong>Parting Gust</strong> is a brilliant, flexible tech choice—it serves as premium exile removal for an opponent's threat or acts as a crucial protection spell to blink one of your key value engines in response to a wipe.</li>
+            <li><strong>Table-Shattering Sweepers:</strong> Your board-wipe package is meticulously selected for maximum flexibility. <strong>Farewell</strong> serves as the ultimate nuclear option to reset problematic artifacts, enchantments, or graveyards. <strong>Toxic Deluge</strong> and <strong>Terminus</strong> bypass indestructible threats, while <strong>Fumigate</strong> turns a crowded battlefield directly into a massive infusion of life.</li>
+            <li><strong>Pillow-Fort Defense Grid:</strong> Cards like <strong>Ghostly Prison</strong>, <strong>Windborn Muse</strong>, and <strong>No Mercy</strong> form a defense grid that effectively redirects aggressive decks toward your opponents, buying you all the time you need to set up late-game loops.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">3. Consistency & Tutors</span>
+          <span class="pillar-score">7.5 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          Your deck plays remarkably smoothly, avoiding the classic control pitfall of drawing the "wrong half" of your deck thanks to high-quality card selection.
+          <ul>
+            <li><strong>The Gold Standard:</strong> <strong>Demonic Tutor</strong> allows you to reliably find your missing puzzle piece—whether that’s a <strong>Cyclonic Rift</strong> to survive an alpha strike or <strong>Exquisite Blood</strong> to threaten a win.</li>
+            <li><strong>Continuous Card Flow:</strong> <strong>Talion, the Kindly Lord</strong> and <strong>Twilight Prophet</strong> provide fantastic, continuous card flow while chipping away at your opponents' life totals. <strong>Talion</strong> naming 2 or 3 is a legendary casual draw engine.</li>
+            <li><strong>Precision Top-Deck Selection:</strong> <strong>Sensei's Divining Top</strong> pairs perfectly with your shuffling effects, providing incredible card selection and filtering for just 1 mana.</li>
+            <li><strong>Area for Growth:</strong> While your top-end card draw is explosive, adding 1 or 2 more low-cost, unconditional filter spells (such as <strong>Preordain</strong> or <strong>Lim-Dûl's Vault</strong>) would push this score even higher by ensuring you never stall out on mana in the opening four turns.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">4. Speed & Mana Base</span>
+          <span class="pillar-score">8.0 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          Your land base is remarkably optimized for a three-color deck, successfully avoiding the trap of running too many enters-the-battlefield-tapped utility lands.
+          <ul>
+            <li><strong>Premium Land Packages:</strong> You are running the top-tier mana fixing available, including Original Duals (<strong>Tundra</strong>, <strong>Underground Sea</strong>, <strong>Scrubland</strong>), Shock Lands (<strong>Hallowed Fountain</strong>, <strong>Godless Shrine</strong>, <strong>Watery Grave</strong>), and Battlebond lands (<strong>Vault of Champions</strong>, <strong>Sea of Clouds</strong>).</li>
+            <li><strong>Speed Injectors:</strong> <strong>Ancient Tomb</strong> acts as a crucial speed injector that helps you power out your 4- and 5-mana engines ahead of schedule.</li>
+            <li><strong>Color-Fixing Sovereigns:</strong> <strong>Urborg, Tomb of Yawgmoth</strong> pairs beautifully with <strong>Greed</strong> and your heavy black pip requirements, ensuring color screw is rarely an issue.</li>
+            <li><strong>Curve and Tempo Considerations:</strong> Your ramp package is standard casual fare (<strong>Sol Ring</strong>). Because the overall mana curve is heavy on 4- and 5-drop investments, you will naturally start slower than optimized combo decks, relying on premium counterspells like <strong>Mana Drain</strong> and <strong>Render Silent</strong> to protect your setup window.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">5. Win Conditions & Closeness to "Infinite"</span>
+          <span class="pillar-score">7.0 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          This deck wins cleanly, definitively, and through diverse angles of attack, managing to maintain a terrifying presence without alienating casual tables with infinite loops.
+          <ul>
+            <li><strong>The Core Finisher:</strong> <strong>Exquisite Blood</strong> acts as a massive, asymmetric value anchor. It can easily trigger lethal siphon chains across the table when paired with continuous passive drain pieces.</li>
+            <li><strong>Lethal Stampedes:</strong> <strong>Archangel of Thune</strong> translates individual lifegain instances into a table-shattering lethal stampede, turning your entire board into massive, unstoppable attackers.</li>
+            <li><strong>Inevitable Eldrazi Pressure:</strong> <strong>Kozilek, Butcher of Truth</strong> serves as an inevitable annihilator threat while providing absolute protection against mill strategies.</li>
+            <li><strong>The "Infinite" Evaluation:</strong> It is worth noting that while <strong>Exquisite Blood</strong> + <strong>Sanguine Bond</strong> forms a traditional, instantaneous infinite loop, your list deliberately avoids those specific companion pieces. You maintain an incredibly healthy relationship with high-power casual tables by winning through overwhelming, earned synergy rather than out-of-nowhere button-press combinations.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

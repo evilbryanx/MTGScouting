@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commander Profile - Hearthhull, the Worldseed</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      background-color: #f8fafc;
+      margin: 0;
+      padding: 15px;
+      line-height: 1.4;
+      font-size: 13px;
+    }
+    .sheet-container {
+      background-color: #ffffff;
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2, h3 {
+      margin: 0;
+      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .header-container {
+      border-bottom: 3px solid #475569;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    @media (min-width: 600px) {
+      .header-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+    }
+    .main-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1e293b;
+    }
+    .deck-title {
+      font-weight: 700;
+      color: #475569;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .deck-title-value {
+      font-weight: 800;
+      color: #1e293b;
+      text-transform: none;
+      letter-spacing: normal;
+      font-size: 18px;
+      margin-left: 6px;
+    }
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-bottom: 12px;
+    }
+    @media (min-width: 650px) {
+      .profile-grid {
+        grid-template-columns: 240px 1fr;
+      }
+    }
+    .visual-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .card-frame {
+      width: 230px;
+      height: 321px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      background: #0f172a url('https://cards.scryfall.io/large/front/6/b/6b913e79-a9f6-44d4-bb37-c4f6f66b8151.jpg?1754673442') no-repeat center/cover;
+    }
+    .score-badge {
+      margin-top: 15px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 15px;
+      border-radius: 8px;
+      text-align: center;
+      width: 180px;
+    }
+    .score-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #94a3b8;
+    }
+    .score-num {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+    .data-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+    .label {
+      font-weight: 700;
+      color: #475569;
+      width: 110px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    @media (min-width: 400px) {
+      .label { width: 140px; font-size: 11px; }
+    }
+    .value {
+      color: #0f172a;
+      font-size: 13px;
+    }
+    .decklist-btn {
+      display: inline-block;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .decklist-btn:hover {
+      text-decoration: underline;
+    }
+    .callout-box {
+      background-color: #f8fafc;
+      border-left: 4px solid #475569;
+      padding: 12px 15px;
+      border-radius: 0 8px 8px 0;
+      margin-top: 5px;
+    }
+    .callout-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #334155;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+    }
+    .callout-text {
+      font-size: 12.5px;
+      color: #334155;
+      font-style: italic;
+    }
+    .section-heading {
+      font-size: 14px;
+      font-weight: 700;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      color: #334155;
+    }
+    .pillar-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .pillar-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+    .pillar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .pillar-name {
+      font-weight: 700;
+      font-size: 13px;
+      color: #1e293b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .pillar-score {
+      font-weight: 800;
+      font-size: 12px;
+      background: #f1f5f9;
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: #0f172a;
+    }
+    .pillar-desc {
+      font-size: 12.5px;
+      color: #334155;
+      text-align: justify;
+      line-height: 1.5;
+    }
+    .pillar-desc ul {
+      margin: 8px 0 0 0;
+      padding-left: 20px;
+    }
+    .pillar-desc li {
+      margin-bottom: 6px;
+    }
+    @media print {
+      @page {
+        size: letter;
+        margin: 0.4in 0.5in 0.4in 0.5in;
+      }
+      body {
+        background-color: #ffffff;
+        padding: 0;
+      }
+      .sheet-container {
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      .profile-grid {
+        grid-template-columns: 240px 1fr !important;
+      }
+      .header-container {
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: flex-end !important;
+      }
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sheet-container">
+    <div class="header-container">
+      <div class="main-title">Hearthhull, the Worldseed</div>
+      <div class="deck-title">Deck Name <span class="deck-title-value">Short Term Rentals</span></div>
+    </div>
+
+    <div class="profile-grid">
+      <div class="visual-column">
+        <div class="card-frame"></div>
+        <div class="score-badge">
+          <div class="score-title">Power Rank Score</div>
+          <div class="score-num">7.5 <span style="font-size: 14px; color: #64748b;">/10</span></div>
+        </div>
+      </div>
+
+      <div>
+        <table class="data-table">
+          <tr>
+            <td class="label">Archetype</td>
+            <td class="value">Jund Lands Aristocrats</td>
+          </tr>
+          <tr>
+            <td class="label">Power Bracket</td>
+            <td class="value">High-Power Casual / Optimized</td>
+          </tr>
+          <tr>
+            <td class="label">Est. Turn to Win</td>
+            <td class="value">Turn 6–7</td>
+          </tr>
+          <tr>
+            <td class="label">Archidekt Link</td>
+            <td class="value">
+              <a class="decklist-btn" href="https://archidekt.com/decks/16885216/short_term_rentals" target="_blank">↗ View Full Decklist</a>
+            </td>
+          </tr>
+        </table>
+
+        <div class="callout-box">
+          <div class="callout-title">Definitive Playstyle Mechanics & Win Conditions</div>
+          <div class="callout-text">
+            The deck operates as a Jund Lands Aristocrats machine. It focuses on accelerating lands onto the battlefield, aggressively sacrificing them to commanders and engines like Hearthhull, the Worldseed, The Gitrog Monster, or Zuran Orb, and then recurring them en masse via graveyard-to-battlefield effects. It clinches victory through lethal, non-infinite chunks of passive burn from Hearthhull's pilot form and Mayhem Devil, or via overwhelming, game-ending combat steps powered by Moraug, Fury of Akoum and Scute Swarm.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-heading">Strategic Pillar Breakdown</div>
+    
+    <div class="pillar-stack">
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">1. Synergy & Engine</span>
+          <span class="pillar-score">9.5 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          This is the crown jewel of your build. The mechanical interplay between your engine pieces is beautiful and incredibly hostile to your opponents:
+          <ul>
+            <li><strong>The Sacrifice-Recursion Loop:</strong> Your commander, <strong>Hearthhull, the Worldseed</strong>, is a phenomenal engine. Tapping a random token to meet its Station requirement unlocks its tier-2 ability: spend a mana, tap, sacrifice a land, and draw two cards while fueling your land drops. This feeds perfectly into graveyard-enablers like <strong>Ramunap Excavator</strong>, <strong>Augur of Autumn</strong>, and the incredible <strong>Szarel, Genesis Shepherd</strong>, who lets you play lands from the bin and dumps a mountain of +1/+1 counters on your team whenever you sacrifice a land.</li>
+            <li><strong>The Hidden All-Stars:</strong> <strong>Evendo Brushrazer</strong> acts as a jaw-dropping casual card advantage machine here, exiling and letting you play the top card of your library whenever you sacrifice a land. Pairing that with <strong>The Gitrog Monster</strong> or <strong>Korvold, Fae-Cursed King</strong> means a single land sacrifice draws you multiple cards and digs deeper into your deck simultaneously.</li>
+            <li><strong>Redundancy:</strong> If <strong>Hearthhull</strong> is heavily taxed or removed, the deck barely flinches. <strong>Soul of Windgrace</strong>, <strong>Titania, Protector of Argoth</strong>, and <strong>Mazirek, Kraul Death Priest</strong> step in seamlessly to maintain the sacrifice/landfall value loop.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">2. Interaction & Board Control</span>
+          <span class="pillar-score">7.5 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          Your removal package is solid, efficient, and leans nicely into asymmetrical advantages, though it lacks a tiny bit of the instant-speed stack interaction found in blue-white metas:
+          <ul>
+            <li><strong>Asymmetrical Housewarming:</strong> <strong>Blasphemous Act</strong> is a classic fallback, but <strong>Planetary Annihilation</strong> is a spectacular inclusion for this specific build. Forcing everyone down to six lands while dealing 6 damage to all creatures is fundamentally asymmetrical for you. While your opponents are crippled by losing their hard-earned mana bases, you want your lands in the graveyard to trigger <strong>Titania</strong> tokens, and you can bring them right back the very next turn.</li>
+            <li><strong>Flexible Spot Removal:</strong> <strong>Beast Within</strong>, <strong>Tear Asunder</strong>, and <strong>Windgrace's Judgment</strong> give you highly flexible, catch-all answers to problematic permanents. <strong>Rakdos Charm</strong> acts as crucial flexible tech, serving as instant-speed graveyard hate or a surprise killer against opposing token decks.</li>
+            <li><strong>Room for Improvement:</strong> Because your deck relies so heavily on its own board state developing, you are vulnerable to fast, stack-based combo decks. A few more cheap interactive pieces like Deflecting Swat or Deadly Rollick would push this category higher.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">3. Consistency & Tutors</span>
+          <span class="pillar-score">8.0 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          You have bypassed traditional black tutors (like Demonic Tutor or Vampiric Tutor) in favor of raw, overwhelming card draw and land selection, making the deck feel incredibly organic and resilient:
+          <ul>
+            <li><strong>Velocity Through Selection:</strong> With <strong>Oracle of Mul Daya</strong>, <strong>Augur of Autumn</strong>, and <strong>Night's Whisper</strong>, you rarely stall out. The sheer volume of cards you draw off <strong>Hearthhull</strong>, <strong>Korvold</strong>, and <strong>The Gitrog Monster</strong> ensures that you don't need standard tutors; you simply draw a quarter of your deck in a single turn cycle.</li>
+            <li><strong>Land Tutors:</strong> Your land-selection engine is flawless. Cards like <strong>Fabled Passage</strong>, <strong>Bloodstained Mire</strong>, <strong>Springbloom Druid</strong>, and <strong>Harrow</strong> pull exactly the colors you need while double-triggering landfall and putting fuel straight into the graveyard for your recursion turns.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">4. Speed & Mana Base</span>
+          <span class="pillar-score">8.5 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          Your mana generation is lightning-fast, perfectly mirroring the high-risk, high-reward nature of a dedicated Jund lands deck:
+          <ul>
+            <li><strong>Explosive Acceleration:</strong> <strong>Orcish Lumberjack</strong> provides an absolutely terrifying early-game speed boost, sacrificing Forests to net you three mana chunks to turbo out your heavy hitters. Combined with <strong>Exploration Broodship</strong> (which gives you extra land drops early and graveyard-casting power later) and <strong>Tireless Provisioner</strong>, your mana production scales exponentially.</li>
+            <li><strong>The Land Base:</strong> Your land base is highly optimized for a casual deck. You have a healthy mix of fetches, duals (<strong>Blood Crypt</strong>), pain lands (<strong>Llanowar Wastes</strong>, <strong>Sulfurous Springs</strong>), and horizon-style canopy lands. More importantly, you've included perfect utility slots like <strong>Bojuka Bog</strong> for opposing graveyards and <strong>Dakmor Salvage</strong> to unlock dredge loops with Gitrog.</li>
+            <li><strong>The Curve:</strong> The deck is top-heavy with massive bombs like <strong>Famished Worldsire</strong> (an 8-mana creature that can devour your entire land base to search out an ungodly amount of lands from the top of your deck) and <strong>Omnath, Locus of Rage</strong>. Your ramp package handles this well, but low-interaction opening hands can occasionally feel a bit slow before turn 3.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">5. Win Conditions & Closeness to "Infinite"</span>
+          <span class="pillar-score">8.0 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          You have built an incredibly honest, terrifyingly powerful combat and burn engine that completely respects your preference for avoiding infinite loops:
+          <ul>
+            <li><strong>The Ultimate Path to Victory:</strong> Your primary win condition relies on a table-shattering lethal stampede or massive chunks of burn.</li>
+            <li><strong>Massive Non-Infinite Climax Spells:</strong> Resolving <strong>Splendid Reclamation</strong>, <strong>World Shaper</strong> dying, or ticking up chapter II on the incredible <strong>Summon: Titan</strong> saga returns every single land from your graveyard to the battlefield at once. If <strong>Scute Swarm</strong>, <strong>Rampaging Baloths</strong>, or <strong>Eusocial Engineering</strong> are on the board, you instantly create an army of dozens of tokens. If <strong>Moraug, Fury of Akoum</strong> is out, those entering lands grant you 5 to 10 consecutive combat phases, allowing you to swing through the entire table in a single turn.</li>
+            <li><strong>X-Spells & Flipped Burn:</strong> If <strong>Hearthhull</strong> is fully crewed to its 8+ charge counter form, its static ability triggers: Whenever you sacrifice a land, each opponent loses 2 life. Combined with <strong>Zuran Orb</strong> or <strong>Reprocess</strong>, you can sacrifice 12 lands on a whim, burning the entire table out for 24+ life instantly. Meanwhile, <strong>Worldsoul's Rage</strong> serves as a brilliant dual-purpose card, acting as targeted removal early or a massive, burning finish that puts even more lands into play to trigger your landfall layout.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

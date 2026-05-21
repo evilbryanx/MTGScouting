@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commander Profile - Doran, Besieged by Time</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      background-color: #f8fafc;
+      margin: 0;
+      padding: 15px;
+      line-height: 1.4;
+      font-size: 13px;
+    }
+    .sheet-container {
+      background-color: #ffffff;
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2, h3 {
+      margin: 0;
+      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .header-container {
+      border-bottom: 3px solid #475569;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    @media (min-width: 600px) {
+      .header-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+    }
+    .main-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1e293b;
+    }
+    .deck-title {
+      font-weight: 700;
+      color: #475569;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .deck-title-value {
+      font-weight: 800;
+      color: #1e293b;
+      text-transform: none;
+      letter-spacing: normal;
+      font-size: 18px;
+      margin-left: 6px;
+    }
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-bottom: 12px;
+    }
+    @media (min-width: 650px) {
+      .profile-grid {
+        grid-template-columns: 240px 1fr;
+      }
+    }
+    .visual-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .card-frame {
+      width: 230px;
+      height: 321px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      background: #0f172a url('https://cards.scryfall.io/large/front/5/6/568aa70a-6765-486a-bd37-5d38b16c46de.jpg?1767732894') no-repeat center/cover;
+    }
+    .score-badge {
+      margin-top: 15px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 15px;
+      border-radius: 8px;
+      text-align: center;
+      width: 180px;
+    }
+    .score-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #94a3b8;
+    }
+    .score-num {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+    .data-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+    .label {
+      font-weight: 700;
+      color: #475569;
+      width: 110px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    @media (min-width: 400px) {
+      .label { width: 140px; font-size: 11px; }
+    }
+    .value {
+      color: #0f172a;
+      font-size: 13px;
+    }
+    .decklist-btn {
+      display: inline-block;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .decklist-btn:hover {
+      text-decoration: underline;
+    }
+    .callout-box {
+      background-color: #f8fafc;
+      border-left: 4px solid #475569;
+      padding: 12px 15px;
+      border-radius: 0 8px 8px 0;
+      margin-top: 5px;
+    }
+    .callout-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #334155;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+    }
+    .callout-text {
+      font-size: 12.5px;
+      color: #334155;
+      font-style: italic;
+    }
+    .section-heading {
+      font-size: 14px;
+      font-weight: 700;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      color: #334155;
+    }
+    .pillar-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .pillar-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+    .pillar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .pillar-name {
+      font-weight: 700;
+      font-size: 13px;
+      color: #1e293b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .pillar-score {
+      font-weight: 800;
+      font-size: 12px;
+      background: #f1f5f9;
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: #0f172a;
+    }
+    .pillar-desc {
+      font-size: 12.5px;
+      color: #334155;
+      text-align: justify;
+      line-height: 1.5;
+    }
+    .pillar-desc ul {
+      margin: 8px 0 0 0;
+      padding-left: 20px;
+    }
+    .pillar-desc li {
+      margin-bottom: 6px;
+    }
+    @media print {
+      @page {
+        size: letter;
+        margin: 0.4in 0.5in 0.4in 0.5in;
+      }
+      body {
+        background-color: #ffffff;
+        padding: 0;
+      }
+      .sheet-container {
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      .profile-grid {
+        grid-template-columns: 240px 1fr !important;
+      }
+      .header-container {
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: flex-end !important;
+      }
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sheet-container">
+    <div class="header-container">
+      <div class="main-title">Doran, Besieged by Time</div>
+      <div class="deck-title">Deck Name <span class="deck-title-value">In the Rear</span></div>
+    </div>
+
+    <div class="profile-grid">
+      <div class="visual-column">
+        <div class="card-frame"></div>
+        <div class="score-badge">
+          <div class="score-title">Power Rank Score</div>
+          <div class="score-num">6.5 <span style="font-size: 14px; color: #64748b;">/10</span></div>
+        </div>
+      </div>
+
+      <div>
+        <table class="data-table">
+          <tr>
+            <td class="label">Archetype</td>
+            <td class="value">Abzan "Toughness Matters" Aggro-Midrange</td>
+          </tr>
+          <tr>
+            <td class="label">Power Bracket</td>
+            <td class="value">High-Power Casual</td>
+          </tr>
+          <tr>
+            <td class="label">Est. Turn to Win</td>
+            <td class="value">Turn 6 - 7</td>
+          </tr>
+          <tr>
+            <td class="label">Archidekt Link</td>
+            <td class="value">
+              <a class="decklist-btn" href="https://archidekt.com/decks/18254724/doran_besieged_by_time" target="_blank">↗ View Full Decklist</a>
+            </td>
+          </tr>
+        </table>
+
+        <div class="callout-box">
+          <div class="callout-title">Definitive Playstyle Mechanics & Win Conditions</div>
+          <div class="callout-text">
+            The deck operates as an Abzan "Butts-to-Chop" Aggro-Midrange engine, leveraging "backside combat" mechanics to turn high-toughness, low-mana-value creatures into massive offensive threats. It wins by establishing a wide, resilient board of giant defenders, using asymmetrical board wipes to clear the path, and closing the game via table-shattering lethal stampedes fueled by power/toughness doublers and mass trample.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-heading">Strategic Pillar Breakdown</div>
+    
+    <div class="pillar-stack">
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">1. Synergy & Engine</span>
+          <span class="pillar-score">9 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          The internal synergy of this list is an absolute masterclass in theme execution. You aren't just running a few high-toughness creatures; you have built a self-reinforcing ecosystem where every piece amplifies the next.
+          <ul>
+             <li><strong>Redundant Backbone:</strong> A massive strength here is that you don't fall apart if your commander is removed. Running <strong>Assault Formation</strong>, <strong>Baldin, Century Herdmaster</strong>, <strong>Bedrock Tortoise</strong>, and the classic <strong>Doran, the Siege Tower</strong> ensures that your creatures almost always attack with their toughness.</li>
+             <li><strong>Jaw-Dropping Casual Card Advantage:</strong> The synergy between high toughness and card draw here is disgusting. <strong>Last March of the Ents</strong> in this deck is essentially an uncounterable "draw 10+ cards and put your entire hand onto the battlefield" spell. <strong>Sapling of Colfenor</strong> and <strong>Fecund Greenshell</strong> keep your hand perpetually stocked because virtually your entire creature suite satisfies their high-toughness triggers.</li>
+             <li><strong>The Unkillable Forest:</strong> The inclusion of <strong>Colfenor, the Last Yew</strong> means that whenever one of your high-toughness creatures dies, its 0 or 1 power allows you to return almost any other creature from your graveyard to your hand. Pair that with <strong>Luminous Broodmoth</strong> or <strong>Mikaeus, the Unhallowed</strong>, and your board becomes an inescapable nightmare to clear through combat.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">2. Interaction & Board Control</span>
+          <span class="pillar-score">8.5 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          Your removal package is exceptionally clever because it weaponizes your deck’s unique structural design against the rest of the table.
+          <ul>
+             <li><strong>Asymmetrical Nuclear Options:</strong> <strong>Slaughter the Strong</strong> and <strong>Dusk // Dawn</strong> are absolute all-stars here. Because your massive creatures have base powers of 0, 1, or 2, these cards act as completely one-sided board wipes. You can wipe out a table of threatening dragons, eldrazi, and commanders while your entire board remains entirely untouched.</li>
+             <li><strong>Premier Spot Precision:</strong> You are running the absolute gold standard of pinpoint interaction in Abzan colors: <strong>Swords to Plowshares</strong>, <strong>Path to Exile</strong>, and <strong>Stroke of Midnight</strong>. These give you instant-speed answers to any problematic combo pieces or static hate pieces your opponents drop.</li>
+             <li><strong>Flexible Utility Cleansing:</strong> <strong>Farewell</strong> and <strong>Fade from History</strong> provide critical emergency valves. If the table gets overwhelmed by treasures, enchantments, or graveyard strategies, you can reset the non-creature landscape cleanly. The only minor vulnerability is that a generic mass creature wipe from an opponent can hurt if your reanimation engines aren't online, but your high toughness protects you from almost all damage-based sweepers.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">3. Consistency & Tutors</span>
+          <span class="pillar-score">8 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          You will rarely find yourself stalling out or digging blindly for answers with this setup; the deck features elite selection tools.
+          <ul>
+             <li><strong>The Black Ribbon Elite:</strong> Carrying <strong>Demonic Tutor</strong> and <strong>Vampiric Tutor</strong> instantly elevates the consistency of this deck by a full point. Whether you desperately need a toughness-converter, a protection piece, or a game-ending finisher, you have immediate access to it.</li>
+             <li><strong>The Specific Recruits:</strong> <strong>Eladamri's Call</strong> acts as a brilliant instant-speed creature tutor, while <strong>Treefolk Harbinger</strong> serves as a flavor-accurate, 1-mana tutor that grabs staples like <strong>Doran, the Siege Tower</strong>, <strong>Ancient Lumberknot</strong>, or even a crucial basic forest to fix your mana.</li>
+             <li><strong>Continuous Sifting:</strong> <strong>Sylvan Library</strong> and <strong>Mirri's Guile</strong> give you top-deck manipulation from turn one or two, ensuring you never draw dead lands in the late game. Combined with combat draw engines like <strong>Ohran Frostfang</strong> and <strong>Driven // Despair</strong>, you can easily dig 5 to 10 cards deep into your library in a single combat step.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">4. Speed & Mana Base</span>
+          <span class="pillar-score">7.5 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          Your mana engine is robust, reliable, and perfectly tuned for a mid-range deck that wants to start dropping 4- and 5-mana bombs ahead of schedule.
+          <ul>
+             <li><strong>The Green Accelerants:</strong> Standard casual powerhouses like <strong>Cultivate</strong>, <strong>Kodama's Reach</strong>, and <strong>Farseek</strong> ensure you hit your land drops. <strong>Arboreal Grazer</strong> and <strong>Sylvan Caryatid</strong> pull double duty—they speed up your mana while entering as relevant blockers that instantly become offensive threats once a toughness-enabler hits the field.</li>
+             <li><strong>The Untap Engines:</strong> <strong>Seedborn Muse</strong> completely warps the game pacing in your favor, allowing you to hold up interaction on every opponent's turn. <strong>Faeburrow Elder</strong> is an explosive mana dork in an Abzan deck, regularly tapping for 3 mana by itself.</li>
+             <li><strong>Land Optimization:</strong> Your land base is highly optimized with true duals like <strong>Godless Shrine</strong>, <strong>Overgrown Tomb</strong>, and <strong>Temple Garden</strong>, alongside excellent fixing like <strong>Indatha Triome</strong> and Bond lands (<strong>Bountiful Promenade</strong>, <strong>Undergrowth Stadium</strong>, <strong>Vault of Champions</strong>). The utility package is fantastic: <strong>Boseiju, Who Endures</strong> provides uncounterable interaction, while <strong>Yavimaya, Cradle of Growth</strong> and <strong>Urborg, Tomb of Yawgmoth</strong> ensure you never run into color screw.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">5. Win Conditions & Closeness to "Infinite"</span>
+          <span class="pillar-score">7 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          This deck deliberately embraces a fair, combat-driven philosophy. It entirely avoids infinite loops or cheesy instant-win two-card combos, choosing instead to win through pure, overwhelming physical presence.
+          <ul>
+             <li><strong>Table-Shattering Lethal Stampedes:</strong> Your primary way to close out the game is by taking a board of high-toughness creatures and multiplying their damage output exponentially. <strong>Unnatural Growth</strong> and <strong>Zopandrel, Hunger Dominus</strong> double your creatures' stats at combat, turning a casual 5/5 wall into a terrifying 10/10 attacker.</li>
+             <li><strong>The Overrun Overlords:</strong> <strong>Pathbreaker Ibex</strong> and <strong>Blossoming Bogbeast</strong> are lethal combat multipliers. Because the Ibex checks the highest power among creatures you control, it pairs magnificently with cards like <strong>Sovereign Okinec Ahau</strong> or after a pump spell to give your entire board a massive boost and trample. <strong>Triumph of the Hordes</strong> provides a sudden, unexpected win via Infect if a pod's life totals are too high to chew through normally.</li>
+             <li><strong>The Tree of Death:</strong> A spectacular, high-synergy interaction in this deck features <strong>Tree of Perdition</strong>. By activating its ability to exchange an opponent's life total with its toughness (which starts at 13), you can instantly drop a player to a dangerously low life total. If <strong>Doran, Besieged by Time</strong> or <strong>Assault Formation</strong> is out, that Tree can immediately turn around and swing for massive damage to eliminate that player on the spot.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

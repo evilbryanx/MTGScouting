@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commander Profile - Azor, the Lawbringer</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      background-color: #f8fafc;
+      margin: 0;
+      padding: 15px;
+      line-height: 1.4;
+      font-size: 13px;
+    }
+    .sheet-container {
+      background-color: #ffffff;
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2, h3 {
+      margin: 0;
+      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .header-container {
+      border-bottom: 3px solid #475569;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    @media (min-width: 600px) {
+      .header-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+    }
+    .main-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1e293b;
+    }
+    .deck-title {
+      font-weight: 700;
+      color: #475569;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .deck-title-value {
+      font-weight: 800;
+      color: #1e293b;
+      text-transform: none;
+      letter-spacing: normal;
+      font-size: 18px;
+      margin-left: 6px;
+    }
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-bottom: 12px;
+    }
+    @media (min-width: 650px) {
+      .profile-grid {
+        grid-template-columns: 240px 1fr;
+      }
+    }
+    .visual-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .card-frame {
+      width: 230px;
+      height: 321px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      background: #0f172a url('https://cards.scryfall.io/large/front/3/0/30dc237e-b28a-4b65-9790-6b434828bf2e.jpg?1555040794') no-repeat center/cover;
+    }
+    .score-badge {
+      margin-top: 15px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 15px;
+      border-radius: 8px;
+      text-align: center;
+      width: 180px;
+    }
+    .score-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #94a3b8;
+    }
+    .score-num {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+    .data-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+    .label {
+      font-weight: 700;
+      color: #475569;
+      width: 110px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    @media (min-width: 400px) {
+      .label { width: 140px; font-size: 11px; }
+    }
+    .value {
+      color: #0f172a;
+      font-size: 13px;
+    }
+    .decklist-btn {
+      display: inline-block;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .decklist-btn:hover {
+      text-decoration: underline;
+    }
+    .callout-box {
+      background-color: #f8fafc;
+      border-left: 4px solid #475569;
+      padding: 12px 15px;
+      border-radius: 0 8px 8px 0;
+      margin-top: 5px;
+    }
+    .callout-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #334155;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+    }
+    .callout-text {
+      font-size: 12.5px;
+      color: #334155;
+      font-style: italic;
+    }
+    .section-heading {
+      font-size: 14px;
+      font-weight: 700;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      color: #334155;
+    }
+    .pillar-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .pillar-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+    .pillar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .pillar-name {
+      font-weight: 700;
+      font-size: 13px;
+      color: #1e293b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .pillar-score {
+      font-weight: 800;
+      font-size: 12px;
+      background: #f1f5f9;
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: #0f172a;
+    }
+    .pillar-desc {
+      font-size: 12.5px;
+      color: #334155;
+      text-align: justify;
+      line-height: 1.5;
+    }
+    .pillar-desc ul {
+      margin: 8px 0 0 0;
+      padding-left: 20px;
+    }
+    .pillar-desc li {
+      margin-bottom: 6px;
+    }
+    @media print {
+      @page {
+        size: letter;
+        margin: 0.4in 0.5in 0.4in 0.5in;
+      }
+      body {
+        background-color: #ffffff;
+        padding: 0;
+      }
+      .sheet-container {
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      .profile-grid {
+        grid-template-columns: 240px 1fr !important;
+      }
+      .header-container {
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: flex-end !important;
+      }
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sheet-container">
+    <div class="header-container">
+      <div class="main-title">Azor, the Lawbringer</div>
+      <div class="deck-title">Deck Name <span class="deck-title-value">Shazzam</span></div>
+    </div>
+
+    <div class="profile-grid">
+      <div class="visual-column">
+        <div class="card-frame"></div>
+        <div class="score-badge">
+          <div class="score-title">Power Rank Score</div>
+          <div class="score-num">6 <span style="font-size: 14px; color: #64748b;">/10</span></div>
+        </div>
+      </div>
+
+      <div>
+        <table class="data-table">
+          <tr>
+            <td class="label">Archetype</td>
+            <td class="value">Azorius Control-Blink Hybrid</td>
+          </tr>
+          <tr>
+            <td class="label">Power Bracket</td>
+            <td class="value">High-End Focused Casual</td>
+          </tr>
+          <tr>
+            <td class="label">Est. Turn to Win</td>
+            <td class="value">Turn 10–12</td>
+          </tr>
+          <tr>
+            <td class="label">Archidekt Link</td>
+            <td class="value">
+              <a class="decklist-btn" href="https://archidekt.com/decks/22456457/jeff_deck_azor" target="_blank">↗ View Full Decklist</a>
+            </td>
+          </tr>
+        </table>
+
+        <div class="callout-box">
+          <div class="callout-title">Definitive Playstyle Mechanics & Win Conditions</div>
+          <div class="callout-text">
+            The deck functions as an Azorius Control-Blink hybrid that leverages tax elements, combat deterrents, and enter-the-battlefield (ETB) triggers to stymie opponents' offensive plans. It ultimately wins by locking down opponent spellcasting or combat phases while riding massive combat multipliers like Elesh Norn, Grand Cenobite, generating unstoppable token clones with Helm of the Host, or executing time-bending extra-turn loops with Medomai the Ageless or Time Warp.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-heading">Strategic Pillar Breakdown</div>
+     
+    <div class="pillar-stack">
+      <!-- Pillar 1 -->
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">1. Synergy & Engine</span>
+          <span class="pillar-score">7 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          The internal gears of this deck grind beautifully once they get moving, converting ETB triggers into massive tactical advantages.
+          <ul>
+            <li><strong>The Blink & Bounce Matrix:</strong> You have a robust suite of self-bouncing and flickering creatures like <strong>Whitemane Lion</strong>, <strong>Jeskai Barricade</strong>, <strong>Charming Prince</strong>, and <strong>Guardian of Ghirapur</strong>. These pieces offer jaw-dropping casual card advantage and protection, allowing you to repeatedly trigger value pieces like <strong>Solemn Simulacrum</strong> or re-buy critical spells with <strong>Mnemonic Wall</strong>.</li>
+            <li><strong>The Commander Synergy:</strong> <strong>Azor, the Lawbringer</strong> is a massive 6-mana investment, but if you can flicker or bounce him on an opponent’s end step using <strong>Wispweaver Angel</strong> or <strong>Portal of Sanctuary</strong>, you can trigger his "Silence" effect every single turn cycle, entirely shutting down sorcery-speed decks.</li>
+            <li><strong>Where it friction-points:</strong> The deck runs a few highly vanilla or aggressive creatures (like <strong>Lucent Liminid</strong> and <strong>Sunpearl Kirin</strong>) that do not actively feed into your primary ETB blink or control engines, slightly diluting your structural redundancy when Azor isn't on the field.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Pillar 2 -->
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">2. Interaction & Board Control</span>
+          <span class="pillar-score">8 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          Your ability to police the table and dictate the terms of engagement is incredibly potent.
+          <ul>
+            <li><strong>Table-Shattering Board Wipes:</strong> You are packing the gold standard of uncounterable wipes with <strong>Supreme Verdict</strong>, alongside the flexible <strong>Austere Command</strong> and the brilliantly asymmetrical <strong>Promise of Loyalty</strong>, which forces opponents to sacrifice their hordes while keeping their weakest creature away from your life total.</li>
+            <li><strong>Combat Deterrents:</strong> <strong>Propaganda</strong>, <strong>Authority of the Consuls</strong>, and <strong>Thalia, Heretic Cathar</strong> create an agonizing tax matrix for aggro decks. Combined with the combat-denying ETB of <strong>Stonehorn Dignitary</strong> (which can be looped with your blink spells), you can effectively turn off the combat phase for targeted opponents entirely.</li>
+            <li><strong>Counter-Magic & Spot Removal:</strong> <strong>Render Silent</strong> is a thematic masterpiece here, acting as a mini-Azor on a stick. Paired with hard counters like <strong>Disallow</strong> and <strong>Counterspell</strong>, you have a strong capability to protect your lock-pieces.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Pillar 3 -->
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">3. Consistency & Tutors</span>
+          <span class="pillar-score">5 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          This is the deck's main causal bottleneck. The list relies heavily on organic drawing and specific combat connections to dig through the library.
+          <ul>
+            <li><strong>Raw Card Draw:</strong> <strong>Azor, the Lawbringer</strong> himself is a repeatable Sphinx's Revelation when he attacks, offering massive reload potential. <strong>Aqueous Form</strong> and <strong>Steel of the Godhead</strong> are excellent inclusions here, ensuring Azor connects safely to keep the cards flowing.</li>
+            <li><strong>Selection & Filtering:</strong> Beyond Azor's attack trigger, the deck lacks heavy-hitting card selection engines (like Rhystic Study, Mystic Remora, or Mystic Speculation).</li>
+            <li><strong>The Tutor Deficit:</strong> You are running zero traditional tutors. While this is fantastic for keeping games varied and fun at a casual table, it means your highest-impact win conditions—like <strong>Helm of the Host</strong> or <strong>Elesh Norn</strong>—must be drawn naturally, lowering the deck's overall strategic velocity.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Pillar 4 -->
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">4. Speed & Mana Base</span>
+          <span class="pillar-score">6 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          Your land base features great mechanical utility, but the deck's overall speed is heavily throttled by its high mana curve.
+          <ul>
+            <li><strong>Utility All-Stars:</strong> <strong>Mystic Sanctuary</strong> is a phenomenal inclusion, allowing you to recur <strong>Time Warp</strong> or a crucial counterspell. <strong>Emeria, the Sky Ruin</strong> offers highly resilient late-game reanimation, provided you hit your basic Plains threshold.</li>
+            <li><strong>The Curve Conundrum:</strong> You have a massive top-end with multiple 6- and 7-drops (<strong>Azor</strong>, <strong>Medomai</strong>, <strong>Elesh Norn</strong>, <strong>Zahid</strong>, <strong>Wispweaver Angel</strong>).</li>
+            <li><strong>Ramp Deficit:</strong> To consistently cast a 6-mana commander and leave mana up for protection, a deck typically needs 10–12 ramp pieces. With only <strong>Sol Ring</strong>, <strong>Arcane Signet</strong>, <strong>Replicating Ring</strong>, and <strong>Solemn Simulacrum</strong>, you will frequently find yourself playing one big spell per turn and passing, unable to hold up your interaction package simultaneously.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Pillar 5 -->
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">5. Win Conditions & Closeness to "Infinite"</span>
+          <span class="pillar-score">7 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          You have a terrifying suite of casual finishers that completely avoid standard infinite-combo tropes, relying instead on high-impact value multipliers.
+          <ul>
+            <li><strong>The Combat Clones:</strong> Dropping <strong>Helm of the Host</strong> onto <strong>Elesh Norn, Grand Cenobite</strong> creates a table-shattering lethal stampede that decimates opposing boards while generating giant attackers. Putting that same Helm on <strong>Medomai the Ageless</strong> creates a non-legendary token that can attack on extra turns, netting you unlimited turn cycles without technically assembling a traditional loop.</li>
+            <li><strong>Exponential Growth:</strong> <strong>Mirror-Sigil Sergeant</strong> can run away with the game completely undetected if you control a blue permanent, doubling its presence every single upkeep.</li>
+            <li><strong>No Infinite Combos:</strong> True to your design philosophy, the deck completely avoids deterministic infinite loops (such as the traditional Felidar Guardian + Aminatou/Saheeli loop, or infinite mana combos). Your victories are earned through hard-fought combat dominance, extra-turn chains, and inescapable value locks.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

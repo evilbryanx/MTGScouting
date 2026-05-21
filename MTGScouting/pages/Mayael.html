@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commander Profile - Mayael the Anima</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      background-color: #f8fafc;
+      margin: 0;
+      padding: 15px;
+      line-height: 1.4;
+      font-size: 13px;
+    }
+    .sheet-container {
+      background-color: #ffffff;
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2, h3 {
+      margin: 0;
+      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .header-container {
+      border-bottom: 3px solid #475569;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    @media (min-width: 600px) {
+      .header-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+    }
+    .main-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1e293b;
+    }
+    .deck-title {
+      font-weight: 700;
+      color: #475569;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .deck-title-value {
+      font-weight: 800;
+      color: #1e293b;
+      text-transform: none;
+      letter-spacing: normal;
+      font-size: 18px;
+      margin-left: 6px;
+    }
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-bottom: 12px;
+    }
+    @media (min-width: 650px) {
+      .profile-grid {
+        grid-template-columns: 240px 1fr;
+      }
+    }
+    .visual-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .card-frame {
+      width: 230px;
+      height: 321px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      background: #0f172a url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTentQiNIMTq0DALCFUn02PnRz0lCTwJrsHHQ&s') no-repeat center/cover;
+    }
+    .score-badge {
+      margin-top: 15px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 15px;
+      border-radius: 8px;
+      text-align: center;
+      width: 180px;
+    }
+    .score-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #94a3b8;
+    }
+    .score-num {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+    .data-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+    .label {
+      font-weight: 700;
+      color: #475569;
+      width: 110px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    @media (min-width: 400px) {
+      .label { width: 140px; font-size: 11px; }
+    }
+    .value {
+      color: #0f172a;
+      font-size: 13px;
+    }
+    .decklist-btn {
+      display: inline-block;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .decklist-btn:hover {
+      text-decoration: underline;
+    }
+    .callout-box {
+      background-color: #f8fafc;
+      border-left: 4px solid #475569;
+      padding: 12px 15px;
+      border-radius: 0 8px 8px 0;
+      margin-top: 5px;
+    }
+    .callout-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #334155;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+    }
+    .callout-text {
+      font-size: 12.5px;
+      color: #334155;
+      font-style: italic;
+    }
+    .section-heading {
+      font-size: 14px;
+      font-weight: 700;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      color: #334155;
+    }
+    .pillar-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .pillar-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+    .pillar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .pillar-name {
+      font-weight: 700;
+      font-size: 13px;
+      color: #1e293b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .pillar-score {
+      font-weight: 800;
+      font-size: 12px;
+      background: #f1f5f9;
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: #0f172a;
+    }
+    .pillar-desc {
+      font-size: 12.5px;
+      color: #334155;
+      text-align: justify;
+      line-height: 1.5;
+    }
+    .pillar-desc ul {
+      margin: 8px 0 0 0;
+      padding-left: 20px;
+    }
+    .pillar-desc li {
+      margin-bottom: 6px;
+    }
+    @media print {
+      @page {
+        size: letter;
+        margin: 0.4in 0.5in 0.4in 0.5in;
+      }
+      body {
+        background-color: #ffffff;
+        padding: 0;
+      }
+      .sheet-container {
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      .profile-grid {
+        grid-template-columns: 240px 1fr !important;
+      }
+      .header-container {
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: flex-end !important;
+      }
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sheet-container">
+    <div class="header-container">
+      <div class="main-title">Mayael the Anima</div>
+      <div class="deck-title">Deck Name <span class="deck-title-value">Herculoids</span></div>
+    </div>
+
+    <div class="profile-grid">
+      <div class="visual-column">
+        <div class="card-frame"></div>
+        <div class="score-badge">
+          <div class="score-title">Power Rank Score</div>
+          <div class="score-num">5 <span style="font-size: 14px; color: #64748b;">/10</span></div>
+        </div>
+      </div>
+
+      <div>
+        <table class="data-table">
+          <tr>
+            <td class="label">Archetype</td>
+            <td class="value">Naya Battlecruiser / Cheat-Stompy</td>
+          </tr>
+          <tr>
+            <td class="label">Power Bracket</td>
+            <td class="value">Mid-Power Casual</td>
+          </tr>
+          <tr>
+            <td class="label">Est. Turn to Win</td>
+            <td class="value">Turns 8 - 10</td>
+          </tr>
+          <tr>
+            <td class="label">Archidekt Link</td>
+            <td class="value">
+              <a class="decklist-btn" href="https://archidekt.com/decks/22456592/jeff_deck_mayael" target="_blank">↗ View Full Decklist</a>
+            </td>
+          </tr>
+        </table>
+
+        <div class="callout-box">
+          <div class="callout-title">Definitive Playstyle Mechanics & Win Conditions</div>
+          <div class="callout-text">
+            The strategy focuses on explosive, high-reward mana cheating. It uses <strong>Mayael the Anima</strong>, <strong>Elvish Piper</strong>, and high-cost enchantments to skip past massive mana costs and drop game-ending threats directly onto the battlefield. Victory is achieved through a <strong>table-shattering lethal stampede</strong> driven by overwhelming combat modifiers, extra combat steps, and catastrophic damage-multiplying triggers.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-heading">Strategic Pillar Breakdown</div>
+    
+    <div class="pillar-stack">
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">1. Synergy & Engine</span>
+          <span class="pillar-score">6 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          Your creature suite is perfectly tailored to meet your commander’s strict threshold requirements, ensuring that every blind activation of <strong>Mayael the Anima</strong> yields a devastating result.
+          <ul>
+            <li><strong>The Power-5+ Value Core:</strong> The internal synergy among your stompy payoffs is incredibly strong. <strong>Where Ancients Tread</strong> converts every single top-deck cheat into a free, uncounterable shock to any target, while <strong>Monstrous Vortex</strong> rewards you with a cascading waterfall of free spells whenever you cast your massive threats from your hand.</li>
+            <li><strong>Enchantment-Driven Cheat Engines:</strong> New additions provide unbelievable redundancy. <strong>Web of Life and Destiny</strong> acts as an absolute powerhouse, letting you look at your top five cards at the beginning of <em>every</em> combat to cheat a creature into play for free.</li>
+            <li><strong>The Fragility Risk:</strong> The primary reason this score sits at a 6 is structural dependency. While you have excellent backups like <strong>Elvish Piper</strong> and <strong>Ghalta, Stampede Tyrant</strong>, the deck relies heavily on keeping a 3-drop, 3-toughness creature (<strong>Mayael</strong>) alive on a hostile board for an entire turn cycle before it can generate value. If an opponent repeatedly picks off your commander, the engine can stall out with a hand full of uncastable, high-cost behemoths.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">2. Interaction & Board Control</span>
+          <span class="pillar-score">5 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          Your removal package features high impact and dramatic flavor, but it suffers from high mana costs and a lack of split-second timing.
+          <ul>
+            <li><strong>Asymmetrical Power:</strong> You possess incredible, jaw-dropping tactical tools. <strong>Curious Colossus</strong> is an absolute superstar here—when it hits the board, it permanently turns an opponent's entire army into vanilla 1/1 Cowards without affecting your own towering threats. <strong>Kogla and Yidaro</strong> gives you a brilliant, uncounterable modal option to smash an artifact or enchantment at instant speed while cycling itself back into your deck.</li>
+            <li><strong>Massive Target Removal:</strong> For wide boards, <strong>Austere Command</strong> provides the precise flexibility a big-creature deck needs, allowing you to wipe out small tokens and pesky utility artifacts while leaving your giant monsters completely untouched.</li>
+            <li><strong>The Timing Deficit:</strong> Your spot removal is heavily weighted at sorcery speed or relies on enter-the-battlefield triggers (like <strong>Terastodon</strong> and <strong>Woodfall Primus</strong>). If an opponent attempts to execute a fast, non-combat combo win on their turn, you have very few low-cost instant-speed options to stop them outside of a solitary <strong>Path to Exile</strong> or <strong>Settle the Wreckage</strong>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">3. Consistency & Tutors</span>
+          <span class="pillar-score">4 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          This deck embraces a high-variance, thrilling playstyle, which means its consistency relies almost entirely on top-deck luck and continuous card draw rather than a precise tutoring package.
+          <ul>
+            <li><strong>Digging for Card Draw:</strong> To prevent running out of steam, you rely on specialized power-matters engines. <strong>Drumhunter</strong> and <strong>Bugenhagen, Wise Elder</strong> provide reliable, repetitive card draw during your upkeep just for doing what your deck already wants to do: controlling massive 7+ power creatures.</li>
+            <li><strong>Top-Deck Filtering:</strong> <strong>Loot, Exuberant Explorer</strong> helps you churn through your library, while <strong>Monstrous Vortex</strong> keeps your hand topped off by chaining creature spells together.</li>
+            <li><strong>The Missing Links:</strong> The deck runs zero traditional Naya creature tutors (such as <em>Worldly Tutor</em>, <em>Eladamri's Call</em>, or <em>Chord of Calling</em>). Without these pieces to specifically search for protection monsters like <strong>Spellbreaker Behemoth</strong> or <strong>Archetype of Endurance</strong>, you are at the mercy of whatever cards happen to sit in the top five slots of your library when you activate your commander.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">4. Speed & Mana Base</span>
+          <span class="pillar-score">5 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          Your mana base contains excellent individual fixing pieces, but the overall speed is significantly reined in by a high volume of lands that enter the battlefield tapped.
+          <ul>
+            <li><strong>The Green Mana Backbone:</strong> Your green fixing is structurally sound. High-tier duals like <strong>Stomping Ground</strong>, alongside battle lands like <strong>Canopy Vista</strong> and <strong>Cinder Glade</strong>, ensure you can easily hit your early green requirements to begin developing your board.</li>
+            <li><strong>The Tempo Cost:</strong> Running multiple tap-lands like <strong>Arctic Flats</strong>, <strong>Highland Weald</strong>, <strong>Timber Gorge</strong>, and <strong>Thornglint Bridge</strong> creates a noticeable bottleneck. In a deck where the average converted mana cost of your spells is incredibly high, falling a full turn behind the rest of the table due to tapped lands can severely delay your game plan.</li>
+            <li><strong>Ramp Discrepancy:</strong> Your deck features fantastic internal ramp creatures like <strong>Hulking Raptor</strong>, but it lacks the core suite of low-cost, 2-mana land-searching spells (like <em>Three Visits</em>, <em>Nature's Lore</em>, or <em>Farseek</em>) that are critical for consistently pulling off a turn-3 commander play.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">5. Win Conditions & Closeness to "Infinite"</span>
+          <span class="pillar-score">7 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          When this deck successfully establishes its board state, it closes out games with a spectacular, terrifying show of sheer force.
+          <ul>
+            <li><strong>The Lethal Combat Multipliers:</strong> You have an incredible array of combat finishers. <strong>Twinflame Tyrant</strong> acts as a massive force multiplier by doubling all damage dealt by your sources, while <strong>Atarka, World Render</strong> instantly grants your massive dragons double strike.</li>
+            <li><strong>Overwhelming Alpha Strikes:</strong> <strong>Thunderfoot Baloth</strong> provides a huge team-wide pump and trample across your entire front line, while <strong>Hellkite Charger</strong> allows you to pay extra mana to untap your army and take additional combat steps to finish off the table.</li>
+            <li><strong>Commitment to Non-Infinite Play:</strong> This deck earns a 7 because it delivers a highly optimized, incredibly deadly combat step while remaining <strong>strictly anti-infinite</strong>. You have completely avoided infinite combat loops (such as pairing <em>Hellkite Charger</em> with <em>Sword of the Feast and Famine</em>). Instead, your victories are earned through honest, explosive, and devastating casual combat damage.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
