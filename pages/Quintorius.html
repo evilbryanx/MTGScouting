@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commander Profile - Quintorius, History Chaser</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      background-color: #f8fafc;
+      margin: 0;
+      padding: 15px;
+      line-height: 1.4;
+      font-size: 13px;
+    }
+    .sheet-container {
+      background-color: #ffffff;
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2, h3 {
+      margin: 0;
+      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .header-container {
+      border-bottom: 3px solid #475569;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    @media (min-width: 600px) {
+      .header-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+    }
+    .main-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1e293b;
+    }
+    .deck-title {
+      font-weight: 700;
+      color: #475569;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .deck-title-value {
+      font-weight: 800;
+      color: #1e293b;
+      text-transform: none;
+      letter-spacing: normal;
+      font-size: 18px;
+      margin-left: 6px;
+    }
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-bottom: 12px;
+    }
+    @media (min-width: 650px) {
+      .profile-grid {
+        grid-template-columns: 240px 1fr;
+      }
+    }
+    .visual-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .card-frame {
+      width: 230px;
+      height: 321px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      background: #0f172a url('https://cards.scryfall.io/large/front/0/7/0742f19d-179c-43c4-ab95-4160c56b4384.jpg?1776731084') no-repeat center/cover;
+    }
+    .score-badge {
+      margin-top: 15px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 15px;
+      border-radius: 8px;
+      text-align: center;
+      width: 180px;
+    }
+    .score-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #94a3b8;
+    }
+    .score-num {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+    .data-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+    .label {
+      font-weight: 700;
+      color: #475569;
+      width: 110px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    @media (min-width: 400px) {
+      .label { width: 140px; font-size: 11px; }
+    }
+    .value {
+      color: #0f172a;
+      font-size: 13px;
+    }
+    .decklist-btn {
+      display: inline-block;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .decklist-btn:hover {
+      text-decoration: underline;
+    }
+    .callout-box {
+      background-color: #f8fafc;
+      border-left: 4px solid #475569;
+      padding: 12px 15px;
+      border-radius: 0 8px 8px 0;
+      margin-top: 5px;
+    }
+    .callout-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #334155;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+    }
+    .callout-text {
+      font-size: 12.5px;
+      color: #334155;
+      font-style: italic;
+    }
+    .section-heading {
+      font-size: 14px;
+      font-weight: 700;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      color: #334155;
+    }
+    .pillar-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .pillar-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+    .pillar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .pillar-name {
+      font-weight: 700;
+      font-size: 13px;
+      color: #1e293b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .pillar-score {
+      font-weight: 800;
+      font-size: 12px;
+      background: #f1f5f9;
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: #0f172a;
+    }
+    .pillar-desc {
+      font-size: 12.5px;
+      color: #334155;
+      text-align: justify;
+      line-height: 1.5;
+    }
+    .pillar-desc ul {
+      margin: 8px 0 0 0;
+      padding-left: 20px;
+    }
+    .pillar-desc li {
+      margin-bottom: 6px;
+    }
+    @media print {
+      @page {
+        size: letter;
+        margin: 0.4in 0.5in 0.4in 0.5in;
+      }
+      body {
+        background-color: #ffffff;
+        padding: 0;
+      }
+      .sheet-container {
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      .profile-grid {
+        grid-template-columns: 240px 1fr !important;
+      }
+      .header-container {
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: flex-end !important;
+      }
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sheet-container">
+    <div class="header-container">
+      <div class="main-title">Quintorius, History Chaser</div>
+      <div class="deck-title">Deck Name <span class="deck-title-value">Never Forget</span></div>
+    </div>
+
+    <div class="profile-grid">
+      <div class="visual-column">
+        <div class="card-frame"></div>
+        <div class="score-badge">
+          <div class="score-title">Power Rank Score</div>
+          <div class="score-num">6.5 <span style="font-size: 14px; color: #64748b;">/10</span></div>
+        </div>
+      </div>
+
+      <div>
+        <table class="data-table">
+          <tr>
+            <td class="label">Archetype</td>
+            <td class="value">Graveyard-Exile Aristocrats / Token Swarm</td>
+          </tr>
+          <tr>
+            <td class="label">Power Bracket</td>
+            <td class="value">High-Power Casual / Optimized Engine</td>
+          </tr>
+          <tr>
+            <td class="label">Est. Turn to Win</td>
+            <td class="value">Turn 7 - 8 (Uninterrupted)</td>
+          </tr>
+          <tr>
+            <td class="label">Archidekt Link</td>
+            <td class="value">
+              <a class="decklist-btn" href="https://archidekt.com/decks/22039853/never_forget" target="_blank">↗ View Full Decklist</a>
+            </td>
+          </tr>
+        </table>
+
+        <div class="callout-box">
+          <div class="callout-title">Definitive Playstyle Mechanics & Win Conditions</div>
+          <div class="callout-text">
+            This deck operates as a graveyard-exile Aristocrats and token-swarm engine. Mechanically, it looks to dump cards into the graveyard via looting or milling, and then extract immense value by forcing those cards to leave the graveyard via reanimation, escape, or targeted exile. It translates these zone changes into an overwhelming army of 3/2 Spirit tokens or direct-damage burns, ultimately riding a table-shattering lethal stampede or massive burn triggers to victory.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-heading">Strategic Pillar Breakdown</div>
+    
+    <div class="pillar-stack">
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">1. Synergy & Engine</span>
+          <span class="pillar-score">9 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          The absolute crown jewel of this deck list is how beautifully it marries its card slots to Quintorius, History Chaser’s uniquely explosive trigger. You have constructed a flawless, self-contained machine where the graveyard is a revolving door.
+          <ul>
+             <li><strong>Zone-Change Abuse:</strong> Cards like <strong>Advanced Reconstruction</strong>, <strong>Ark of Hunger</strong>, and <strong>Kirol, History Buff // Pack a Punch</strong> act as brilliant force multipliers. When cards leave the yard, you aren't just getting a 3/2 Spirit from your commander; you're stacking up widespread face-burn and unlocking copied spells.</li>
+             <li><strong>The Unshakable Core:</strong> The tag-team of <strong>Containment Construct</strong> and <strong>Conspiracy Theorist</strong> turns standard Boros looting cards (<strong>Faithless Looting</strong>, <strong>Seize the Spoils</strong>) into <strong>jaw-dropping casual card advantage</strong>. You discard a card, trigger an ability to exile it, immediately get a Spirit token because it left the graveyard, and then still get to cast the spell.</li>
+             <li><strong>Engine Redundancy:</strong> If your opponents realize how dangerous your commander is and send him to the command zone, you have robust structural backups. <strong>Quintorius, Field Historian</strong> and <strong>Quintorius, Loremaster</strong> ensure the Spirit-generating, card-exiling strategy stays completely online.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">2. Interaction & Board Control</span>
+          <span class="pillar-score">7 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          Your interaction suite features premier, hyper-efficient classic point removal alongside some deeply thematic, devastating tools.
+          <ul>
+             <li><strong>Spot Removal Gold Standards:</strong> Running <strong>Swords to Plowshares</strong> and <strong>Path to Exile</strong> means you can answer catastrophic threats instantly for just a single mana. <strong>Rip Apart</strong> adds vital flexibility for hitting problematic enchantments or artifacts.</li>
+             <li><strong>Asymmetrical Power & Synergistic Wipes:</strong> <strong>Tragic Arrogance</strong> is a masterful inclusion here. It completely deconstructs your opponents' boards while allowing you to keep your best engine pieces alive. Furthermore, utilizing <strong>Release to Memory</strong> can act as a sudden blowout—completely wiping an opponent’s threatening graveyard while simultaneously triggering your commander to hand you an absolute army of Spirits.</li>
+             <li><strong>Room for Growth:</strong> While <strong>Skyclave Apparition</strong> is stellar, the interaction suite leans a little heavily towards sorcery speed or highly conditional responses. Adding a few more instant-speed options like <em>Chaos Warp</em> or <em>Generous Gift</em> would push this score even higher.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">3. Consistency & Tutors</span>
+          <span class="pillar-score">7 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          This deck relies heavily on a high volume of card draw and self-mill rather than a dense web of tutor spells, which perfectly matches a highly interactive, non-infinite casual playstyle.
+          <ul>
+             <li><strong>Exceptional Engine Draw:</strong> Once your engine is online, your draw packages are incredibly potent. <strong>Tocasia's Welcome</strong> and <strong>Caretaker's Talent</strong> offer steady, repeatable card-drawing fuel because you are constantly creating tokens or moving cards across zones. <strong>Idol of Oblivion</strong> is effectively a free extra card every single rotation.</li>
+             <li><strong>Graveyard Fueling:</strong> <strong>Perpetual Timepiece</strong> and <strong>Millikin</strong> work double-duty by filling your graveyard with potential targets while protecting you from getting completely blown out by opposing graveyard hate.</li>
+             <li><strong>The Bottleneck:</strong> The reason this sits at a 7 is a slight reliance on finding your engines organically. Without tutors like <em>Enlightened Tutor</em> to pull out your crucial Class enchantments or key artifacts, you are at the mercy of your top decks and looting spells to find your most explosive enablers.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">4. Speed & Mana Base</span>
+          <span class="pillar-score">7.5 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          Your mana base and acceleration package are structurally sound and capable of supporting your mid-range curve, though there are subtle areas where the deck's speed is intentionally throttled.
+          <ul>
+             <li><strong>The High-Value Lands:</strong> <strong>Lotus Field</strong> is a spectacular inclusion here. Sacrificing two lands forces them directly into the graveyard, giving you immediate targets to reanimate or harvest later. <strong>Emeria, the Sky Ruin</strong> and <strong>Mistveil Plains</strong> provide incredible late-game inevitability.</li>
+             <li><strong>Ramp Suite:</strong> Traditional powerhouses like <strong>Sol Ring</strong>, <strong>Arcane Signet</strong>, and <strong>Archaeomancer's Map</strong> keep you right on pace with the rest of the table. <strong>Bitterthorn, Nissa's Animus</strong> provides a brilliant, repeatable land-ramp package attached to a token body.</li>
+             <li><strong>The Tempo Cost:</strong> Because the deck runs a notable number of tapped utility lands or bounce/snarl lands (<strong>Rugged Prairie</strong>, <strong>Furycalm Snarl</strong>, <strong>Temple of Triumph</strong>), you will occasionally experience minor tempo loss in the opening three turns.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">5. Win Conditions & Closeness to "Infinite"</span>
+          <span class="pillar-score">8 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          You have successfully constructed a deck that hits like an absolute freight train without alienating your playgroup with cheap, infinite loops.
+          <ul>
+             <li><strong>No Infinite Combos:</strong> True to your strategic preference, this list features no cheap, infinite two-card locks. It wins purely through high-synergy value accumulation and overwhelming combat presence.</li>
+             <li><strong>The Ultimate Finishers:</strong> <strong>Moonshaker Cavalry</strong> is your absolute premier win condition. Dropping this down onto a board packed with 3/2 Spirit tokens turns your army into a <strong>table-shattering lethal stampede</strong> that can delete an entire four-player pod in a single combat phase.</li>
+             <li><strong>Brutal Combat Chonkers:</strong> <strong>Balefire Liege</strong> completely swings the math by pumping your entire board while providing massive life-swing burns whenever you cast your Boros spells. Combined with <strong>Augusta, Order Returned</strong>, you can untap your attackers, pivot to defense, or pump your squad’s power dynamically to squeeze out every drop of combat damage.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

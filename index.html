@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commander Deck Hub</title>
+    <style>
+        /* --- GENERAL PAGE STYLING --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #121214; /* Dark sleek background */
+            color: #e2e8f0;            /* Light gray text for readability */
+            margin: 0;
+            padding: 2rem;
+            line-height: 1.5;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #a0aec0;
+            font-size: 1.1rem;
+        }
+
+        /* --- THE FOUR-COLUMN GRID SYSTEM --- */
+        .grid-container {
+            display: grid;
+            /* Creates 4 equal columns on desktop, shrinks to 1 column on mobile */
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- PLAYER COLUMN BOXES --- */
+        .player-column {
+            background-color: #1a1a1e; /* Slightly lighter box for contrast */
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 1px solid #2d2d34;
+        }
+
+        .player-column h2 {
+            font-size: 1.3rem;
+            color: #f1c40f; /* Gold accent color for the player names */
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #2d2d34;
+            padding-bottom: 0.5rem;
+        }
+
+        /* --- LINK LIST STYLING --- */
+        .deck-list {
+            list-style-type: none; /* Removes standard bullet points */
+            padding: 0;
+            margin: 0;
+        }
+
+        .deck-list li {
+            margin-bottom: 0.75rem; /* Space between links */
+        }
+
+        /* How the links look normally */
+        .deck-list a {
+            color: #38bdf8; /* Clean blue link color */
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        /* How the links look when you hover your mouse over them */
+        .deck-list a:hover {
+            color: #7dd3fc; /* Lighter blue on hover */
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MTG Playgroup Scouting Report</h1>
+        <p class="subtitle">Quick access to our active Commander decks</p>
+    </header>
+
+    <!-- This container holds all 4 columns together -->
+    <div class="grid-container">
+
+        <!-- ==================== COLUMN 1: BILL ==================== -->
+        <div class="player-column">
+            <h2>Bill's Decks</h2>
+            <ul class="deck-list">
+                <!-- TUTORIAL NOTE: Copy a line below to add a new deck. 
+                     Change 'pages/example.html' to your actual file path. -->
+                <li><a href="pages/Arcades.html">Arcades, the Strategist</a></li>
+                <li><a href="pages/Karador.html">Karador, Ghost Chieftain</a></li>
+    		<li><a href="pages/Loot.html">Loot, Exuberant Explorer</a></li>
+		<li><a href="pages/Oloro.html">Oloro, Ageless Ascetic</a></li>
+                <li><a href="pages/Surrak.html">Surrak Dragonclaw</a></li>
+                <!-- New links go right above this line -->
+            </ul>
+        </div>
+
+        <!-- ==================== COLUMN 2: BRAD ==================== -->
+        <div class="player-column">
+            <h2>Brad's Decks</h2>
+            <ul class="deck-list">
+                <li><a href="pages/Doran.html">Doran, Besieged by Time</a></li>
+                <li><a href="pages/Eriette.html">Eriette of the Charmed Apple</a></li>
+		<li><a href="pages/Kudo.html">Kudo, King Among Bears</a></li>
+                <li><a href="pages/Valgavoth.html">Valgavoth, Harrorer of Souls</a></li>
+		<li><a href="pages/Zurgo.html">Zurgo Stormrender</a></li>
+            </ul>
+        </div>
+
+        <!-- ==================== COLUMN 3: BRYAN ==================== -->
+        <div class="player-column">
+            <h2>Bryan's Decks</h2>
+            <ul class="deck-list">
+                <li><a href="pages/Ardbert.html">Ardbert, Warrior of Darkness</a></li>
+		<li><a href="pages/Hamza.html">Hamza, Guardian of Arashin</a></li>
+		<li><a href="pages/Hearthhull.html">Hearthhull, the Worldseed</a></li>
+		<li><a href="pages/Kenessos.html">Kenessos, Priest of Thassa</a></li>
+                <li><a href="pages/Lucea.html">Magus Lucea Kane</a></li>
+		<li><a href="pages/Obeka.html">Obeka, Brute Chronologist</a></li>
+		<li><a href="pages/Quintorius.html">Quintorius, Field Historian</a></li>
+		<li><a href="pages/Ragost.html">Ragost, Deft Gastronaut</a></li>
+		<li><a href="pages/Sidar.html">Sidar, Jabari of Zhalfir</a></li>
+		<li><a href="pages/Teval.html">Teval, the Balanced Scale</a></li>
+		<li><a href="pages/Volo.html">Volo, Guide to Monsters</a></li>
+            </ul>
+        </div>
+
+        <!-- ==================== COLUMN 4: JEFF ==================== -->
+        <div class="player-column">
+            <h2>Jeff's Decks</h2>
+            <ul class="deck-list">
+                <li><a href="pages/Azor.html">Azor, the Lawbringer</a></li>
+		<li><a href="pages/Geist.html">Geist of Saint Traft</a></li>
+		<li><a href="pages/Jodah.html">Jodah, Archmage Eternal</a></li>
+                <li><a href="pages/Mayael.html">Mayael the Anima</a></li>
+		<li><a href="pages/Rafiq.html">Rafiq of the Many</a></li>
+		<li><a href="pages/Shalai.html">Shalai, Voice of Plenty</a></li>
+		<li><a href="pages/ShuYun.html">Shu Yun, the Silent Tempest</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+</body>
+</html>

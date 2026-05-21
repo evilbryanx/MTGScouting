@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commander Profile - Geist of Saint Traft</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      background-color: #f8fafc;
+      margin: 0;
+      padding: 15px;
+      line-height: 1.4;
+      font-size: 13px;
+    }
+    .sheet-container {
+      background-color: #ffffff;
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2, h3 {
+      margin: 0;
+      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .header-container {
+      border-bottom: 3px solid #475569;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    @media (min-width: 600px) {
+      .header-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+    }
+    .main-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1e293b;
+    }
+    .deck-title {
+      font-weight: 700;
+      color: #475569;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .deck-title-value {
+      font-weight: 800;
+      color: #1e293b;
+      text-transform: none;
+      letter-spacing: normal;
+      font-size: 18px;
+      margin-left: 6px;
+    }
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-bottom: 12px;
+    }
+    @media (min-width: 650px) {
+      .profile-grid {
+        grid-template-columns: 240px 1fr;
+      }
+    }
+    .visual-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .card-frame {
+      width: 230px;
+      height: 321px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      background: #0f172a url('https://cards.scryfall.io/large/front/3/5/35b57113-b39a-460b-b4aa-02606b40bbd0.jpg?1562828502') no-repeat center/cover;
+    }
+    .score-badge {
+      margin-top: 15px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 15px;
+      border-radius: 8px;
+      text-align: center;
+      width: 180px;
+    }
+    .score-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #94a3b8;
+    }
+    .score-num {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+    .data-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+    .label {
+      font-weight: 700;
+      color: #475569;
+      width: 110px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    @media (min-width: 400px) {
+      .label { width: 140px; font-size: 11px; }
+    }
+    .value {
+      color: #0f172a;
+      font-size: 13px;
+    }
+    .decklist-btn {
+      display: inline-block;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .decklist-btn:hover {
+      text-decoration: underline;
+    }
+    .callout-box {
+      background-color: #f8fafc;
+      border-left: 4px solid #475569;
+      padding: 12px 15px;
+      border-radius: 0 8px 8px 0;
+      margin-top: 5px;
+    }
+    .callout-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #334155;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+    }
+    .callout-text {
+      font-size: 12.5px;
+      color: #334155;
+      font-style: italic;
+    }
+    .section-heading {
+      font-size: 14px;
+      font-weight: 700;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      color: #334155;
+    }
+    .pillar-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .pillar-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+    .pillar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .pillar-name {
+      font-weight: 700;
+      font-size: 13px;
+      color: #1e293b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .pillar-score {
+      font-weight: 800;
+      font-size: 12px;
+      background: #f1f5f9;
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: #0f172a;
+    }
+    .pillar-desc {
+      font-size: 12.5px;
+      color: #334155;
+      text-align: justify;
+      line-height: 1.5;
+    }
+    .pillar-desc ul {
+      margin: 8px 0 0 0;
+      padding-left: 20px;
+    }
+    .pillar-desc li {
+      margin-bottom: 6px;
+    }
+    @media print {
+      @page {
+        size: letter;
+        margin: 0.4in 0.5in 0.4in 0.5in;
+      }
+      body {
+        background-color: #ffffff;
+        padding: 0;
+      }
+      .sheet-container {
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      .profile-grid {
+        grid-template-columns: 240px 1fr !important;
+      }
+      .header-container {
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: flex-end !important;
+      }
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sheet-container">
+    <div class="header-container">
+      <div class="main-title">Geist of Saint Traft</div>
+      <div class="deck-title">Deck Name <span class="deck-title-value">Scooby Doo Where Are You</span></div>
+    </div>
+
+    <div class="profile-grid">
+      <div class="visual-column">
+        <div class="card-frame"></div>
+        <div class="score-badge">
+          <div class="score-title">Power Rank Score</div>
+          <div class="score-num">4.5 <span style="font-size: 14px; color: #64748b;">/10</span></div>
+        </div>
+      </div>
+
+      <div>
+        <table class="data-table">
+          <tr>
+            <td class="label">Archetype</td>
+            <td class="value">Voltron / Spirit Tribal / Clones Subtheme</td>
+          </tr>
+          <tr>
+            <td class="label">Power Bracket</td>
+            <td class="value">Mid-Power Casual</td>
+          </tr>
+          <tr>
+            <td class="label">Est. Turn to Win</td>
+            <td class="value">Turns 9–11</td>
+          </tr>
+          <tr>
+            <td class="label">Archidekt Link</td>
+            <td class="value">
+              <a class="decklist-btn" href="https://archidekt.com/decks/22456624/jeff_deck_geist" target="_blank">↗ View Full Decklist</a>
+            </td>
+          </tr>
+        </table>
+
+        <div class="callout-box">
+          <div class="callout-title">Definitive Playstyle Mechanics & Win Conditions</div>
+          <div class="callout-text">
+            The deck functions by deploying hexproof or unblockable threats like <strong>Geist of Saint Traft</strong> or <strong>Invisible Stalker</strong>, making them lethal via aura/equipment buffs, and copying them with clone variants. It aims to win via chunking opponents down with unblockable Commander/combat damage, amplified by token doublers like <strong>Anointed Procession</strong> and tribal anthems.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-heading">Strategic Pillar Breakdown</div>
+    
+    <div class="pillar-stack">
+      <!-- Pillar 1 -->
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">1. Synergy & Engine</span>
+          <span class="pillar-score">5 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          Your deck possesses a few pockets of brilliant, jaw-dropping casual card advantage, but the engine experiences structural friction due to a split focus.
+          <ul>
+             <li><strong>Typing and Token Engines:</strong> You have included <strong>Arcane Adaptation</strong> and <strong>Leyline of Transformation</strong>. These cards are absolute all-stars here. They turn all your unblockable non-Spirits into Spirits to reap the benefits of <strong>Drogskol Captain</strong> and <strong>Supreme Phantom</strong>. Furthermore, pairing <strong>Geist of Saint Traft</strong> with <strong>Anointed Procession</strong> is magnificent, yielding two 4/4 flying Angels per attack instead of one.</li>
+             <li><strong>The Friction (Clone Non-Synergy):</strong> The deck runs a massive Clone package (<strong>Clone</strong>, <strong>Mirror Image</strong>, <strong>Copycrook</strong>, <strong>Pirated Copy</strong>, <strong>Clever Impersonator</strong>). While cloning an opponent's best creature is fine, cloning <strong>Geist of Saint Traft</strong> results in disaster due to the <strong>Legend Rule</strong>—you will immediately have to sacrifice one of them. While <strong>Helm of the Host</strong> brilliantly bypasses this rule to create a table-shattering army of Geists, it is a lone exception. Without the Helm, your clones cannot safely copy your own Commander to build a cohesive engine.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Pillar 2 -->
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">2. Interaction & Board Control</span>
+          <span class="pillar-score">4 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          Your interactive suite has excellent standalone cards, but it lacks the depth and rapid-response speed required to dictate the pace of a modern Commander game.
+          <ul>
+             <li><strong>Spot Removal & Single Targets:</strong> Cards like <strong>Path to Exile</strong> and <strong>Frogify</strong> are efficient, premier choices for neutralising major threats. <strong>Hanged Executioner</strong> pulls double duty as a Spirit and a reactive exile effect. However, a total spot-removal count this low leaves you highly vulnerable to fast-moving combo decks or early-game aggressors.</li>
+             <li><strong>Sweepers & Asymmetry:</strong> You have <strong>Settle the Wreckage</strong>, which offers a beautiful, unexpected blow-out potential against an aggressive opponent. Beyond that, your board control relies heavily on your massive planeswalkers: <strong>Ugin, the Spirit Dragon</strong>, <strong>Karn Liberated</strong>, and <strong>Jace, Unraveler of Secrets</strong>. While Ugin offers an asymmetric wipe, his -X ability will completely obliterate your own Auras, Token Angels, and low-mana Spirits. True asymmetric options that protect your Voltron strategy (such as <em>Single Combat</em> or <em>Divine Reckoning</em>) are missing.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Pillar 3 -->
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">3. Consistency & Tutors</span>
+          <span class="pillar-score">4 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          Executing a multi-piece game plan requires robust card-filtering, but this list heavily relies on top-decking the right pieces at the right time.
+          <ul>
+             <li><strong>Card Draw & Selection:</strong> <strong>Mentor of the Meek</strong> and <strong>Bygone Bishop</strong> provide solid, steady value whenever you cast your small utility or unblockable creatures. <strong>Silent Hallcreeper</strong> is an absolute gem here, providing unblockable utility that can draw you cards or grow into a threat.</li>
+             <li><strong>The Tutor Vacuum:</strong> The deck scores lower in this category due to a complete absence of tutors. You have critical, high-impact enchantments and equipment (<strong>Anointed Procession</strong>, <strong>Helm of the Host</strong>, <strong>Steel of the Godhead</strong>) that completely warp the game when they hit the board. Without tools like <em>Open the Armory</em>, <em>Idyllic Tutor</em>, or <em>Stoneforge Mystic</em>, you cannot reliably access these game-winning linchpins when you need them most.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Pillar 4 -->
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">4. Speed & Mana Base</span>
+          <span class="pillar-score">5 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          The deck's mana profile creates an internal pacing conflict, resulting in slow early turns followed by a sudden jump to massive mana costs.
+          <ul>
+             <li><strong>The Mana Curve Conflict:</strong> Your core strategy is built around efficient, aggressive 2-to-4 mana plays (<strong>Geist of Saint Traft</strong>, <strong>Aqueous Form</strong>, <strong>Rattlechains</strong>). However, the top end of the deck suddenly spikes into massive, slow battlecruiser cards like <strong>Moonsilver Spear</strong> (4 mana to cast + 4 mana to equip), <strong>Karn Liberated</strong> (7 mana), <strong>Ugin, the Spirit Dragon</strong> (8 mana), and <strong>Emrakul, the Promised End</strong> (13 mana). These elements feel entirely detached from your core tribal and speed-based Voltron synergy.</li>
+             <li><strong>The Land Base:</strong> You have fantastic utility lands like <strong>Cavern of Souls</strong> (making your Spirits uncounterable) and <strong>Rogue's Passage</strong> (ensuring lethal damage gets through). However, you are running too many lands that enter the battlefield tapped (<strong>Meandering River</strong>, <strong>Tranquil Cove</strong>, <strong>Glacial Floodplain</strong>, <strong>Azorius Chancery</strong>). This slows your tempo, often delaying your Commander by an entire turn cycle.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Pillar 5 -->
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">5. Win Conditions & Closeness to "Infinite"</span>
+          <span class="pillar-score">6 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          This deck strictly avoids infinite combos, opting instead for a fair, explosive combat-focused finisher style.
+          <ul>
+             <li><strong>Driving Home the Victory:</strong> Your primary path to victory is a table-shattering lethal stampede led by unblockable threats. <strong>Steel of the Godhead</strong> turned on by Geist of Saint Traft creates an immediate 4/4 unblockable, lifelinking monster that generates an escalating life-total gap.</li>
+             <li><strong>Combat Scale and Finishers:</strong> <strong>Blackblade Reforged</strong> scales massively with your 38 lands, easily turning <strong>Invisible Stalker</strong> or Geist into a 2-turn clock. Additionally, <strong>Katilda, Dawnhart Martyr</strong> scales directly with your count of Spirits and Enchantments, allowing for a sudden, massive flying strike. Because you do not run loops or game-ending infinite interactions, your victories will always be earned through hard-fought combat phases.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commander Profile - Eriette of the Charmed Apple</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      background-color: #f8fafc;
+      margin: 0;
+      padding: 15px;
+      line-height: 1.4;
+      font-size: 13px;
+    }
+    .sheet-container {
+      background-color: #ffffff;
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2, h3 {
+      margin: 0;
+      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .header-container {
+      border-bottom: 3px solid #475569;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    @media (min-width: 600px) {
+      .header-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+    }
+    .main-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1e293b;
+    }
+    .deck-title {
+      font-weight: 700;
+      color: #475569;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .deck-title-value {
+      font-weight: 800;
+      color: #1e293b;
+      text-transform: none;
+      letter-spacing: normal;
+      font-size: 18px;
+      margin-left: 6px;
+    }
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-bottom: 12px;
+    }
+    @media (min-width: 650px) {
+      .profile-grid {
+        grid-template-columns: 240px 1fr;
+      }
+    }
+    .visual-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .card-frame {
+      width: 230px;
+      height: 321px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      background: #0f172a url('https://cards.scryfall.io/normal/front/e/c/ecead4cd-47ae-4c42-b15c-1b29b5caba18.jpg?1692939281') no-repeat center/cover;
+    }
+    .score-badge {
+      margin-top: 15px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 15px;
+      border-radius: 8px;
+      text-align: center;
+      width: 180px;
+    }
+    .score-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #94a3b8;
+    }
+    .score-num {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1;
+      margin-top: 2px;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+    .data-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+    .label {
+      font-weight: 700;
+      color: #475569;
+      width: 110px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    @media (min-width: 400px) {
+      .label { width: 140px; font-size: 11px; }
+    }
+    .value {
+      color: #0f172a;
+      font-size: 13px;
+    }
+    .decklist-btn {
+      display: inline-block;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .decklist-btn:hover {
+      text-decoration: underline;
+    }
+    .callout-box {
+      background-color: #f8fafc;
+      border-left: 4px solid #475569;
+      padding: 12px 15px;
+      border-radius: 0 8px 8px 0;
+      margin-top: 5px;
+    }
+    .callout-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #334155;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+    }
+    .callout-text {
+      font-size: 12.5px;
+      color: #334155;
+      font-style: italic;
+    }
+    .section-heading {
+      font-size: 14px;
+      font-weight: 700;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      color: #334155;
+    }
+    .pillar-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .pillar-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+    .pillar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .pillar-name {
+      font-weight: 700;
+      font-size: 13px;
+      color: #1e293b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .pillar-score {
+      font-weight: 800;
+      font-size: 12px;
+      background: #f1f5f9;
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: #0f172a;
+    }
+    .pillar-desc {
+      font-size: 12.5px;
+      color: #334155;
+      text-align: justify;
+      line-height: 1.5;
+    }
+    .pillar-desc ul {
+      margin: 8px 0 0 0;
+      padding-left: 20px;
+    }
+    .pillar-desc li {
+      margin-bottom: 6px;
+    }
+    @media print {
+      @page {
+        size: letter;
+        margin: 0.4in 0.5in 0.4in 0.5in;
+      }
+      body {
+        background-color: #ffffff;
+        padding: 0;
+      }
+      .sheet-container {
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      .profile-grid {
+        grid-template-columns: 240px 1fr !important;
+      }
+      .header-container {
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: flex-end !important;
+      }
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sheet-container">
+    <div class="header-container">
+      <div class="main-title">Eriette of the Charmed Apple</div>
+      <div class="deck-title">Deck Name <span class="deck-title-value">Bad Apple</span></div>
+    </div>
+
+    <div class="profile-grid">
+      <div class="visual-column">
+        <div class="card-frame"></div>
+        <div class="score-badge">
+          <div class="score-title">Power Rank Score</div>
+          <div class="score-num">7.5 <span style="font-size: 14px; color: #64748b;">/10</span></div>
+        </div>
+      </div>
+
+      <div>
+        <table class="data-table">
+          <tr>
+            <td class="label">Archetype</td>
+            <td class="value">Aura-Goad / Pillow Fort / Lifegain Bleed</td>
+          </tr>
+          <tr>
+            <td class="label">Power Bracket</td>
+            <td class="value">High-Power Casual</td>
+          </tr>
+          <tr>
+            <td class="label">Est. Turn to Win</td>
+            <td class="value">Turn 6 - 8</td>
+          </tr>
+          <tr>
+            <td class="label">Archidekt Link</td>
+            <td class="value">
+              <a class="decklist-btn" href="https://archidekt.com/decks/18851798/eriette_of_the_charmed_apple" target="_blank">↗ View Full Decklist</a>
+            </td>
+          </tr>
+        </table>
+
+        <div class="callout-box">
+          <div class="callout-title">Definitive Playstyle Mechanics & Win Conditions</div>
+          <div class="callout-text">
+            The deck operates as a political puppet master, attaching auras like <strong>Ghoulish Impetus</strong> and <strong>Phyresis</strong> to opponents' creatures so they cannot attack you, forcing them to bludgeon your other rivals. You achieve ultimate victory by stacking a massive board of enchantments to activate Eriette’s end-step siphon, heavily amplified by damage doublers and massive life-drain bursts.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-heading">Strategic Pillar Breakdown</div>
+    
+    <div class="pillar-stack">
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">1. Synergy & Engine</span>
+          <span class="pillar-score">8.5 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          The sheer mechanical cohesion in this deck is magnificent, featuring structural redundancy and value engines that keep your engine humming with jaw-dropping casual card advantage.
+          <ul>
+            <li>The Cost-Reduction Core: <strong>Killian, Ink Duelist</strong> and <strong>Danitha Capashen, Paragon</strong> turn your target removal and auras into dirt-cheap plays. Killian reducing the cost of auras targeting *any* creature by {2} lets you spread curses across the table for pennies.</li>
+            <li>Unfair Value Engines: <strong>Light-Paws, Emperor's Voice</strong> is an absolute powerhouse here; casting a single pacifying aura on an opponent's threat lets you tutor up a protection piece or an engine card like <strong>Lord Skitter's Blessing</strong> directly to the battlefield. Meanwhile, new heavy-hitters like <strong>Pearl-Ear, Imperial Advisor</strong> offer incredible lifelink synergy and crucial card draw.</li>
+            <li>Symmetrical Pain Management: <strong>Ondu Spiritdancer</strong> and <strong>Archon of Sun's Grace</strong> ensure that as you cast your enchantments, you are passively building a towering, resilient army of blockers and attackers.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">2. Interaction & Board Control</span>
+          <span class="pillar-score">9 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          Your removal package is staggeringly efficient, focusing on sweeping threats symmetrically while keeping your target packages cleanly aligned with your political strategy.
+          <ul>
+            <li>Table-Shattering Asymmetrical Wipes: You are running <strong>Winds of Abandon</strong> and <strong>Austere Command</strong>, which allow you to sculpt the perfect board state. <strong>Farewell</strong> and <strong>Damn</strong> provide ultimate flexibility, letting you wipe the slate clean if a game state gets out of hand.</li>
+            <li>Weaponized Spot Removal: Standard gold-standards like <strong>Swords to Plowshares</strong>, <strong>Path to Exile</strong>, and <strong>Anguished Unmaking</strong> keep instant-speed threats at bay.</li>
+            <li>The "Pacifism-Plus" Package: <strong>Darksteel Mutation</strong> is the ultimate answer to problematic commanders, turning a god or an engine into an un-sacrificable, useless {0/1} insect that still counts toward Eriette's end-step drain.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">3. Consistency & Tutors</span>
+          <span class="pillar-score">9 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          A deck trying to juggle an interactive aura strategy needs to find its specific silver bullets exactly when it counts, guaranteed by an elite selection of tutors and draw pieces.
+          <ul>
+            <li>Elite Tutoring: Running the trinity of <strong>Demonic Tutor</strong>, <strong>Vampiric Tutor</strong>, and <strong>Enlightened Tutor</strong> means your highest-impact engines are always a single mana-investment away. <strong>Open the Armory</strong> acts as a hyper-efficient specialized tutor for whatever situational aura you need.</li>
+            <li>Massive Card Selection: <strong>Bolas's Citadel</strong> acts as an explosive secondary win condition on its own, allowing you to cast enchantments off the top of your library at the lightning speed of life payments.</li>
+            <li>Velocity Engines: <strong>Land Tax</strong> ensures you never miss a land drop while thinning your deck, and <strong>Well of Lost Dreams</strong> converts Eriette's passive end-step life gain into a torrent of raw card draw.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">4. Speed & Mana Base</span>
+          <span class="pillar-score">7.5 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          Your mana base contains some of the most powerful individual lands in the entire format, offering high optimization relative to your color requirements despite lacking competitive fast-mana artifacts.
+          <ul>
+            <li>The Crown Jewel: <strong>Serra's Sanctum</strong> is a legendary inclusion here. In an enchantment deck, this land easily taps for {5} to {10} white mana by turn 4 or 5, fueling explosive, multi-spell turns that leave opponents reeling.</li>
+            <li>Color Fixing Excellence: Dual lands like <strong>Godless Shrine</strong>, <strong>Vault of Champions</strong>, and <strong>Shattered Sanctum</strong> minimize tapped-land friction, keeping you perfectly on-curve.</li>
+            <li>Utility All-Stars: <strong>Hall of Heliod's Generosity</strong> provides brilliant recursion against enchantment removal, and <strong>Urborg, Tomb of Yawgmoth</strong> pairs nicely with your heavy black mana requirements.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <span class="pillar-name">5. Win Conditions & Closeness to "Infinite"</span>
+          <span class="pillar-score">7 / 10</span>
+        </div>
+        <div class="pillar-desc">
+          This category is where the deck reveals its true, terrifying casual identity, completely avoiding traditional infinite combos in favor of massive, synergistic chunks of direct damage and life loss.
+          <ul>
+            <li>The End-Step Bleed: Combining <strong>Eriette of the Charmed Apple</strong> with <strong>Bloodletter of Aclazotz</strong> double-triggers your end-step drain effects. Because Eriette's ability causes players to lose life rather than dealing damage, Bloodletter's text explicitly amplifies this effect, causing an opponent with 6 auras on the board to lose a staggering 12 life on your end step alone.</li>
+            <li>The Life-Swap Hammer: Activating <strong>Tree of Perdition</strong> alongside <strong>Giggling Skitterspike</strong> swaps an opponent's life total directly down to 13, transferring lethal chunks of structural damage through your indestructible piece.</li>
+            <li>The Lethal Voltron Volley: Stacking massive power-amplifiers like <strong>Ethereal Armor</strong> and <strong>Sage's Reverie</strong> onto a single protected creature allows you to pivot into a commander damage threat capable of one-shotting a player.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
