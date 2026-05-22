@@ -1,399 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Land Ho - Deck Profile Dashboard</title>
-    <style>
-        :root {
-            --bg-main: #0d1117;
-            --bg-card: #161b22;
-            --border-color: #30363d;
-            --text-main: #c9d1d9;
-            --text-light: #8b949e;
-            --accent: #58a6ff;
-            --accent-green: #2ea44f;
-            --badge-remove: #f85149;
-            --badge-unrestricted: #a371f7;
-            --badge-budget: #3fb950;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Omo, Queen of Vesuva - Core Deck Analysis</title>
+  <style>
+    /* Default Dark Mode Palette */
+    :root {
+      --bg-main: #0d1117;
+      --bg-card: #161b22;
+      --border-color: #30363d;
+      --text-main: #c9d1d9;
+      --text-light: #8b949e;
+      --accent: #58a6ff;
+      --accent-green: #2ea44f;
+      --badge-remove: #f85149;
+      --badge-unrestricted: #a371f7;
+      --badge-budget: #3fb950;
+      --card-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      --text-dark-heading: #ffffff;
+      --pill-bg-light: #30363d;
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    /* Light Mode Overrides */
+    [data-theme="light"] {
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --text-main: #1e293b;
+      --text-light: #475569;
+      --accent: #2563eb;
+      --accent-green: #16a34a;
+      --badge-remove: #ef4444;
+      --badge-unrestricted: #7c3aed;
+      --badge-budget: #22c55e;
+      --text-dark-heading: #0f172a;
+      --pill-bg-light: #f1f5f9;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
 
-        body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            padding: 2rem 1rem;
-        }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; bg-color: var(--bg-main); background-color: var(--bg-main); color: var(--text-main); line-height: 1.6; padding: 2rem; transition: background-color 0.3s, color 0.3s; }
+    
+    .header-container { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem; }
+    .title-area h1 { color: var(--text-dark-heading); font-size: 2.25rem; font-weight: 800; }
+    .title-area p { color: var(--text-light); font-size: 1.1rem; margin-top: 0.25rem; }
+    
+    .theme-toggle { background: transparent; border: 1px solid var(--border-color); padding: 0.5rem 1rem; border-radius: 6px; color: var(--text-main); font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .theme-toggle:hover { border-color: var(--accent); color: var(--accent); background: rgba(88, 166, 255, 0.1); }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+    .nav-tabs { display: flex; border-bottom: 1px solid var(--border-color); margin-bottom: 2rem; gap: 0.5rem; }
+    .nav-link { display: block; padding: 0.75rem 1.2rem; text-decoration: none; color: var(--text-light); border-radius: 6px 6px 0 0; font-weight: 600; border-bottom: 2px solid transparent; transition: all 0.2s; }
+    .nav-link:hover { color: var(--accent); background: rgba(88, 166, 255, 0.05); }
+    .nav-link.active { color: var(--accent); border-bottom-color: var(--accent); background: var(--pill-bg-light); }
 
-        header {
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 1.5rem;
-            margin-bottom: 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .grid-top { display: grid; grid-template-columns: 320px 1fr; gap: 2rem; margin-bottom: 2.5rem; }
+    .left-col { display: flex; flex-direction: column; gap: 1.5rem; }
+    
+    .commander-frame { background-size: contain; background-repeat: no-repeat; background-position: top center; width: 100%; height: auto; aspect-ratio: 63 / 88; box-shadow: var(--card-shadow); border-radius: 4.75% / 3.5%; overflow: hidden; }
+    
+    .score-badge-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: var(--card-shadow); }
+    .score-badge-card h3 { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-light); margin-bottom: 0.5rem; }
+    .huge-score { font-size: 4rem; font-weight: 900; color: var(--accent-green); line-height: 1; }
+    .huge-score span { font-size: 1.5rem; color: var(--text-light); font-weight: 400; }
 
-        h1 {
-            font-size: 2.25rem;
-            font-weight: 600;
-            color: #ffffff;
-        }
+    .right-col { display: flex; flex-direction: column; gap: 1.5rem; }
+    .meta-table-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; box-shadow: var(--card-shadow); }
+    .meta-table { width: 100%; border-collapse: collapse; }
+    .meta-table td { padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); }
+    .meta-table tr:last-child td { border-bottom: none; }
+    .meta-table td.label { color: var(--text-light); font-weight: 500; width: 40%; }
+    .meta-table td.value { color: var(--text-dark-heading); font-weight: 600; }
+    .meta-table td a { color: var(--accent); text-decoration: none; }
+    .meta-table td a:hover { text-decoration: underline; }
 
-        h1 span {
-            color: var(--accent);
-            font-size: 1.25rem;
-            display: block;
-            font-weight: 400;
-            margin-top: 0.25rem;
-        }
+    .summary-box { background: rgba(88, 166, 255, 0.07); border: 1px solid var(--accent); border-radius: 12px; padding: 1.5rem; box-shadow: var(--card-shadow); }
+    .summary-box h3 { color: var(--accent); margin-bottom: 0.5rem; font-size: 1.25rem; font-weight: 700; }
+    .summary-box p { color: var(--text-main); font-size: 1.1rem; }
 
-        .top-grid {
-            display: grid;
-            grid-template-columns: 350px 1fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
+    .bottom-section { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1rem; }
+    .pillar-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; box-shadow: var(--card-shadow); }
+    .pillar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 1.25rem; }
+    .pillar-title { font-size: 1.5rem; font-weight: 700; color: var(--text-dark-heading); }
+    .pillar-score { font-size: 1.25rem; font-weight: 700; background: var(--pill-bg-light); padding: 0.25rem 0.75rem; border-radius: 20px; color: var(--accent); }
+    
+    .pillar-content strong { color: var(--text-dark-heading); }
+    .pillar-content ul { margin-left: 1.5rem; margin-top: 0.75rem; }
+    .pillar-content li { margin-bottom: 0.5rem; }
+    
+    .warning-callout { background: rgba(248, 81, 73, 0.07); border-left: 4px solid var(--badge-remove); padding: 1rem; margin-top: 1rem; border-radius: 0 8px 8px 0; }
+    .warning-callout p { color: var(--text-main); font-size: 0.95rem; }
 
-        .left-col {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
+    @media (max-width: 900px) {
+      .grid-top { grid-template-columns: 1fr; }
+      .left-col { align-items: center; }
+      .commander-frame { max-width: 320px; }
+      .score-badge-card { width: 100%; max-width: 320px; }
+    }
 
-        .commander-frame {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .commander-img {
-            background-image: url('https://cards.scryfall.io/large/front/e/5/e5d1c814-4c22-4917-95ae-dffaf491db32.jpg?1727175657');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: top center;
-            width: 100%;
-            height: auto;
-            aspect-ratio: 63 / 88;
-            border-radius: 8px;
-        }
-
-        .score-badge-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-        }
-
-        .score-title {
-            color: var(--text-light);
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.5rem;
-        }
-
-        .score-value {
-            font-size: 4rem;
-            font-weight: 800;
-            color: var(--accent);
-            line-height: 1;
-        }
-
-        .score-max {
-            font-size: 1.25rem;
-            color: var(--text-light);
-            font-weight: 400;
-        }
-
-        .right-col {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .metadata-table-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-        }
-
-        .meta-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .meta-table td {
-            padding: 0.75rem 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .meta-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .meta-label {
-            color: var(--text-light);
-            font-weight: 500;
-            width: 40%;
-        }
-
-        .meta-value {
-            color: #ffffff;
-            font-weight: 600;
-        }
-
-        .meta-value a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-
-        .meta-value a:hover {
-            text-decoration: underline;
-        }
-
-        .summary-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-        }
-
-        .summary-card h2 {
-            font-size: 1.25rem;
-            margin-bottom: 1rem;
-            color: #ffffff;
-        }
-
-        .pillar-section {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            margin-top: 1rem;
-        }
-
-        .pillar-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-        }
-
-        .pillar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 0.75rem;
-            margin-bottom: 1rem;
-        }
-
-        .pillar-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #ffffff;
-        }
-
-        .pillar-score {
-            background-color: rgba(88, 166, 255, 0.1);
-            color: var(--accent);
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            border: 1px solid rgba(88, 166, 255, 0.2);
-        }
-
-        .pillar-content p {
-            margin-bottom: 1rem;
-        }
-
-        .pillar-content p:last-child {
-            margin-bottom: 0;
-        }
-
-        blockquote {
-            background: rgba(88, 166, 255, 0.05);
-            border-left: 4px solid var(--accent);
-            padding: 1rem;
-            margin: 1rem 0;
-            border-radius: 0 8px 8px 0;
-            font-style: italic;
-        }
-
-        @media (max-width: 900px) {
-            .top-grid {
-                grid-template-columns: 1fr;
-            }
-            .commander-frame {
-                display: none;
-            }
-        }
-
-        @media print {
-            body {
-                background: white;
-                color: #000000;
-                padding: 0;
-            }
-            .container {
-                max-width: 100%;
-            }
-            .commander-frame, .score-badge-card {
-                display: none;
-            }
-            .top-grid {
-                grid-template-columns: 1fr;
-            }
-            .metadata-table-card, .summary-card, .pillar-card {
-                background: white;
-                border: 1px solid #000000;
-                color: #000000;
-                page-break-inside: avoid;
-            }
-            h1, h2, .pillar-title, .meta-value {
-                color: #000000 !important;
-            }
-            .pillar-score {
-                background: none;
-                color: #000000;
-                border: 1px solid #000000;
-            }
-        }
-    </style>
+    @media print {
+      body { background: white !important; color: #111 !important; padding: 0; }
+      .theme-toggle, .nav-tabs { display: none !important; }
+      .pillar-card, .meta-table-card, .score-badge-card, .summary-box { border: 1px solid #ccc !important; background: white !important; box-shadow: none !important; page-break-inside: avoid; }
+      var(--text-dark-heading), .pillar-title, h1, h2, h3, strong { color: #000 !important; }
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <div>
-            <h1>Land Ho <span>Commander: Omo, Queen of Vesuva</span></h1>
-        </div>
-    </header>
+  <div class="header-container">
+    <div class="title-area">
+      <h1>Land Ho</h1>
+      <p>Omo, Queen of Vesuva Strategy Dossier</p>
+    </div>
+    <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
+  </div>
 
-    <div class="top-grid">
-        <div class="left-col">
-            <div class="commander-frame">
-                <div class="commander-img"></div>
-            </div>
-            <div class="score-badge-card">
-                <div class="score-title">Calibrated Power Level</div>
-                <div class="score-value">7.5<span class="score-max">/10</span></div>
-            </div>
-        </div>
+  <div class="nav-tabs">
+    <a href="Omo.html" class="nav-link active">Core Analysis & Audit</a>
+    <a href="Omo_upgrade.html" class="nav-link">Upgrade Blueprint</a>
+  </div>
 
-        <div class="right-col">
-            <div class="metadata-table-card">
-                <table class="meta-table">
-                    <tr>
-                        <td class="meta-label">Archetype</td>
-                        <td class="meta-value">Simic Everything Toolbox / Lands-Matter</td>
-                    </tr>
-                    <tr>
-                        <td class="meta-label">Power Bracket</td>
-                        <td class="meta-value">High-Power Casual</td>
-                    </tr>
-                    <tr>
-                        <td class="meta-label">Est. Turn to Win</td>
-                        <td class="meta-value">Turn 7 - 8</td>
-                    </tr>
-                    <tr>
-                        <td class="meta-label">Archidekt Link</td>
-                        <td class="meta-value"><a href="https://archidekt.com/decks/9195348/land_ho_20" target="_blank">View Original Decklist</a></td>
-                    </tr>
-                    <tr>
-                        <td class="meta-label">Upgrade Path</td>
-                        <td class="meta-value"><a href="Omo_upgrade.html">UPGRADE BLUEPRINT</a></td>
-                    </tr>
-                </table>
-            </div>
+  <div class="grid-top">
+    <div class="left-col">
+      <div class="commander-frame" style="background-image: url('https://cards.scryfall.io/large/front/e/5/e5d1c814-4c22-4917-95ae-dffaf491db32.jpg?1727175657');"></div>
+      <div class="score-badge-card">
+        <h3>Calibrated Power Level</h3>
+        <div class="huge-score">7.5<span>/10</span></div>
+      </div>
+    </div>
+    
+    <div class="right-col">
+      <div class="meta-table-card">
+        <table class="meta-table">
+          <tr>
+            <td class="label">Archetype</td>
+            <td class="value">Simic Everything Lands / Cloudpost Architecture</td>
+          </tr>
+          <tr>
+            <td class="label">Power Bracket</td>
+            <td class="value">High-Power Casual / Optimized</td>
+          </tr>
+          <tr>
+            <td class="label">Est. Turn to Win</td>
+            <td class="value">Turn 6 - 7 (Uninterrupted)</td>
+          </tr>
+          <tr>
+            <td class="label">Decklist Source</td>
+            <td class="value"><a href="https://archidekt.com/decks/9195348/land_ho_20" target="_blank">Archidekt Link</a></td>
+          </tr>
+        </table>
+      </div>
+      
+      <div class="summary-box">
+        <h3>Executive Summary</h3>
+        <p>A hyper-flexible Simic lands-matter engine that leverages <strong>Omo, Queen of Vesuva</strong> to fuse disparate, high-ceiling land subtypes (<strong>Urza's</strong>, <strong>Cloudpost</strong>, <strong>Desert</strong>, <strong>Gates</strong>) into a singular, explosive mana engine. The deck wins by generating catastrophic amounts of mana to drop game-ending threats, creating overwhelming token armies via landfall triggers, or copying high-value utility lands.</p>
+      </div>
+    </div>
+  </div>
 
-            <div class="summary-card">
-                <h2>Executive Summary</h2>
-                <p>This is a <strong>Simic Everything-Counter Toolbox</strong> deck that leverages <strong>Omo, Queen of Vesuva</strong> to simultaneously unlock maximum value from hyper-specific land types (Locus, Urza's, Deserts) and disparate creature types. It wins by generating astronomical amounts of mana to cast massive X-spells, animating giant land-creatures, or swarming the board with unblockable, buffed tokens without relying on infinite combos.</p>
-            </div>
-        </div>
+  <h2>Strategic Pillar Breakdown</h2>
+  <div class="bottom-section">
+  
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <span class="pillar-title">1. Synergy & Engine</span>
+        <span class="pillar-score">9.5 / 10</span>
+      </div>
+      <div class="pillar-content">
+        <p>This deck's synergy is incredibly high due to how <strong>Omo, Queen of Vesuva</strong> breaks the traditional structural constraints of Magic's land system.</p>
+        <ul>
+          <li><strong>The Everything Token Engine:</strong> By placing everything counters on key pieces, <strong>Planar Nexus</strong>, <strong>Cloudpost</strong>, and the <strong>Urza's Tron Lands</strong> (<strong>Urza's Mine</strong>, <strong>Urza's Power Plant</strong>, <strong>Urza's Tower</strong>, <strong>Urza's Workshop</strong>) instantly activate their maximum operational thresholds. A single everything counter on a utility land transforms <strong>Cloudpost</strong> and <strong>Glimmerpost</strong> into staggering mana engines.</li>
+          <li><strong>Typeline Abuse:</strong> <strong>Azami, Lady of Scrolls</strong> turns any creature with an everything counter into a repeatable draw engine. <strong>Lord of Atlantis</strong> grants islandwalk and a statistical buff to your entire board state once Omo marks them. <strong>Swarmyard</strong> becomes a universal cellular regenerator for your high-value targets.</li>
+          <li><strong>Land Copying & Clones:</strong> <strong>Vesuva</strong>, <strong>Thespian's Stage</strong>, <strong>Copy Land</strong>, and <strong>Mirage Mirror</strong> act as force multipliers, doubling down on <strong>Dark Depths</strong>, <strong>Field of the Dead</strong>, or maximized <strong>Cloudposts</strong>. <strong>Roaming Throne</strong> and <strong>Helm of the Host</strong> double down on Omo's counter distribution or trigger secondary tribal payoffs.</li>
+        </ul>
+      </div>
     </div>
 
-    <h2>Strategic Pillar Breakdown</h2>
-    <div class="pillar-section">
-        
-        <div class="pillar-card">
-            <div class="pillar-header">
-                <div class="pillar-title">1. Synergy & Engine</div>
-                <div class="pillar-score">9 / 10</div>
-            </div>
-            <div class="pillar-content">
-                <p>This is where the deck absolutely shines. <strong>Omo</strong> acts as a skeleton key for your entire list. By placing an everything counter on a land, it becomes a <strong>Locus</strong> (supercharging <strong>Cloudpost</strong> and <strong>Glimmerpost</strong>), an <strong>Urza's Mine/Tower/Power Plant/Workshop</strong> (instantly turning on the Tron package), and a <strong>Desert</strong> to enable your cycling lands or <strong>Hashep Oasis</strong>.</p>
-                <p>On the creature side, everything counters turn utility dorks into <strong>Merfolk</strong> for <strong>Hakbal of the Surging Soul</strong>, <strong>Wizards</strong> for <strong>Azami, Lady of Scrolls</strong>, and <strong>Rogues</strong> for <strong>Nimble Trapfinder</strong>. The inclusion of <strong>Thassa, Deep-Dwelling</strong>, <strong>Displacer Kitten</strong>, and <strong>Splash Portal</strong> allows you to blink Omo or other value pieces to spread everything counters across the board at an alarming rate. <strong>Roaming Throne</strong> naming "Avatar" or "Noble" doubles Omo's triggers, creating an engine that feels incredibly cohesive and explosive.</p>
-            </div>
-        </div>
-
-        <div class="pillar-card">
-            <div class="pillar-header">
-                <div class="pillar-title">2. Interaction & Board Control</div>
-                <div class="pillar-score">6 / 10</div>
-            </div>
-            <div class="pillar-content">
-                <p>Your interaction suite features high-quality premium staples like <strong>Mana Drain</strong>, <strong>Fierce Guardianship</strong>, and <strong>Cyclonic Rift</strong>, which can single-handedly swing games. Spot removal like <strong>Beast Within</strong>, <strong>Pongify</strong>, and <strong>Volatile Fault</strong> gives you clean answers to problematic permanents.</p>
-                <blockquote>The raw density of interaction is a bit low for a high-power casual meta. If Omo is removed or countered multiple times, the deck can struggle to control aggressive boards.</blockquote>
-                <p>While <strong>Collective Restraint</strong> is a hilarious and brilliant inclusion (Omo makes your lands have all basic land types, meaning Collective Restraint easily gives you a Domain tax of 5 colorless mana per attacking creature), you could use a few more low-mana responses to protect your engine before it establishes dominance.</p>
-            </div>
-        </div>
-
-        <div class="pillar-card">
-            <div class="pillar-header">
-                <div class="pillar-title">3. Consistency & Tutors</div>
-                <div class="pillar-score">7 / 10</div>
-            </div>
-            <div class="pillar-content">
-                <p>Lands-matter strategies are inherently consistent due to cards like <strong>Expedition Map</strong>, <strong>Hour of Promise</strong>, and your suite of non-basic utilities. You have top-tier card selection via <strong>Sylvan Library</strong> and massive burst draw like <strong>Finale of Revelation</strong>, <strong>Drown in Dreams</strong>, and <strong>Sea Gate Restoration</strong>.</p>
-                <p>The main vulnerability in consistency stems from the reliance on Omo to bridge your sub-themes. If you draw <strong>Cloudpost</strong> without Omo or other Locus lands, it's just a tapped land that taps for 1. If you draw tribal payoffs without Omo counters, your creatures don't talk to each other. More land-tutors that can find <strong>Vesuva</strong> or <strong>Thespian's Stage</strong> directly would push this score closer to an 8 or 9.</p>
-            </div>
-        </div>
-
-        <div class="pillar-card">
-            <div class="pillar-header">
-                <div class="pillar-title">4. Speed & Mana Base</div>
-                <div class="pillar-score">8 / 10</div>
-            </div>
-            <div class="pillar-content">
-                <p>The ceiling of your mana base is terrifyingly high. A single everything counter on a random land alongside <strong>Urza's Workshop</strong> or <strong>Cloudpost</strong> can easily yield 4 to 10 mana from a single land drop. Spells like <strong>Awaken the Woods</strong>, <strong>Reshape the Earth</strong>, and <strong>Aesi, Tyrant of Gyre Strait</strong> ensure your hand stays full of fuel and your battlefield stays flooded with mana.</p>
-                <p>The primary drawback is the number of utility lands that tap for colorless or enter the battlefield tapped (like <strong>Lush Oasis</strong>, <strong>Simic Guildgate</strong>, and the cycling Deserts). In early turns, you may find yourself color-screwed or a turn behind the table's development. Balancing the hyper-explosive colorless lands with stable colored mana is your main building challenge.</p>
-            </div>
-        </div>
-
-        <div class="pillar-card">
-            <div class="pillar-header">
-                <div class="pillar-title">5. Win Conditions & Closeness to "Infinite"</div>
-                <div class="pillar-score">7 / 10</div>
-            </div>
-            <div class="pillar-content">
-                <p>Per your deckbuilding rules, there are <strong>no infinite combos</strong> here. Instead, you win through overwhelming value and combat steps. <strong>Dark Depths</strong> comboed with <strong>Thespian's Stage</strong> (or just Omo turning Dark Depths into a land with no counters so it immediately sacrifices into Marit Lage) provides a massive 20/20 indestructible flier.</p>
-                <p>For wide boards, <strong>Avenger of Zendikar</strong>, <strong>Scute Swarm</strong>, and <strong>Rampaging Baloths</strong> generate armies that become lethal when paired with <strong>Herald of Hoofbeats</strong> (giving your everything-counter creatures Horsemanship) or <strong>Lord of Atlantis</strong> (giving them Islandwalk). <strong>Hydra Broodmaster</strong> acts as a brilliant mana sink to create an overwhelming army of giant hydras in a single turn.</p>
-            </div>
-        </div>
-
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <span class="pillar-title">2. Interaction & Board Control</span>
+        <span class="pillar-score">6.5 / 10</span>
+      </div>
+      <div class="pillar-content">
+        <p>The interaction suite contains premiere premium options but runs slightly lean, relying heavily on massive structural sweeps to reset problematic states.</p>
+        <ul>
+          <li><strong>The Nuclear Option:</strong> <strong>Cyclonic Rift</strong> stands as the definitive, asymmetric clear-out mechanism. <strong>Curse of the Swine</strong> offers scalable, exiling mass removal for problematic creature packages.</li>
+          <li><strong>Targeted Answers:</strong> <strong>Beast Within</strong>, <strong>Pongify</strong>, and <strong>Acidic Slime</strong> offer flexible removal against non-land permanents. <strong>Volatile Fault</strong> and <strong>Boseiju, Who Endures</strong> provide excellent, low-opportunity-cost land and artifact interaction.</li>
+          <li><strong>Countermagic Suite:</strong> <strong>Mana Drain</strong> and <strong>Fierce Guardianship</strong> provide world-class stack protection, allowing you to force through high-cost spells like <strong>Reshape the Earth</strong> or protect your commander from targeted removal.</li>
+        </ul>
+      </div>
     </div>
-</div>
 
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <span class="pillar-title">3. Consistency & Tutors</span>
+        <span class="pillar-score">7.0 / 10</span>
+      </div>
+      <div class="pillar-content">
+        <p>The deck functions with high operational consistency due to its land-tutoring packages, though its creature and non-land spell selection is limited.</p>
+        <ul>
+          <li><strong>Targeted Land Tutors:</strong> <strong>Expedition Map</strong>, <strong>Hour of Promise</strong>, and <strong>Scapeshift</strong> act as direct surgical tools to assemble your land-based engines, whether retrieving <strong>Dark Depths</strong> for an immediate 20/20 or <strong>Cloudpost</strong> for immediate mana acceleration.</li>
+          <li><strong>Card Advantage Engines:</strong> <strong>Sylvan Library</strong>, <strong>Tatyova, Benthic Druid</strong>, <strong>Aesi, Tyrant of Gyre Strait</strong>, and <strong>Hydroid Krasis</strong> keep your hand fully refueled. Spells like <strong>Finale of Revelation</strong> and <strong>Drown in Dreams</strong> act as massive x-spell reload buttons once your mana engine is online.</li>
+          <li><strong>Recruitment &amp; Recursion:</strong> <strong>Ramunap Excavator</strong> and <strong>Lumra, Bellow of the Woods</strong> provide critical security against land destruction or self-mill strategies, transforming your graveyard into an extended hand.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <span class="pillar-title">4. Speed & Mana Base</span>
+        <span class="pillar-score">8.5 / 10</span>
+      </div>
+      <div class="pillar-content">
+        <p>The mana base is an intricate, non-traditional engine that exchanges early turn-1 or turn-2 velocity for exponential turn-4 and turn-5 explosions.</p>
+        <ul>
+          <li><strong>The Non-Basic Lattice:</strong> The inclusion of <strong>Breeding Pool</strong>, <strong>Misty Rainforest</strong>, and <strong>Yavimaya Coast</strong> provides the fundamental color correction required, while <strong>Yavimaya, Cradle of Growth</strong> fixes all green constraints instantly.</li>
+          <li><strong>Exponential Acceleration:</strong> Once <strong>Mana Reflection</strong> touches the battlefield alongside a maximized <strong>Cloudpost</strong> or an active <strong>Urza's Tron</strong> matrix, the deck bypasses normal resource constraints. Spells like <strong>Awaken the Woods</strong> double as both immediate mana expansion and a defensive token array.</li>
+          <li><strong>Tempo Prereqs:</strong> The deck runs a low count of traditional raw-speed mana rocks (relying primarily on <strong>Sol Ring</strong>), choosing instead to utilize explore-style effects like <strong>Dryad of the Ilysian Grove</strong> to drop multiple land pieces per cycle.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <span class="pillar-title">5. Win Conditions & Closeness to "Infinite"</span>
+        <span class="pillar-score">6.0 / 10</span>
+      </div>
+      <div class="pillar-content">
+        <p>Per the deckbuilding constraints, there are <strong>no infinite loops</strong>. Instead, the deck relies on overwhelming structural mass and high-impact combat threats.</p>
+        <ul>
+          <li><strong>The Marit Lage Vector:</strong> <strong>Dark Depths</strong> combined with <strong>Thespian's Stage</strong> or an Omo counter provides an immediate, highly repeatable 20/20 flying, indestructible avatar threat.</li>
+          <li><strong>Token Swarms:</strong> <strong>Scute Swarm</strong>, <strong>Avenger of Zendikar</strong>, and <strong>Rampaging Baloths</strong> turn single land drops into immediate wide board states. When paired with <strong>Awaken the Woods</strong>, these effects scale exponentially.</li>
+          <li><strong>Evasion Overlays:</strong> <strong>Herald of Hoofbeats</strong> gives your entire team islandwalk (via everything counters), rendering your massive tokens and giant Hydras completely unblockable across the table. <strong>Apex Devastator</strong> acts as a singular brute-force value drop to close out any remaining resistance.</li>
+        </ul>
+        <div class="warning-callout">
+          <p><strong>Anti-Infinite Constraint Verification:</strong> Checked against Displacer Kitten line-of-sight loops. The deck adheres perfectly to the casual restriction parameter while preserving structural tier efficiency.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const toggleBtn = document.getElementById('themeToggle');
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      if (currentTheme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+        toggleBtn.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        toggleBtn.textContent = '🌙 Dark Mode';
+      }
+    });
+  </script>
 </body>
 </html>
