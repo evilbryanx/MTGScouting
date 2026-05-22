@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Land Ho - Upgrade Blueprint</title>
   <style>
-    *, *::before, *::after { box-sizing: border-box; }
-    
     /* Default Dark Mode Palette */
     :root {
       --bg-main: #0d1117;
@@ -19,6 +17,8 @@
       --badge-remove: #f85149;
       --badge-unrestricted: #a371f7;
       --badge-budget: #3fb950;
+
+      /* Shared structural constants */
       --card-shadow: 0 4px 10px rgba(0,0,0,0.3);
       --text-dark-heading: #ffffff;
       --pill-bg-light: #30363d;
@@ -36,93 +36,82 @@
       --badge-remove: #ef4444;
       --badge-unrestricted: #7c3aed;
       --badge-budget: #22c55e;
+
+      /* Light mode structural overrides */
       --text-dark-heading: #0f172a;
       --pill-bg-light: #f1f5f9;
       --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
-    body {
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+
+    body {
       background-color: var(--bg-main);
       color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
       line-height: 1.6;
+      padding: 2rem 1rem;
     }
 
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 2rem 1.5rem;
     }
 
     .header-container {
-      display: block;
-      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       padding-bottom: 1rem;
-      margin-bottom: 1rem;
-    }
-    
-    .header-title-area {
-      margin-right: 120px;
+      border-bottom: 1px solid var(--border-color);
     }
 
     h1 {
-      font-size: 2.25rem;
-      font-weight: 800;
       color: var(--text-dark-heading);
-      margin: 0 0 0.25rem 0;
-    }
-
-    .subtitle {
-      font-size: 1.1rem;
-      color: var(--text-light);
-      margin: 0;
+      font-size: 2.25rem;
+      font-weight: 700;
     }
 
     .theme-toggle {
-      position: absolute;
-      top: 0;
-      right: 0;
       background: transparent;
       border: 1px solid var(--border-color);
       padding: 0.5rem 1rem;
-      border-radius: 6px;
       color: var(--text-main);
+      border-radius: 6px;
       cursor: pointer;
       font-weight: 500;
-      transition: all 0.2s ease;
+      transition: all 0.2s;
     }
 
     .theme-toggle:hover {
       border-color: var(--accent);
       color: var(--accent);
-      background-color: rgba(88, 166, 255, 0.1);
     }
 
-    /* Embedded Navigation Tabs */
     .nav-tabs {
-      display: block;
+      display: flex;
       border-bottom: 1px solid var(--border-color);
+      margin-top: 1rem;
       margin-bottom: 2rem;
-      padding-bottom: 1px;
+      gap: 0.5rem;
     }
 
     .nav-link {
-      display: inline-block;
-      padding: 0.75rem 1.2rem;
+      padding: 0.75rem 1rem;
       text-decoration: none;
       color: var(--text-light);
-      font-weight: 600;
-      font-size: 0.95rem;
+      font-weight: 500;
       border-radius: 6px 6px 0 0;
-      margin-right: 0.5rem;
       transition: all 0.2s;
     }
 
     .nav-link:hover {
       color: var(--accent);
-      background-color: rgba(88, 166, 255, 0.05);
+      background-color: var(--pill-bg-light);
     }
 
     .nav-link.active {
@@ -134,103 +123,98 @@
     .meta-overview-card {
       background-color: var(--bg-card);
       border: 1px solid var(--border-color);
-      border-radius: 12px;
+      border-radius: 8px;
       padding: 1.5rem;
-      margin-bottom: 2.5rem;
-      box-shadow: var(--card-shadow);
-    }
-
-    .meta-overview-card h3 {
-      margin: 0 0 0.5rem 0;
-      color: var(--text-dark-heading);
-    }
-    
-    .meta-overview-card p {
-      margin: 0;
-      color: var(--text-light);
-    }
-
-    /* Upgrade Table Core View (Desktop) */
-    .upgrade-table-wrapper {
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: var(--card-shadow);
       margin-bottom: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .meta-item-title {
+      font-size: 0.875rem;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .meta-item-val {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-dark-heading);
+      margin-top: 0.25rem;
     }
 
     .upgrade-table {
       width: 100%;
       border-collapse: collapse;
-      text-align: left;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      margin-top: 1rem;
     }
 
     .upgrade-table th {
-      background-color: rgba(0, 0, 0, 0.15);
-      padding: 1rem 1.25rem;
+      background-color: var(--pill-bg-light);
       color: var(--text-dark-heading);
-      font-weight: 700;
+      text-align: left;
+      padding: 1rem;
+      font-weight: 600;
       border-bottom: 1px solid var(--border-color);
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
     }
 
     .upgrade-table td {
-      padding: 1.25rem;
+      padding: 1.25rem 1rem;
       border-bottom: 1px solid var(--border-color);
       vertical-align: top;
-      font-size: 0.95rem;
     }
 
     .upgrade-table tr:last-child td {
       border-bottom: none;
     }
 
-    /* Action Profile Coloring */
     .card-remove {
       color: var(--badge-remove);
-      font-weight: 700;
+      font-weight: 600;
     }
 
     .card-unrestricted {
       color: var(--badge-unrestricted);
-      font-weight: 700;
+      font-weight: 600;
     }
 
     .card-budget {
       color: var(--badge-budget);
-      font-weight: 700;
+      font-weight: 600;
     }
 
-    /* Impact Metric Pill */
     .metric-pill {
       display: inline-block;
-      padding: 0.25rem 0.6rem;
+      padding: 0.25rem 0.5rem;
       background-color: var(--pill-bg-light);
-      color: var(--text-main);
-      border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 600;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 500;
       text-align: center;
       border: 1px solid var(--border-color);
-      white-space: nowrap;
     }
 
     .velocity-badge {
-      display: inline-block;
-      font-weight: 700;
-      font-size: 0.85rem;
+      font-weight: 600;
     }
-    .vel-high {
+    .velocity-high {
       color: var(--accent-green);
     }
-    .vel-low {
+    .velocity-low {
       color: var(--text-light);
     }
 
-    /* Mobile Layout Transformation */
     @media (max-width: 768px) {
       .upgrade-table, .upgrade-table tbody, .upgrade-table tr, .upgrade-table td {
         display: block;
@@ -238,27 +222,22 @@
       }
 
       .upgrade-table thead {
-        display: none !important;
+        display: none;
       }
 
       .upgrade-table tr {
         margin-bottom: 1.5rem;
         background-color: var(--bg-card);
         border: 1px solid var(--border-color);
-        border-radius: 12px;
+        border-radius: 8px;
         padding: 1rem;
         box-shadow: var(--card-shadow);
       }
 
       .upgrade-table td {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        padding: 0.75rem 0.25rem;
+        border-bottom: 1px solid var(--border-color);
+        padding: 0.75rem 0.5rem;
         position: relative;
-        text-align: left;
-      }
-      
-      [data-theme="light"] .upgrade-table td {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
       }
 
       .upgrade-table td:last-child {
@@ -269,37 +248,34 @@
         content: attr(data-label);
         display: block;
         font-size: 0.75rem;
-        font-weight: 700;
         text-transform: uppercase;
+        letter-spacing: 0.05em;
         color: var(--text-light);
+        font-weight: bold;
         margin-bottom: 0.25rem;
       }
     }
 
-    /* Print Recovery Stylesheet */
     @media print {
       body {
-        background-color: #ffffff !important;
-        color: #000000 !important;
-      }
-      :root {
-        --bg-main: #ffffff !important;
-        --bg-card: #ffffff !important;
-        --border-color: #cccccc !important;
-        --text-main: #000000 !important;
-        --text-light: #555555 !important;
-        --text-dark-heading: #000000 !important;
-        --pill-bg-light: #eeeeee !important;
+        background: white !important;
+        color: black !important;
+        padding: 0;
       }
       .theme-toggle, .nav-tabs {
         display: none !important;
       }
-      .upgrade-table-wrapper, .meta-overview-card {
+      .upgrade-table, .meta-overview-card {
+        background: white !important;
+        border: 1px solid #ccc !important;
         box-shadow: none !important;
-        border: 1px solid #cccccc !important;
       }
-      .upgrade-table tr {
-        page-break-inside: avoid;
+      th {
+        background: #f0f0f0 !important;
+        border-bottom: 1px solid #ccc !important;
+      }
+      * {
+        color: black !important;
       }
     }
   </style>
@@ -308,120 +284,130 @@
 
   <div class="container">
     <div class="header-container">
-      <div class="header-title-area">
-        <h1>Land Ho</h1>
-        <p class="subtitle">Omo, Queen of Vesuva Strategic Upgrade Matrix</p>
-      </div>
+      <h1>Land Ho — Upgrade Blueprint</h1>
       <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
     </div>
 
     <div class="nav-tabs">
-      <a href="index.html" class="nav-link">Back to list</a>
+      <a href="../index.html" class="nav-link">Back to list</a>
       <a href="Omo.html" class="nav-link">Core Analysis & Audit</a>
       <a href="Omo_upgrade.html" class="nav-link active">Upgrade Blueprint</a>
     </div>
 
     <div class="meta-overview-card">
-      <h3>Targeted Tactical Upgrade Matrix</h3>
-      <p>The following swaps have been curated using a multi-pass filtration process to prune low-velocity, clunky elements and maximize engine performance. All swaps respect the strict <strong>No Infinite Combos</strong> restriction.</p>
+      <div class="meta-grid">
+        <div>
+          <div class="meta-item-title">Commander</div>
+          <div class="meta-item-val">Omo, Queen of Vesuva</div>
+        </div>
+        <div>
+          <div class="meta-item-title">Deckbuilding Filter</div>
+          <div class="meta-item-val" style="color: var(--badge-remove);">No Infinite Combos</div>
+        </div>
+        <div>
+          <div class="meta-item-title">Target Swaps</div>
+          <div class="meta-item-val">10 Tactical Cuts</div>
+        </div>
+      </div>
     </div>
 
-    <div class="upgrade-table-wrapper">
-      <table class="upgrade-table">
-        <thead>
-          <tr>
-            <th>Card to Remove</th>
-            <th>Replace With (Unrestricted)</th>
-            <th>Replace With (Budget)</th>
-            <th>Impact Metric</th>
-            <th>Velocity</th>
-            <th>Strategic Justification</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td data-label="Card to Remove" class="card-remove">Monument to Perfection</td>
-            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Crop Rotation</td>
-            <td data-label="Replace With (Budget)" class="card-budget">Sylvan Scrying</td>
-            <td data-label="Impact Metric"><span class="metric-pill">Consistency & Tutors</span></td>
-            <td data-label="Velocity"><span class="velocity-badge vel-high">High</span></td>
-            <td>Monument is extremely slow and clunky. Instant land tutors allow you to drop Cloudpost or Field of the Dead right before your turn or in response to removal.</td>
-          </tr>
-          <tr>
-            <td data-label="Card to Remove" class="card-remove">Simic Guildgate</td>
-            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Tropical Island</td>
-            <td data-label="Replace With (Budget)" class="card-budget">Hinterland Harbor</td>
-            <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana Base</span></td>
-            <td data-label="Velocity"><span class="velocity-badge vel-low">Low</span></td>
-            <td>Removing flat, always-tapped dual lands for untapped resource generation increases deck tempo and prevents awkward early-turn delays.</td>
-          </tr>
-          <tr>
-            <td data-label="Card to Remove" class="card-remove">Hydra Broodmaster</td>
-            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Craterhoof Behemoth</td>
-            <td data-label="Replace With (Budget)" class="card-budget">End-Raze Forerunners</td>
-            <td data-label="Impact Metric"><span class="metric-pill">Win Conditions</span></td>
-            <td data-label="Velocity"><span class="velocity-badge vel-high">High</span></td>
-            <td>Broodmaster requires massive, multi-turn mana investment to create non-evasive bodies. Immediate trample-based overrun wins the game on the spot.</td>
-          </tr>
-          <tr>
-            <td data-label="Card to Remove" class="card-remove">Multiclass Baldric</td>
-            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Cyclonic Rift (2nd copy / Rhystic Study)</td>
-            <td data-label="Replace With (Budget)" class="card-budget">Mystic Remora</td>
-            <td data-label="Impact Metric"><span class="metric-pill">Synergy & Engine</span></td>
-            <td data-label="Velocity"><span class="velocity-badge vel-high">High</span></td>
-            <td>Baldric provides marginal keywords that don't scale the primary land engine. Pure drawing engines capitalize heavily on the extra mana generated by Omo.</td>
-          </tr>
-          <tr>
-            <td data-label="Card to Remove" class="card-remove">Acidic Slime</td>
-            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Haywire Mite</td>
-            <td data-label="Replace With (Budget)" class="card-budget">Nature's Claim</td>
-            <td data-label="Impact Metric"><span class="metric-pill">Interaction</span></td>
-            <td data-label="Velocity"><span class="velocity-badge vel-high">High</span></td>
-            <td>Five mana for a single targeted destroy effect is highly inefficient in high-power casual metas. Lowering the interactive curve improves reaction speed.</td>
-          </tr>
-          <tr>
-            <td data-label="Card to Remove" class="card-remove">Simic Growth Chamber</td>
-            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Ancient Tomb</td>
-            <td data-label="Replace With (Budget)" class="card-budget">Temple of the False God</td>
-            <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana Base</span></td>
-            <td data-label="Velocity"><span class="velocity-badge vel-low">Low</span></td>
-            <td>Growth Chamber causes major tempo loss when targeted or drawn early. Sol-lands leverage the high generic costs of your heavy payload cards perfectly.</td>
-          </tr>
-          <tr>
-            <td data-label="Card to Remove" class="card-remove">Lush Oasis</td>
-            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Rejuvenating Springs</td>
-            <td data-label="Replace With (Budget)" class="card-budget">Flooded Grove (Extra/Barkchannel Pathway)</td>
-            <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana Base</span></td>
-            <td data-label="Velocity"><span class="velocity-badge vel-low">Low</span></td>
-            <td>Replacing standard tapped deserts for untapped battlebond or pathway styles preserves crucial velocity in competitive or high-power turns.</td>
-          </tr>
-          <tr>
-            <td data-label="Card to Remove" class="card-remove">Collective Restraint</td>
-            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Propaganda</td>
-            <td data-label="Replace With (Budget)" class="card-budget">Elephant Grass</td>
-            <td data-label="Impact Metric"><span class="metric-pill">Interaction</span></td>
-            <td data-label="Velocity"><span class="velocity-badge vel-low">Low</span></td>
-            <td>Collective Restraint relies heavily on having all 5 basic land types via Omo. Propaganda acts as a safer, lower cost, and more reliable defensive pillow.</td>
-          </tr>
-          <tr>
-            <td data-label="Card to Remove" class="card-remove">Trenchpost</td>
-            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Yavimaya Hollow</td>
-            <td data-label="Replace With (Budget)" class="card-budget">Alchemist's Refuge</td>
-            <td data-label="Impact Metric"><span class="metric-pill">Synergy & Engine</span></td>
-            <td data-label="Velocity"><span class="velocity-badge vel-high">High</span></td>
-            <td>Trenchpost mills your own library slowly without mass graveyard recursion loops. Utility outlets that grant flash or regeneration provide higher tactical value.</td>
-          </tr>
-          <tr>
-            <td data-label="Card to Remove" class="card-remove">Overflowing Basin</td>
-            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Prismatic Vista</td>
-            <td data-label="Replace With (Budget)" class="card-budget">Evolving Wilds (New Capenna variant / Fabled Passage)</td>
-            <td data-label="Impact Metric"><span class="metric-pill">Consistency & Tutors</span></td>
-            <td data-label="Velocity"><span class="velocity-badge vel-low">Low</span></td>
-            <td>Filtering lands that enter tapped slow down early setup. Shuffle-inducing fetch mechanics help thin the deck and instantly trigger double landfall stats.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <h2>Tactical Upgrade Matrix</h2>
+    
+    <table class="upgrade-table">
+      <thead>
+        <tr>
+          <th style="width: 18%;">Card to Remove</th>
+          <th style="width: 18%;">Replace With (Unrestricted)</th>
+          <th style="width: 18%;">Replace With (Budget <$5)</th>
+          <th style="width: 12%;">Impact Metric</th>
+          <th style="width: 8%;">Velocity</th>
+          <th style="width: 26%;">Strategic Justification</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-label="Card to Remove" class="card-remove">Simic Guildgate</td>
+          <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Yavimaya Hollow</td>
+          <td data-label="Replace With (Budget)" class="card-budget">Sunken Palace</td>
+          <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana</span></td>
+          <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+          <td data-label="Strategic Justification">Replaces a strictly slow tap-land with an elite tier utility land that can regenerate critical engine creatures like Omo.</td>
+        </tr>
+        <tr>
+          <td data-label="Card to Remove" class="card-remove">Desert of the Indomitable</td>
+          <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Echoing Deeps</td>
+          <td data-label="Replace With (Budget)" class="card-budget">Captivating Cave</td>
+          <td data-label="Impact Metric"><span class="metric-pill">Consistency</span></td>
+          <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+          <td data-label="Strategic Justification">Replaces a low-impact cycling land with a land that can clone any high-value utility land residing in a graveyard.</td>
+        </tr>
+        <tr>
+          <td data-label="Card to Remove" class="card-remove">Hydra Broodmaster</td>
+          <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Craterhoof Behemoth</td>
+          <td data-label="Replace With (Budget)" class="card-budget">End-Raze Forerunners</td>
+          <td data-label="Impact Metric"><span class="metric-pill">Win Conditions</span></td>
+          <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+          <td data-label="Strategic Justification">Broodmaster demands too much mana investment. Group overrun triggers turn your token swarms into immediate win steps.</td>
+        </tr>
+        <tr>
+          <td data-label="Card to Remove" class="card-remove">Multiclass Baldric</td>
+          <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Chord of Calling</td>
+          <td data-label="Replace With (Budget)" class="card-budget">Neoform</td>
+          <td data-label="Impact Metric"><span class="metric-pill">Consistency</span></td>
+          <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+          <td data-label="Strategic Justification">Baldric is a slow equipment choice. Instant or direct creature tutoring brings out dynamic pieces like Timber Protector instantly.</td>
+        </tr>
+        <tr>
+          <td data-label="Card to Remove" class="card-remove">Simic Growth Chamber</td>
+          <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Tropical Island</td>
+          <td data-label="Replace With (Budget)" class="card-budget">Rejuvenating Springs</td>
+          <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana</span></td>
+          <td data-label="Velocity" class="velocity-badge velocity-low">Low</td>
+          <td data-label="Strategic Justification">Bouncing lands can open you up to major early tempo losses. Untapped dual variants smoothly lock in color requirements.</td>
+        </tr>
+        <tr>
+          <td data-label="Card to Remove" class="card-remove">Lush Oasis</td>
+          <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Ancient Tomb</td>
+          <td data-label="Replace With (Budget)" class="card-budget">Temple of Mystery</td>
+          <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana</span></td>
+          <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+          <td data-label="Strategic Justification">Speeds up deck development by a full turn or more by trading a slow tap-land for explosive colorless acceleration.</td>
+        </tr>
+        <tr>
+          <td data-label="Card to Remove" class="card-remove">Monument to Perfection</td>
+          <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Green Sun's Zenith</td>
+          <td data-label="Replace With (Budget)" class="card-budget">Shared Summons</td>
+          <td data-label="Impact Metric"><span class="metric-pill">Consistency</span></td>
+          <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+          <td data-label="Strategic Justification">Monument is too slow to reasonably construct in a 100-card list. Direct creature search remedies the total lack of tutors.</td>
+        </tr>
+        <tr>
+          <td data-label="Card to Remove" class="card-remove">Lumbering Falls</td>
+          <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Boseiju, Who Shelters All</td>
+          <td data-label="Replace With (Budget)" class="card-budget">Alchemist's Refuge</td>
+          <td data-label="Impact Metric"><span class="metric-pill">Interaction</span></td>
+          <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+          <td data-label="Strategic Justification">Trades a weak creature-land for absolute uncounterable protection on high-pivotal spells like Reshape the Earth.</td>
+        </tr>
+        <tr>
+          <td data-label="Card to Remove" class="card-remove">Desert of the Mindful</td>
+          <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Vesuva</td>
+          <td data-label="Replace With (Budget)" class="card-budget">Plaza of Heroes</td>
+          <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana</span></td>
+          <td data-label="Velocity" class="velocity-badge velocity-low">Low</td>
+          <td data-label="Strategic Justification">Removes an inefficient tap-land to add direct clone land coverage or targeted protection rules for Omo.</td>
+        </tr>
+        <tr>
+          <td data-label="Card to Remove" class="card-remove">Skullwinder</td>
+          <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Eternal Witness</td>
+          <td data-label="Replace With (Budget)" class="card-budget">Bala Ged Recovery</td>
+          <td data-label="Impact Metric"><span class="metric-pill">Synergy</span></td>
+          <td data-label="Velocity" class="velocity-badge velocity-low">Low</td>
+          <td data-label="Strategic Justification">Provides the exact same powerful card recursion value without forcing political card advantage onto an opponent.</td>
+        </tr>
+      </tbody>
+    </table>
+
   </div>
 
   <script>
