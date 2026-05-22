@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Land Ho - Upgrade Blueprint</title>
+  <style>
+    :root {
+      --bg-main: #0d1117;
+      --bg-card: #161b22;
+      --border-color: #30363d;
+      --text-main: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --badge-remove: #f85149;
+      --badge-unrestricted: #58a6ff;
+      --badge-budget: #34d058;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      padding: 2rem;
+      line-height: 1.5;
+    }
+    header {
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+    }
+    header h1 { font-size: 2.5rem; color: #ffffff; }
+    header p { color: var(--text-muted); font-size: 1.1rem; }
+    
+    .metadata-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    .metadata-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .metadata-table td:first-child {
+      font-weight: bold;
+      color: #ffffff;
+      width: 30%;
+    }
+
+    .upgrade-table-container {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background-color: var(--bg-card);
+    }
+    table.upgrade-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    table.upgrade-table th, table.upgrade-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+    }
+    table.upgrade-table th {
+      background-color: #1f242c;
+      color: #ffffff;
+      font-weight: bold;
+    }
+    
+    .card-remove { color: var(--badge-remove); font-weight: bold; }
+    .card-unrestricted { color: var(--badge-unrestricted); font-weight: bold; }
+    .card-budget { color: var(--badge-budget); font-weight: bold; }
+    
+    .metric-badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      background-color: #30363d;
+      color: #ffffff;
+    }
+    
+    .impact-high { border-left: 4px solid var(--badge-remove); }
+    .impact-low { border-left: 4px solid var(--badge-budget); }
+
+    @media print {
+      body { background-color: #ffffff; color: #000000; padding: 0; }
+      .upgrade-table-container, .metadata-table { border: 1px solid #000000; background: none; }
+      table.upgrade-table th { background-color: #eeeeee; color: #000000; }
+      td, th { border-bottom: 1px solid #000000 !important; }
+      .card-remove, .card-unrestricted, .card-budget { color: #000000 !important; font-weight: bold; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Land Ho — Upgrade Blueprint</h1>
+    <p>Optimization Strategy & Swap Matrix</p>
+  </header>
+
+  <table class="metadata-table">
+    <tr>
+      <td>Target Power Goal</td>
+      <td>Optimized High-Power Casual (8.0 / 10)</td>
+    </tr>
+    <tr>
+      <td>Primary Focus</td>
+      <td>Mana Efficiency, Kindred Mass Removal, Compact Finishers</td>
+    </tr>
+    <tr>
+      <td>Combo Policy</td>
+      <td>Strictly Non-Infinite / Synergistic Value Spikes Only</td>
+    </tr>
+  </table>
+
+  <div class="upgrade-table-container">
+    <table class="upgrade-table">
+      <thead>
+        <tr>
+          <th>Card to Remove</th>
+          <th>Unrestricted Path</th>
+          <th>Budget Path</th>
+          <th>Impact Metric</th>
+          <th>Strategic Justification</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="impact-high">
+          <td class="card-remove">Acidic Slime</td>
+          <td class="card-unrestricted">Tropical Island <br><small>or Thassa's Intervention</small></td>
+          <td class="card-budget">Reclamation Sage</td>
+          <td><span class="metric-badge">Interaction</span><br><br><strong>High Velocity</strong></td>
+          <td>Slime is too slow at 5 mana. Reclamation Sage drops the curve down cleanly, while an extra land or flexible choice respects your overall velocity.</td>
+        </tr>
+        <tr class="impact-high">
+          <td class="card-remove">Apex Devastator</td>
+          <td class="card-unrestricted">Craterhoof Behemoth</td>
+          <td class="card-budget">End-Raze Forerunners</td>
+          <td><span class="metric-badge">Win Conditions</span><br><br><strong>High Velocity</strong></td>
+          <td>Devastator is random fun, but Craterhoof immediately converts your massive wide armies of tokens into an unblockable, lethal combat win.</td>
+        </tr>
+        <tr class="impact-low">
+          <td class="card-remove">Simic Guildgate</td>
+          <td class="card-unrestricted">Yavimaya, Cradle of Growth</td>
+          <td class="card-budget">Thran Portal</td>
+          <td><span class="metric-badge">Mana Base</span><br><br><strong>Low Velocity</strong></td>
+          <td>Guildgate entering tapped slows down a high-power deck. Swapping to an untapped fixer accelerates your engine by a full turn turn cycle.</td>
+        </tr>
+        <tr class="impact-high">
+          <td class="card-remove">Hydra Broodmaster</td>
+          <td class="card-unrestricted">Birds of Paradise</td>
+          <td class="card-budget">Elvish Mystic</td>
+          <td><span class="metric-badge">Mana Base</span><br><br><strong>High Velocity</strong></td>
+          <td>Broodmaster is a massive mana sink that is easily removed. Introducing 1-mana dorks ensures Omo hits the board consistently on turn 3.</td>
+        </tr>
+        <tr class="impact-high">
+          <td class="card-remove">Collective Restraint</td>
+          <td class="card-unrestricted">Raise the Palisade</td>
+          <td class="card-budget">Distant Melody</td>
+          <td><span class="metric-badge">Synergy</span><br><br><strong>High Velocity</strong></td>
+          <td>Restraint only taxes for 2 in Simic. Raise the Palisade exploits Omo's everything counters to bounce your opponents' total boards while leaving yours intact.</td>
+        </tr>
+        <tr class="impact-low">
+          <td class="card-remove">Lumbering Falls</td>
+          <td class="card-unrestricted">Glacial Chasm</td>
+          <td class="card-budget">Sunken Field</td>
+          <td><span class="metric-badge">Consistency</span><br><br><strong>Low Velocity</strong></td>
+          <td>Creature lands are rarely activated in this style. Glacial Chasm can be tutored instantly to completely shield you while assembling lethal setups.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>
