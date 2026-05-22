@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arcades Upgrade Blueprint Dashboard</title>
+  <style>
+    /* Default Dark Mode Palette */
+    :root {
+      --bg-main: #0d1117;
+      --bg-card: #161b22;
+      --border-color: #30363d;
+      --text-main: #c9d1d9;
+      --text-light: #8b949e;
+      --accent: #58a6ff;
+      --accent-green: #2ea44f;
+      --badge-remove: #f85149;
+      --badge-unrestricted: #a371f7;
+      --badge-budget: #3fb950;
+      --card-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      --text-dark-heading: #ffffff;
+      --pill-bg-light: #30363d;
+    }
+
+    /* Extracted Light Mode Palette */
+    [data-theme="light"] {
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --text-main: #1e293b;
+      --text-light: #475569;
+      --accent: #2563eb;
+      --accent-green: #16a34a;
+      --badge-remove: #ef4444;
+      --badge-unrestricted: #7c3aed;
+      --badge-budget: #22c55e;
+      --text-dark-heading: #0f172a;
+      --pill-bg-light: #f1f5f9;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Header Container */
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    h1 {
+      color: var(--text-dark-heading);
+      font-size: 2.25rem;
+      font-weight: 800;
+    }
+
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 1rem;
+      color: var(--text-main);
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--text-light);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--accent);
+      background-color: rgba(88, 166, 255, 0.1);
+    }
+
+    .nav-link.active {
+      color: var(--accent);
+      background-color: var(--pill-bg-light);
+    }
+
+    /* Meta Overview Card */
+    .meta-overview-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .meta-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-dark-heading);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Upgrade Data Table Layout */
+    .upgrade-table-container {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+    }
+
+    .upgrade-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .upgrade-table th {
+      background-color: rgba(0, 0, 0, 0.15);
+      color: var(--text-dark-heading);
+      padding: 1rem;
+      font-weight: 700;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .upgrade-table td {
+      padding: 1.25rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+    }
+
+    .upgrade-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Card Action Formatting profiles */
+    .card-remove {
+      color: var(--badge-remove);
+      font-weight: 700;
+    }
+
+    .card-unrestricted {
+      color: var(--badge-unrestricted);
+      font-weight: 700;
+    }
+
+    .card-budget {
+      color: var(--badge-budget);
+      font-weight: 700;
+    }
+
+    /* Centered Structural Text Pills */
+    .metric-pill {
+      display: inline-block;
+      background-color: var(--pill-bg-light);
+      color: var(--text-main);
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .velocity-text {
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    
+    .vel-high { color: #ff9800; }
+    .vel-low { color: var(--text-light); }
+
+    /* Print Recovery Configuration */
+    @media print {
+      body {
+        background: white !important;
+        color: #000000 !important;
+        padding: 0;
+      }
+      .theme-toggle, .nav-tabs {
+        display: none !important;
+      }
+      .upgrade-table-container, .meta-overview-card {
+        border: 1px solid #000000 !important;
+        box-shadow: none !important;
+        background: transparent !important;
+      }
+      th {
+        background: #f1f5f9 !important;
+        color: #000000 !important;
+        border-bottom: 2px solid #000000 !important;
+      }
+      td {
+        border-bottom: 1px solid #000000 !important;
+      }
+      .card-remove, .card-unrestricted, .card-budget {
+        color: #000000 !important;
+        text-decoration: underline;
+      }
+    }
+
+    /* Mobile Transformation Engine UI */
+    @media (max-width: 768px) {
+      .upgrade-table, .upgrade-table tbody, .upgrade-table tr, .upgrade-table td {
+        display: block;
+        width: 100%;
+      }
+
+      .upgrade-table thead {
+        display: none; /* Hide standard headers on screens below 768px */
+      }
+
+      .upgrade-table tr {
+        margin-bottom: 1.5rem;
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1rem;
+        box-shadow: var(--card-shadow);
+      }
+
+      .upgrade-table td {
+        border-bottom: 1px solid var(--border-color);
+        padding: 0.75rem 0.25rem;
+        position: relative;
+        padding-top: 1.75rem; /* Make structural room for injected header titles */
+      }
+
+      .upgrade-table td:last-child {
+        border-bottom: none;
+      }
+
+      /* Injected Headers through Dynamic Content Reads */
+      .upgrade-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        top: 0.25rem;
+        left: 0.25rem;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        font-weight: 800;
+        color: var(--text-light);
+        letter-spacing: 0.05em;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header Block -->
+    <div class="header-container">
+      <div>
+        <h1>Big Butts</h1>
+      </div>
+      <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
+    </div>
+
+    <!-- Navigation Menu -->
+    <div class="nav-tabs">
+      <a href="index.html" class="nav-link">Back to list</a>
+      <a href="Arcades.html" class="nav-link">Core Analysis & Audit</a>
+      <a href="Arcades_upgrade.html" class="nav-link active">Upgrade Blueprint</a>
+    </div>
+
+    <!-- Metadata Context Window -->
+    <div class="meta-overview-card">
+      <div class="meta-title">Targeted Tactical Upgrade Matrix</div>
+      <p>This blueprint displays the top 10 multi-pass filtered card alterations optimized for Arcades. This menu offers an unrestricted elite path alongside budget-conscious functional alternatives under $5.</p>
+    </div>
+
+    <!-- Main Dynamic Data Grid Container -->
+    <div class="upgrade-table-container">
+      <table class="upgrade-table">
+        <thead>
+          <tr>
+            <th>Card to Remove</th>
+            <th>Replace With (Unrestricted)</th>
+            <th>Replace With (Budget &lt;$5)</th>
+            <th>Impact Metric</th>
+            <th>Velocity</th>
+            <th>Strategic Justification</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Swap item 1 -->
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Airbender Ascension</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Eladamri's Call</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Vivien on the Hunt</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Consistency & Tutors</span></td>
+            <td data-label="Velocity" class="velocity-text vel-high">High Impact</td>
+            <td data-label="Strategic Justification">Replaces a low-impact passive combat filler card with an instant-speed creature tutor to pull missing combo pieces or win conditions like Tetsuko.</td>
+          </tr>
+          <!-- Swap item 2 -->
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Akroma's Memorial</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Moonshaker Cavalry</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Crashing Drawbridge</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Win Conditions</span></td>
+            <td data-label="Velocity" class="velocity-text vel-high">High Impact</td>
+            <td data-label="Strategic Justification">Memorial is too expensive at 7 mana. Cavalry acts as a decisive Craterhoof-style finisher that instantly scales off your high creature count.</td>
+          </tr>
+          <!-- Swap item 3 -->
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Arbor Adherent</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Wall of Kelp</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Carven Caryatid</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Synergy & Engine</span></td>
+            <td data-label="Velocity" class="velocity-text vel-low">Low Impact</td>
+            <td data-label="Strategic Justification">Adherent is a clunky 4-mana French-vanilla wall. Wall of Kelp creates multiple defender tokens to trigger Arcades repeatedly at instant speed.</td>
+          </tr>
+          <!-- Swap item 4 -->
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Chulane, Teller of Tales</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Congregation at Dawn</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Winding Canyons</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Consistency & Tutors</span></td>
+            <td data-label="Velocity" class="velocity-text vel-high">High Impact</td>
+            <td data-label="Strategic Justification">Chulane is an expensive value piece that spreads the deck thin. Congregation lets you stack three perfect defenders right before an Arcades swing.</td>
+          </tr>
+          <!-- Swap item 5 -->
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Crystal Barricade</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Bedrock Tortoise</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Rasaad yn Bashir</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Win Conditions</span></td>
+            <td data-label="Velocity" class="velocity-text vel-high">High Impact</td>
+            <td data-label="Strategic Justification">Tortoise provides hexproof to your board on your turn while acting as a backup "butt-strike" enabler, completely outclassing Barricade.</td>
+          </tr>
+          <!-- Swap item 6 -->
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Guard Gomazoa</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Walking Bulwark</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Hover Barrier</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Win Conditions</span></td>
+            <td data-label="Velocity" class="velocity-text vel-low">Low Impact</td>
+            <td data-label="Strategic Justification">Gomazoa is purely defensive. Bulwark gives you an alternative way to animate your walls and grants haste to key defender mana dorks.</td>
+          </tr>
+          <!-- Swap item 7 -->
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Mnemonic Wall</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Archaeomancer</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Shipwreck Sifter</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Synergy & Engine</span></td>
+            <td data-label="Velocity" class="velocity-text vel-low">Low Impact</td>
+            <td data-label="Strategic Justification">Mnemonic Wall's 5 mana cost is too slow. Archaeomancer provides the exact same spell-recursion effect for a full mana less.</td>
+          </tr>
+          <!-- Swap item 8 -->
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Morningtide's Light</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Alchemist's Refuge</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Reliquary Tower</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana Base</span></td>
+            <td data-label="Velocity" class="velocity-text vel-high">High Impact</td>
+            <td data-label="Strategic Justification">Light is a basic utility land. Refuge lets you flash out your walls right before your turn starts, dodging board wipes and drawing dynamically.</td>
+          </tr>
+          <!-- Swap item 9 -->
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">The Walls of Ba Sing Se</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Crashing Drawbridge</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Doorkeeper</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana Base</span></td>
+            <td data-label="Velocity" class="velocity-text vel-high">High Impact</td>
+            <td data-label="Strategic Justification">Ba Sing Se is a slow vanilla defender. Drawbridge provides global haste to your entire team, turning a massive board into an immediate kill vector.</td>
+          </tr>
+          <!-- Swap item 10 -->
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Suppression Ray // Orderly Plaza</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Flawless Maneuver</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Make a Stand</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Interaction & Control</span></td>
+            <td data-label="Velocity" class="velocity-text vel-high">High Impact</td>
+            <td data-label="Strategic Justification">Suppression Ray is overcosted. Flawless Maneuver offers a free protection spell that keeps your engine online even when you're completely tapped out.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Unified Switching Script Logic -->
+  <script>
+    const toggleBtn = document.getElementById('themeToggle');
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      if (currentTheme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+        toggleBtn.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        toggleBtn.textContent = '🌙 Dark Mode';
+      }
+    });
+  </script>
+</body>
+</html>
