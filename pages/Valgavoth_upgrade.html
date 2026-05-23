@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Valgavoth Tactical Upgrade Blueprint</title>
+  <title>Punish for All - Upgrade Blueprint</title>
   <style>
     /* Default Dark Mode Palette */
     :root {
@@ -40,187 +40,219 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background-color: var(--bg-main); color: var(--text-main); line-height: 1.6; padding: 2rem; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background-color: var(--bg-main); color: var(--text-main); line-height: 1.6; padding: 2rem; transition: background-color 0.3s, color 0.3s; }
+    .container { max-width: 1200px; margin: 0 auto; }
     
-    .header-container { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem; }
-    .header-title h1 { color: var(--text-dark-heading); font-size: 2rem; }
-    .header-title p { color: var(--text-light); }
-    
-    .theme-toggle { background: transparent; border: 1px solid var(--border-color); padding: 0.5rem 1rem; border-radius: 6px; color: var(--text-main); cursor: pointer; transition: all 0.2s ease; font-weight: 500; }
+    /* Header & Navigation */
+    .header-container { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1rem; }
+    .header-title h1 { color: var(--text-dark-heading); font-size: 2rem; font-weight: 700; }
+    .header-title p { color: var(--text-light); font-size: 1rem; margin-top: 0.25rem; }
+    .theme-toggle { background: transparent; border: 1px solid var(--border-color); padding: 0.5rem 1rem; border-radius: 6px; color: var(--text-main); cursor: pointer; font-weight: 500; transition: all 0.2s; }
     .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
     
     .nav-tabs { display: flex; border-bottom: 1px solid var(--border-color); margin-bottom: 2rem; gap: 0.5rem; }
-    .nav-link { display: block; padding: 0.75rem 1rem; text-decoration: none; color: var(--text-light); border-radius: 6px 6px 0 0; font-weight: 600; transition: all 0.2s ease; }
-    .nav-link:hover { color: var(--accent); background-color: var(--pill-bg-light); }
-    .nav-link.active { color: var(--accent); background-color: var(--pill-bg-light); border-bottom: 2px solid var(--accent); }
-    
-    .meta-overview-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: var(--card-shadow); }
-    .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
-    .meta-item h4 { font-size: 0.85rem; text-transform: uppercase; color: var(--text-light); margin-bottom: 0.25rem; }
-    .meta-item p { font-size: 1.1rem; font-weight: 600; color: var(--text-dark-heading); }
+    .nav-link { text-decoration: none; color: var(--text-light); padding: 0.75rem 1rem; font-weight: 500; border-radius: 6px 6px 0 0; border-bottom: 2px solid transparent; transition: all 0.2s; }
+    .nav-link:hover { color: var(--accent); background-color: rgba(88, 166, 255, 0.1); }
+    .nav-link.active { color: var(--accent); border-bottom-color: var(--accent); background-color: var(--pill-bg-light); }
 
-    .upgrade-table-container { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; box-shadow: var(--card-shadow); }
-    .upgrade-table { width: 100%; border-collapse: collapse; text-align: left; }
-    .upgrade-table th { background-color: var(--pill-bg-light); color: var(--text-dark-heading); padding: 1rem; font-weight: 600; border-bottom: 1px solid var(--border-color); }
+    /* Meta Summary Card */
+    .meta-overview-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: var(--card-shadow); }
+    .meta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; text-align: center; }
+    .meta-item label { display: block; font-size: 0.75rem; text-transform: uppercase; font-weight: 600; color: var(--text-light); letter-spacing: 0.05rem; margin-bottom: 0.25rem; }
+    .meta-item span { font-size: 1.1rem; font-weight: 700; color: var(--text-dark-heading); }
+
+    /* Master Upgrade Table Architecture */
+    .table-container { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; box-shadow: var(--card-shadow); margin-bottom: 2rem; }
+    .upgrade-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem; }
+    .upgrade-table th { background-color: rgba(0,0,0,0.15); padding: 1rem; font-weight: 600; color: var(--text-dark-heading); border-bottom: 2px solid var(--border-color); }
     .upgrade-table td { padding: 1.25rem 1rem; border-bottom: 1px solid var(--border-color); vertical-align: top; }
     .upgrade-table tr:last-child td { border-bottom: none; }
-
-    .card-remove { color: var(--badge-remove); font-weight: bold; }
-    .card-unrestricted { color: var(--badge-unrestricted); font-weight: bold; }
-    .card-budget { color: var(--badge-budget); font-weight: bold; }
     
-    .metric-pill { display: inline-block; background-color: var(--pill-bg-light); color: var(--text-main); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600; text-align: center; }
-    .velocity-badge { font-weight: bold; font-size: 0.85rem; }
-    .vel-high { color: var(--badge-remove); }
-    .vel-med { color: var(--badge-unrestricted); }
-    .vel-low { color: var(--text-light); }
+    /* Action Color Profile Mappings */
+    .card-remove { color: var(--badge-remove); font-weight: 700; }
+    .card-unrestricted { color: var(--badge-unrestricted); font-weight: 700; }
+    .card-budget { color: var(--badge-budget); font-weight: 700; }
+    
+    /* Text Pills & Utility Badges */
+    .metric-pill { display: inline-block; background-color: var(--pill-bg-light); color: var(--text-main); font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 12px; white-space: nowrap; text-align: center; }
+    .velocity-badge { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02rem; }
+    .velocity-high { color: #e1b400; }
+    .velocity-low { color: var(--text-light); }
+    .justification-text { font-size: 0.9rem; color: var(--text-main); line-height: 1.4; }
 
-    @media (max-width: 768px) {
-      .upgrade-table, .upgrade-table tbody, .upgrade-table tr, .upgrade-table td { display: block; width: 100%; }
-      .upgrade-table thead { display: none; }
-      .upgrade-table tr { margin-bottom: 1.5rem; background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem; box-shadow: var(--card-shadow); }
-      .upgrade-table td { border-bottom: none; padding: 0.5rem 0; display: flex; flex-direction: column; }
-      .upgrade-table td::before { content: attr(data-label); font-size: 0.75rem; text-transform: uppercase; font-weight: bold; color: var(--text-light); margin-bottom: 0.25rem; letter-spacing: 0.05em; }
-      .metric-pill { align-self: flex-start; }
+    /* Mobile Layout Transformation (CSS Unwrapping) */
+    @media (max-width: 900px) {
+      .meta-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
     }
 
+    @media (max-width: 768px) {
+      .table-container { border: none; background: transparent; box-shadow: none; }
+      .upgrade-table, .upgrade-table tbody, .upgrade-table tr, .upgrade-table td { display: block; width: 100%; }
+      .upgrade-table th { display: none; } /* Hide primary head */
+      
+      .upgrade-table tr { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 1.5rem; padding: 1rem; box-shadow: var(--card-shadow); }
+      .upgrade-table td { border-bottom: 1px dashed var(--border-color); padding: 0.75rem 0.5rem; display: flex; flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+      .upgrade-table td:last-child { border-bottom: none; }
+      
+      /* Inject cell metadata headers via pseudo-elements */
+      .upgrade-table td::before { content: attr(data-label); font-size: 0.7rem; text-transform: uppercase; font-weight: 700; color: var(--text-light); letter-spacing: 0.05rem; margin-bottom: 0.15rem; display: block; }
+      .metric-pill { margin-top: 0.25rem; }
+    }
+
+    /* Print Sheet Profile Configuration */
     @media print {
-      body { background: white !important; color: black !important; padding: 0; }
+      body { background: white !important; color: #000000 !important; padding: 0; }
+      :root { --bg-main: #ffffff; --bg-card: #ffffff; --border-color: #bbbbbb; --text-main: #222222; --text-light: #555555; --text-dark-heading: #000000; }
       .theme-toggle, .nav-tabs { display: none !important; }
-      .meta-overview-card, .upgrade-table-container { box-shadow: none !important; border: 1px solid #ccc !important; background: white !important; }
-      .upgrade-table th { background: #eee !important; color: black !important; }
-      :root, [data-theme="light"] { --text-dark-heading: #000000; --text-main: #111111; }
+      .table-container { border: 1px solid #000 !important; box-shadow: none !important; }
+      .upgrade-table th { background: #eee !important; color: #000 !important; border-bottom: 2px solid #000 !important; }
+      .upgrade-table td { border-bottom: 1px solid #eee !important; }
     }
   </style>
 </head>
 <body>
-
-  <div class="header-container">
-    <div class="header-title">
-      <h1>Punish for All</h1>
-      <p>Tactical Upgrade Blueprint Matrix</p>
+  <div class="container">
+    <div class="header-container">
+      <div class="header-title">
+        <h1>Punish for All</h1>
+        <p>Targeted Optimization Matrix & Upgrade Blueprint</p>
+      </div>
+      <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
     </div>
-    <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
-  </div>
 
-  <div class="nav-tabs">
-    <a href="../index.html" class="nav-link">Back to list</a>
-    <a href="Valgavoth.html" class="nav-link">Core Analysis & Audit</a>
-    <a href="Valgavoth_upgrade.html" class="nav-link active">Upgrade Blueprint</a>
-  </div>
+    <div class="nav-tabs">
+      <a href="../index.html" class="nav-link">Back to list</a>
+      <a href="Valgavoth.html" class="nav-link">Core Analysis & Audit</a>
+      <a href="Valgavoth_upgrade.html" class="nav-link active">Upgrade Blueprint</a>
+    </div>
 
-  <div class="meta-overview-card">
-    <div class="meta-grid">
-      <div class="meta-item">
-        <h4>Target Commander</h4>
-        <p>Valgavoth, Harrower of Souls</p>
-      </div>
-      <div class="meta-item">
-        <h4>Swaps Cataloged</h4>
-        <p>10 Strategic Iterations</p>
-      </div>
-      <div class="meta-item">
-        <h4>Primary Core Focus</h4>
-        <p>Velocity & Mana Optimization</p>
+    <div class="meta-overview-card">
+      <div class="meta-grid">
+        <div class="meta-item"><label>Commander</label><span>Valgavoth</span></div>
+        <div class="meta-item"><label>Target Count</label><span>10 Tactical Swaps</span></div>
+        <div class="meta-item"><label>Strategy Tuning</label><span>Speed & Protection</span></div>
+        <div class="meta-item"><label>Meta Bracket</label><span>High Casual / Tier 2</span></div>
       </div>
     </div>
-  </div>
 
-  <div class="upgrade-table-container">
-    <table class="upgrade-table">
-      <thead>
-        <tr>
-          <th>Card to Remove</th>
-          <th>Replace With (Unrestricted)</th>
-          <th>Replace With (Budget)</th>
-          <th>Impact Metric</th>
-          <th>Velocity</th>
-          <th>Strategic Justification</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td data-label="Card to Remove" class="card-remove">Persistent Constrictor</td>
-          <td data-label="Replace With (Unrestricted)" class="card-unrestricted">The One Ring</td>
-          <td data-label="Replace With (Budget)" class="card-budget">Ob Nixilis, the Hate-Twisted</td>
-          <td data-label="Impact Metric"><span class="metric-pill">Synergy & Engine</span></td>
-          <td data-label="Velocity" class="velocity-badge vel-high">High</td>
-          <td data-label="Strategic Justification">Persistent Constrictor is highly localized and low-impact. The One Ring or Ob Nixilis applies constant pressure and massive raw card velocity to fuel your hand.</td>
-        </tr>
-        <tr>
-          <td data-label="Card to Remove" class="card-remove">Solemn Simulacrum</td>
-          <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Mana Crypt</td>
-          <td data-label="Replace With (Budget)" class="card-budget">Talisman of Indulgence</td>
-          <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana Base</span></td>
-          <td data-label="Velocity" class="velocity-badge vel-high">High</td>
-          <td data-label="Strategic Justification">Sad Robot is too slow for high-power casual metas. Low-cost mana stones or immediate fast rocks drastically drop your operational curve.</td>
-        </tr>
-        <tr>
-          <td data-label="Card to Remove" class="card-remove">Blood Artist</td>
-          <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Mirkwood Bats</td>
-          <td data-label="Replace With (Budget)" class="card-budget">Mayhem Devil</td>
-          <td data-label="Impact Metric"><span class="metric-pill">Synergy & Engine</span></td>
-          <td data-label="Velocity" class="velocity-badge vel-med">Medium</td>
-          <td data-label="Strategic Justification">This list does not feature a dedicated aristocrats loop. Mirkwood Bats or Mayhem Devil scales incredibly well with treasures and map mechanics.</td>
-        </tr>
-        <tr>
-          <td data-label="Card to Remove" class="card-remove">Deadpool, Trading Card</td>
-          <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Ragavan, Nimble Pilferer</td>
-          <td data-label="Replace With (Budget)" class="card-budget">Professional Face-Breaker</td>
-          <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana Base</span></td>
-          <td data-label="Velocity" class="velocity-badge vel-high">High</td>
-          <td data-label="Strategic Justification">Acorn/Silver-bordered mechanics lose out to optimal deck construction. Early treasure engines generate critical operational velocity.</td>
-        </tr>
-        <tr>
-          <td data-label="Card to Remove" class="card-remove">Star Athlete</td>
-          <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Deadly Rollick</td>
-          <td data-label="Replace With (Budget)" class="card-budget">Feed the Swarm</td>
-          <td data-label="Impact Metric"><span class="metric-pill">Interaction</span></td>
-          <td data-label="Velocity" class="velocity-badge vel-high">High</td>
-          <td data-label="Strategic Justification">Star Athlete lacks consistent impact. Free interaction or direct enchantment interaction patches Rakdos's structural color weaknesses perfectly.</td>
-        </tr>
-        <tr>
-          <td data-label="Card to Remove" class="card-remove">Gleeful Arsonist</td>
-          <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Phyrexian Arena</td>
-          <td data-label="Replace With (Budget)" class="card-budget">Night's Whisper</td>
-          <td data-label="Impact Metric"><span class="metric-pill">Consistency & Tutors</span></td>
-          <td data-label="Velocity" class="velocity-badge vel-med">Medium</td>
-          <td data-label="Strategic Justification">Gleeful Arsonist relies heavily on death triggers. Raw draw steps or fast sorcery card draw ensure you maintain resources to launch your game plans.</td>
-        </tr>
-        <tr>
-          <td data-label="Card to Remove" class="card-remove">Kaervek the Merciless</td>
-          <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Bloodletter of Aclazotz</td>
-          <td data-label="Replace With (Budget)" class="card-budget">Archfiend of Despair</td>
-          <td data-label="Impact Metric"><span class="metric-pill">Win Conditions</span></td>
-          <td data-label="Velocity" class="velocity-badge vel-high">High</td>
-          <td data-label="Strategic Justification">7 mana is far too clunky for a high-power framework. Bloodletter halves opponent life totals immediately on any damage ping step.</td>
-        </tr>
-        <tr>
-          <td data-label="Card to Remove" class="card-remove">Magebane Lizard</td>
-          <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Eidolon of the Great Revel</td>
-          <td data-label="Replace With (Budget)" class="card-budget">Roiling Horror</td>
-          <td data-label="Impact Metric"><span class="metric-pill">Synergy & Engine</span></td>
-          <td data-label="Velocity" class="velocity-badge vel-med">Medium</td>
-          <td data-label="Strategic Justification">Magebane Lizard can inadvertently disrupt your own development strategy. Eidolon focuses pressure symmetrically onto your opponent chains.</td>
-        </tr>
-        <tr>
-          <td data-label="Card to Remove" class="card-remove">Reliquary Tower</td>
-          <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Ancient Tomb</td>
-          <td data-label="Replace With (Budget)" class="card-budget">Mount Doom</td>
-          <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana Base</span></td>
-          <td data-label="Velocity" class="velocity-badge vel-med">Medium</td>
-          <td data-label="Strategic Justification">Hand sizes rarely matter when you are processing resources efficiently. Fast colorless acceleration or burn utilities perform at a much higher standard.</td>
-        </tr>
-        <tr>
-          <td data-label="Card to Remove" class="card-remove">Canyon Slough</td>
-          <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Badlands</td>
-          <td data-label="Replace With (Budget)" class="card-budget">Sulfurous Springs</td>
-          <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana Base</span></td>
-          <td data-label="Velocity" class="velocity-badge vel-low">Low</td>
-          <td data-label="Strategic Justification">Tap-lands significantly break early turn tempo. Pain duals or original duals guarantee colored execution right on time.</td>
-        </tr>
-      </tbody>
-    </table>
+    <h2>Tactical Swap Architecture</h2>
+    <div class="table-container">
+      <table class="upgrade-table">
+        <thead>
+          <tr>
+            <th style="width: 18%;">Card to Remove</th>
+            <th style="width: 18%;">Replace With (Optimal)</th>
+            <th style="width: 18%;">Replace With (Budget)</th>
+            <th style="width: 15%;">Impact Metric</th>
+            <th style="width: 10%;">Velocity</th>
+            <th style="width: 23%;">Strategic Justification</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <!-- Swap 1 -->
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Solemn Simulacrum</td>
+            <td data-label="Replace With (Optimal)" class="card-unrestricted">Mana Crypt</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Talisman of Indulgence</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana</span></td>
+            <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+            <td data-label="Strategic Justification" class="justification-text">Replaces a clunky, slow 4-drop value piece with hyper-efficient fast mana to accelerate your 5-CMC Commander onto the battlefield 1-2 turns early.</td>
+          </tr>
+
+          <!-- Swap 2 -->
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Leechridden Swamp</td>
+            <td data-label="Replace With (Optimal)" class="card-unrestricted">Ancient Tomb</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Exotic Orchard</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana</span></td>
+            <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+            <td data-label="Strategic Justification" class="justification-text">A tapped land that requires active black creatures to ping is far too slow; swapping it for explosive colorless utility or untapped colored sources drastically increases velocity.</td>
+          </tr>
+
+          <!-- Swap 3 -->
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Blood Seeker</td>
+            <td data-label="Replace With (Optimal)" class="card-unrestricted">Orcish Bowmasters</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Roiling Vortex</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Synergy Engine</span></td>
+            <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+            <td data-label="Strategic Justification" class="justification-text">Blood Seeker only triggers on creature entry; Bowmasters or Vortex punishes core, non-creature game actions like drawing cards and casting life-gain spells instantly.</td>
+          </tr>
+
+          <!-- Swap 4 -->
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Fate Unraveler</td>
+            <td data-label="Replace With (Optimal)" class="card-unrestricted">The Meathook Massacre</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Nightshade Harvester</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Interaction & Control</span></td>
+            <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+            <td data-label="Strategic Justification" class="justification-text">A 4-mana 1/3 that only pings on draws is outclassed. Replacing it with an interactive board-wipe enchantment that rewards you with life-gain and ping triggers is a massive upgrade.</td>
+          </tr>
+
+          <!-- Swap 5 -->
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Kaervek the Merciless</td>
+            <td data-label="Replace With (Optimal)" class="card-unrestricted">Vito, Thorn of the Dusk Rose</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Marauding Blight-Priest</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Win Conditions</span></td>
+            <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+            <td data-label="Strategic Justification" class="justification-text">Kaervek is an incredibly clunky 7-mana spell that rarely survives a round table. Vito acts as a cheap, 3-drop combo amplifier that forms an immediate loop with Exquisite Blood.</td>
+          </tr>
+
+          <!-- Swap 6 -->
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Deadly Tempest</td>
+            <td data-label="Replace With (Optimal)" class="card-unrestricted">Toxic Deluge</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Feed the Swarm</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Interaction & Control</span></td>
+            <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+            <td data-label="Strategic Justification" class="justification-text">At 6 mana, Deadly Tempest is too slow for high-power metas. Toxic Deluge offers cheap, highly scalable interaction that clears indestructible threats for pennies on the mana scale.</td>
+          </tr>
+
+          <!-- Swap 7 -->
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Persistent Constrictor</td>
+            <td data-label="Replace With (Optimal)" class="card-unrestricted">Ragavan, Nimble Pilferer</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Strike It Rich</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana</span></td>
+            <td data-label="Velocity" class="velocity-badge velocity-low">Low</td>
+            <td data-label="Strategic Justification" class="justification-text">Persistent Constrictor adds negligible incremental value. Swapping it for early-game treasure generation and card filtering provides immediate velocity from Turn 1.</td>
+          </tr>
+
+          <!-- Swap 8 -->
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Gleeful Arsonist</td>
+            <td data-label="Replace With (Optimal)" class="card-unrestricted">Deflecting Swat</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Tibalt's Trickery</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Interaction & Control</span></td>
+            <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+            <td data-label="Strategic Justification" class="justification-text">Replaces a conditional, reactive death-trigger creature with free or unexpected stack protection to defend your high-value group-slug enchantments.</td>
+          </tr>
+
+          <!-- Swap 9 -->
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Sword of the Animist</td>
+            <td data-label="Replace With (Optimal)" class="card-unrestricted">Jeweled Lotus</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Springleaf Drum</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana</span></td>
+            <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+            <td data-label="Strategic Justification" class="justification-text">Sword of the Animist requires a creature to attack safely to extract value. Jeweled Lotus power-drives Valgavoth out on Turn 2, maximizing his early-game engine potential.</td>
+          </tr>
+
+          <!-- Swap 10 -->
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Bedevil</td>
+            <td data-label="Replace With (Optimal)" class="card-unrestricted">Deadly Rollick</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Infernal Grasp</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Interaction & Control</span></td>
+            <td data-label="Velocity" class="velocity-badge velocity-low">Low</td>
+            <td data-label="Strategic Justification" class="justification-text">Upgrades 3-mana sorcery/instant single-target speed into a completely free, exile-based piece of removal that leverages having your commander on the battlefield.</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <script>

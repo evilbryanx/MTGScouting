@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Valgavoth Core Analysis & Audit</title>
+  <title>Punish for All - Core Analysis & Audit</title>
   <style>
     /* Default Dark Mode Palette */
     :root {
@@ -40,196 +40,193 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; bg-color: var(--bg-main); background-color: var(--bg-main); color: var(--text-main); line-height: 1.6; padding: 2rem; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background-color: var(--bg-main); color: var(--text-main); line-height: 1.6; padding: 2rem; transition: background-color 0.3s, color 0.3s; }
+    .container { max-width: 1200px; margin: 0 auto; }
     
-    .header-container { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem; }
-    .header-title h1 { color: var(--text-dark-heading); font-size: 2rem; }
-    .header-title p { color: var(--text-light); }
-    
-    .theme-toggle { background: transparent; border: 1px solid var(--border-color); padding: 0.5rem 1rem; border-radius: 6px; color: var(--text-main); cursor: pointer; transition: all 0.2s ease; font-weight: 500; }
+    /* Header & Navigation Styles */
+    .header-container { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1rem; }
+    .header-title h1 { color: var(--text-dark-heading); font-size: 2rem; font-weight: 700; }
+    .header-title p { color: var(--text-light); font-size: 1rem; margin-top: 0.25rem; }
+    .theme-toggle { background: transparent; border: 1px solid var(--border-color); padding: 0.5rem 1rem; border-radius: 6px; color: var(--text-main); cursor: pointer; font-weight: 500; transition: all 0.2s; }
     .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
     
     .nav-tabs { display: flex; border-bottom: 1px solid var(--border-color); margin-bottom: 2rem; gap: 0.5rem; }
-    .nav-link { display: block; padding: 0.75rem 1rem; text-decoration: none; color: var(--text-light); border-radius: 6px 6px 0 0; font-weight: 600; transition: all 0.2s ease; }
-    .nav-link:hover { color: var(--accent); background-color: var(--pill-bg-light); }
-    .nav-link.active { color: var(--accent); background-color: var(--pill-bg-light); border-bottom: 2px solid var(--accent); }
+    .nav-link { text-decoration: none; color: var(--text-light); padding: 0.75rem 1rem; font-weight: 500; border-radius: 6px 6px 0 0; border-bottom: 2px solid transparent; transition: all 0.2s; }
+    .nav-link:hover { color: var(--accent); background-color: rgba(88, 166, 255, 0.1); }
+    .nav-link.active { color: var(--accent); border-bottom-color: var(--accent); background-color: var(--pill-bg-light); }
+
+    /* Layout Grids */
+    .top-section-grid { display: grid; grid-template-columns: 320px 1fr; gap: 2rem; margin-bottom: 2rem; }
+    .commander-sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+    .commander-card-frame { background-size: contain; background-repeat: no-repeat; background-position: top center; width: 100%; height: auto; aspect-ratio: 63 / 88; box-shadow: var(--card-shadow); border-radius: 4.75% / 3.5%; }
     
-    .top-grid { display: grid; grid-template-columns: 320px 1fr; gap: 2rem; margin-bottom: 2rem; }
+    .power-badge-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: var(--card-shadow); }
+    .power-score-label { text-transform: uppercase; font-size: 0.75rem; font-weight: 600; color: var(--text-light); letter-spacing: 0.1rem; }
+    .power-score-number { font-size: 4.5rem; font-weight: 800; color: var(--accent); line-height: 1.1; margin: 0.5rem 0; }
     
-    .left-column { display: flex; flex-direction: column; gap: 1.5rem; }
-    .card-frame { background-size: contain; background-repeat: no-repeat; background-position: top center; width: 100%; height: auto; aspect-ratio: 63 / 88; box-shadow: var(--card-shadow); border-radius: 4.75% / 3.5%; }
-    .power-badge-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; text-align: center; box-shadow: var(--card-shadow); }
-    .power-badge-title { font-size: 0.875rem; text-transform: uppercase; color: var(--text-light); letter-spacing: 0.05em; font-weight: bold; }
-    .power-badge-score { font-size: 4rem; font-weight: 800; color: var(--accent-green); margin: 0.5rem 0; line-height: 1; }
-    
-    .right-column { display: flex; flex-direction: column; gap: 1.5rem; }
-    .meta-table-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; box-shadow: var(--card-shadow); }
+    .executive-details-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; box-shadow: var(--card-shadow); display: flex; flex-direction: column; gap: 1.5rem; }
     .meta-table { width: 100%; border-collapse: collapse; }
     .meta-table td { padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); }
-    .meta-table tr:last-child td { border-bottom: none; }
-    .meta-label { font-weight: bold; color: var(--text-light); width: 35%; }
-    .meta-value { color: var(--text-main); }
-    .meta-value a { color: var(--accent); text-decoration: none; }
-    .meta-value a:hover { text-decoration: underline; }
+    .meta-table td:first-child { font-weight: 600; color: var(--text-light); width: 35%; }
+    .meta-table td:last-child { color: var(--text-dark-heading); font-weight: 500; }
+    .meta-table a { color: var(--accent); text-decoration: none; }
+    .meta-table a:hover { text-decoration: underline; }
     
-    .summary-callout { background-color: var(--bg-card); border-left: 4px solid var(--accent); border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); border-radius: 0 8px 8px 0; padding: 1.5rem; box-shadow: var(--card-shadow); }
-    .summary-callout h3 { color: var(--text-dark-heading); margin-bottom: 0.5rem; }
+    .summary-callout { background: rgba(88, 166, 255, 0.07); border-left: 4px solid var(--accent); padding: 1.5rem; border-radius: 0 8px 8px 0; margin-top: 0.5rem; }
+    .summary-callout h3 { margin-bottom: 0.5rem; color: var(--text-dark-heading); font-size: 1.1rem; }
     
-    .bottom-section { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1rem; }
-    .pillar-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 2rem; box-shadow: var(--card-shadow); }
+    /* Full-Width Bottom Sections */
+    .pillar-breakdown-container { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1rem; }
+    .pillar-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; box-shadow: var(--card-shadow); }
     .pillar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 1rem; }
-    .pillar-title { font-size: 1.25rem; font-weight: 700; color: var(--text-dark-heading); }
-    .pillar-score-pill { background-color: var(--pill-bg-light); color: var(--accent); padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: bold; font-size: 0.9rem; }
-    .pillar-content ul { margin-left: 1.5rem; margin-top: 0.5rem; }
+    .pillar-title { font-size: 1.35rem; font-weight: 700; color: var(--text-dark-heading); }
+    .pillar-score { font-size: 1.25rem; font-weight: 700; background-color: var(--pill-bg-light); padding: 0.25rem 0.75rem; border-radius: 20px; color: var(--accent); }
+    .pillar-content p { margin-bottom: 1rem; color: var(--text-main); }
+    .pillar-content ul { list-style-position: inside; margin-left: 0.5rem; color: var(--text-main); }
     .pillar-content li { margin-bottom: 0.5rem; }
     
-    blockquote { border-left: 4px solid var(--accent-green); background-color: var(--pill-bg-light); padding: 1rem; margin: 1rem 0; border-radius: 0 6px 6px 0; font-style: italic; }
+    strong, b { color: var(--text-dark-heading); font-weight: 600; }
 
+    /* Responsive Breakpoints */
     @media (max-width: 900px) {
-      .top-grid { grid-template-columns: 1fr; }
-      .left-column { align-items: center; }
-      .card-frame { max-width: 320px; }
-      .power-badge-card { width: 100%; max-width: 320px; }
+      .top-section-grid { grid-template-columns: 1fr; }
+      .commander-sidebar { flex-direction: row; align-items: center; gap: 1.5rem; }
+      .commander-card-frame { width: 220px; }
+      .power-badge-card { flex-grow: 1; padding: 2.5rem; }
+    }
+    
+    @media (max-width: 600px) {
+      body { padding: 1rem; }
+      .commander-sidebar { flex-direction: column; }
+      .commander-card-frame { width: 100%; max-width: 280px; }
+      .power-badge-card { width: 100%; }
+      .header-container { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .theme-toggle { align-self: flex-end; }
     }
 
+    /* Print Recovery Sheet styles */
     @media print {
-      body { background: white !important; color: black !important; padding: 0; }
+      body { background: white !important; color: #000000 !important; padding: 0; }
+      :root { --bg-main: #ffffff; --bg-card: #ffffff; --border-color: #cccccc; --text-main: #111111; --text-light: #555555; --text-dark-heading: #000000; }
       .theme-toggle, .nav-tabs { display: none !important; }
-      .pillar-card, .meta-table-card, .summary-callout, .power-badge-card { box-shadow: none !important; border: 1px solid #ccc !important; background: white !important; page-break-inside: avoid; }
-      :root, [data-theme="light"] { --text-dark-heading: #000000; --text-main: #111111; }
+      .pillar-card, .executive-details-card, .power-badge-card { box-shadow: none !important; page-break-inside: avoid; border: 1px solid #ccc !important; }
     }
   </style>
 </head>
 <body>
-
-  <div class="header-container">
-    <div class="header-title">
-      <h1>Punish for All</h1>
-      <p>Commander Strategic Deck Profile</p>
-    </div>
-    <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
-  </div>
-
-  <div class="nav-tabs">
-    <a href="../index.html" class="nav-link">Back to list</a>
-    <a href="Valgavoth.html" class="nav-link active">Core Analysis & Audit</a>
-    <a href="Valgavoth_upgrade.html" class="nav-link">Upgrade Blueprint</a>
-  </div>
-
-  <div class="top-grid">
-    <div class="left-column">
-      <div class="card-frame" style="background-image: url('https://cards.scryfall.io/large/front/8/d/8d7c1f6c-af45-4449-8cf8-e13830b3df8a.jpg?1726596807');"></div>
-      <div class="power-badge-card">
-        <div class="power-badge-title">Calibrated Power Level</div>
-        <div class="power-badge-score">7.5</div>
-        <p style="color: var(--text-light); font-size: 0.85rem; font-weight: 500;">HIGH-POWER CASUAL</p>
+  <div class="container">
+    <div class="header-container">
+      <div class="header-title">
+        <h1>Punish for All</h1>
+        <p>Strategic Commander Audit & Architecture Dashboard</p>
       </div>
+      <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
     </div>
-    
-    <div class="right-column">
-      <div class="meta-table-card">
+
+    <div class="nav-tabs">
+      <a href="../index.html" class="nav-link">Back to list</a>
+      <a href="Valgavoth.html" class="nav-link active">Core Analysis & Audit</a>
+      <a href="Valgavoth_upgrade.html" class="nav-link">Upgrade Blueprint</a>
+    </div>
+
+    <div class="top-section-grid">
+      <div class="commander-sidebar">
+        <div class="commander-card-frame" style="background-image: url('https://cards.scryfall.io/large/front/8/d/8d7c1f6c-af45-4449-8cf8-e13830b3df8a.jpg?1726596807');"></div>
+        <div class="power-badge-card">
+          <div class="power-score-label">Overall Power Rating</div>
+          <div class="power-score-number">8.0</div>
+          <div class="power-score-label">High-Power Casual</div>
+        </div>
+      </div>
+
+      <div class="executive-details-card">
+        <h2>Executive Data Profile</h2>
         <table class="meta-table">
           <tr>
-            <td class="meta-label">Commander</td>
-            <td class="meta-value"><strong>Valgavoth, Harrower of Souls</strong></td>
+            <td>Commander</td>
+            <td>Valgavoth, Harrower of Souls</td>
           </tr>
           <tr>
-            <td class="meta-label">Archetype</td>
-            <td class="meta-value">Group Slug / Punisher Burn</td>
+            <td>Archetype</td>
+            <td>Rakdos Group-Slug / Tax Engine</td>
           </tr>
           <tr>
-            <td class="meta-label">Est. Turn to Win</td>
-            <td class="meta-value">Turn 5 – 7 (Uninterrupted)</td>
+            <td>Est. Turn to Win</td>
+            <td>Turn 5 – 7 (Uninterrupted)</td>
           </tr>
           <tr>
-            <td class="meta-label">Source List</td>
-            <td class="meta-value"><a href="https://archidekt.com/decks/18254440/valgavoth_harrower_of_souls" target="_blank">Archidekt Link</a></td>
+            <td>Source Decklist</td>
+            <td><a href="https://archidekt.com/decks/18254440/valgavoth_harrower_of_souls" target="_blank">Archidekt Link</a></td>
           </tr>
         </table>
+
+        <div class="summary-callout">
+          <h3>Mechanical Overview</h3>
+          <p>This deck is a premier Rakdos group-slug and tax engine that weaponizes opponents' standard game actions (drawing cards, tapping lands, casting spells, playing creatures) into massive life-drain vectors. <strong>Valgavoth, Harrower of Souls</strong> functions as a catastrophic, self-growing threat and card-advantage engine that triggers during <em>each</em> opponent's turn the moment they lose life. The deck wins by stacking incremental damage multipliers, locking down the board with global pain pieces like <strong>Manabarbs</strong> and <strong>Spellshock</strong>, and closing out games through massive explosive bursts via <strong>Chandra's Ignition</strong> or the absolute game-ending combination of <strong>Exquisite Blood</strong> + <strong>Bloodthirsty Conqueror</strong>.</p>
+        </div>
       </div>
+    </div>
+
+    <h2>Strategic Pillar Deep Dive</h2>
+    <div class="pillar-breakdown-container">
       
-      <div class="summary-callout">
-        <h3>Executive Summary</h3>
-        <p>The strategy focuses on incremental, inescapable asymmetric pinging on every single opponent's turn to transform <strong>Valgavoth</strong> into a massive, lethal airborne threat while melting opposing life totals. It wins via explosive damage multipliers, direct non-combat life drains, or continuous combat pressure backed by protective free interaction.</p>
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <div class="pillar-title">1. Synergy & Engine</div>
+          <div class="pillar-score">9.5 / 10</div>
+        </div>
+        <div class="pillar-content">
+          <p>The underlying mechanical synergy between your commander and the deck composition is nearly flawless. You have expertly saturated the list with "free" life-loss triggers that activate on your opponents' turns, ensuring Valgavoth grows and draws cards consistently 3–4 times per turn cycle.</p>
+          <ul>
+            <li><strong>Key Vectors:</strong> <strong>Razorkin Needlehead</strong> and <strong>Sheoldred, the Apocalypse</strong> punish draws; <strong>Ankh of Mishra</strong>, <strong>Zo-Zu the Punisher</strong>, and <strong>Polluted Bonds</strong> punish land drops; <strong>Kederekt Parasite</strong> and <strong>Creeping Bloodsucker</strong> guarantee upkeep pings.</li>
+            <li><strong>Synergy Superchargers:</strong> When your tick-damage triggers meet <strong>Solphim, Mayhem Dominus</strong>, <strong>Ojer Axonil, Deepest Might</strong>, or <strong>Twinflame Tyrant</strong>, the damage scales quadratically, changing a minor 1-damage tax into a game-ending 4-to-8 damage chunk per action.</li>
+          </ul>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <div class="bottom-section">
-    <div class="pillar-card">
-      <div class="pillar-header">
-        <span class="pillar-title">1. Synergy & Engine</span>
-        <span class="pillar-score-pill">9.5 / 10</span>
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <div class="pillar-title">2. Interaction & Board Control</div>
+          <div class="pillar-score">7.5 / 10</div>
+        </div>
+        <div class="pillar-content">
+          <p>Your interaction suite is highly efficient, featuring premier staples like <strong>Deflecting Swat</strong>, <strong>Deadly Rollick</strong>, <strong>Rakdos Charm</strong>, and <strong>Withering Torment</strong> (crucial for Rakdos enchantment removal). Your board wipe package (<strong>Blasphemous Act</strong>, <strong>Damnation</strong>, <strong>Massacre Wurm</strong>) is potent, especially when paired with <strong>Brash Taunter</strong> or <strong>Screaming Nemesis</strong> to weaponize global damage back at your opponents' faces.</p>
+          <p><strong>Strategic Gap:</strong> The deck runs slightly low on stack-based interaction and instantaneous single-target answers. Because your group-slug pieces draw intense table enmity, you need more ways to protect your board state or disrupt fast combo decks before they can ignore your damage tax and win on the stack.</p>
+        </div>
       </div>
-      <div class="pillar-content">
-        <p>This deck's core engine is exceptionally well-tuned. <strong>Valgavoth, Harrower of Souls</strong> demands that an opponent loses life on <em>their own turn</em> to trigger his card draw and $+1/+1$ counter placement. The list maximizes this requirement with surgical precision:</p>
-        <ul>
-          <li><strong>Turn-by-Turn Enablers:</strong> <strong>Ankh of Mishra</strong>, <strong>Zo-Zu the Punisher</strong>, and <strong>Polluted Bonds</strong> punish land drops. <strong>Spellshock</strong>, <strong>Manabarbs</strong>, and <strong>Rug of Smothering</strong> lock down the stack. <strong>Kederekt Parasite</strong>, <strong>Razorkin Needlehead</strong>, and <strong>Fate Unraveler</strong> weaponize the draw step.</li>
-          <li><strong>The Commander Payload:</strong> With these cards active, <strong>Valgavoth</strong> grows by $+4/+4$ and draws you four additional cards per turn cycle.</li>
-          <li><strong>Synergy Multipliers:</strong> <strong>Ojer Axonil, Deepest Might</strong>, <strong>Solphim, Mayhem Dominus</strong>, and <strong>Twinflame Tyrant</strong> turn minor 1-damage stings into chunk damage. This accelerates both <strong>Valgavoth’s</strong> lethality and the table's clock.</li>
-        </ul>
-      </div>
-    </div>
 
-    <div class="pillar-card">
-      <div class="pillar-header">
-        <span class="pillar-title">2. Interaction & Board Control</span>
-        <span class="pillar-score-pill">7.0 / 10</span>
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <div class="pillar-title">3. Consistency & Tutors</div>
+          <div class="pillar-score">8.5 / 10</div>
+        </div>
+        <div class="pillar-content">
+          <p>Consistency is a significant strength here. Anchored by the elite trio of <strong>Demonic Tutor</strong>, <strong>Vampiric Tutor</strong>, and <strong>Imperial Seal</strong>, you can reliably fish out missing combo pieces, damage doublers, or emergency board wipes at a moment's notice. <strong>Wheel of Fortune</strong> and <strong>Valakut Awakening</strong> provide excellent hand sculpting, while Valgavoth himself keeps your grip overflowing with fresh cards as long as your opponents continue to bleed. The deck rarely stalls out due to a lack of resources.</p>
+        </div>
       </div>
-      <div class="pillar-content">
-        <p>The deck boasts highly effective interaction, but its primary posture is aggressive rather than control-oriented.</p>
-        <ul>
-          <li><strong>Targeted Removal:</strong> Highly versatile answers like <strong>Terminate</strong>, <strong>Bedevil</strong>, and <strong>Withering Torment</strong> provide comprehensive coverage against creatures, artifacts, and target enchantments. <strong>Untimely Malfunction</strong> and <strong>Deflecting Swat</strong> offer brilliant stack redirection.</li>
-          <li><strong>Board Wipes with Upside:</strong> Sweepers are selected to directly advance your strategy. <strong>Blasphemous Act</strong> handles wide boards efficiently, while <strong>Deadly Tempest</strong> and <strong>Massacre Wurm</strong> wipe the field while punishing opponents with massive life-loss triggers that immediately supercharge your engine.</li>
-          <li><strong>Strategic Vulnerability:</strong> The deck lacks stack-based counters (as typical for Rakdos) and relies heavily on permanent-based prevention like <strong>Roiling Vortex</strong> and <strong>Sulfuric Vortex</strong> to shut down lifegain.</li>
-        </ul>
-      </div>
-    </div>
 
-    <div class="pillar-card">
-      <div class="pillar-header">
-        <span class="pillar-title">3. Consistency & Tutors</span>
-        <span class="pillar-score-pill">8.0 / 10</span>
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <div class="pillar-title">4. Speed & Mana Base</div>
+          <div class="pillar-score">7.0 / 10</div>
+        </div>
+        <div class="pillar-content">
+          <p>The mana base features heavy hitters like <strong>Cabal Coffers</strong> + <strong>Urborg, Tomb of Yawgmoth</strong>, alongside top-tier dual lands (<strong>Blood Crypt</strong>, <strong>Luxury Suite</strong>). However, the explosive speed of the deck is bottlenecked by its rock package. Valgavoth is a 5-mana commander who desperately wants to hit the board on Turn 3 to begin accumulating counters.</p>
+          <p><strong>Strategic Bottleneck:</strong> The current list leans on slower, clunkier mana generation options like <strong>Solemn Simulacrum</strong> and lacks the hyper-efficient, 0-to-1 mana acceleration rocks needed to reliably outpace mid-range decks.</p>
+        </div>
       </div>
-      <div class="pillar-content">
-        <p>The deck maintains a highly stable operational standard due to its access to the premier black tutoring suite.</p>
-        <ul>
-          <li><strong>Elite Tutors:</strong> <strong>Demonic Tutor</strong> and <strong>Vampiric Tutor</strong> provide instant access to missing combo pieces, answers, or lands.</li>
-          <li><strong>Built-in Velocity:</strong> Because <strong>Valgavoth</strong> acts as an engine in the command zone, you rarely run out of gas. Card velocity is heavily bolstered by cards like <strong>Wheel of Fortune</strong> and <strong>Scrawling Crawler</strong>.</li>
-          <li><strong>Card Performance Variance:</strong> A few cards, such as <strong>Solemn Simulacrum</strong> and <strong>Persistent Constrictor</strong>, lack the explosive mechanical velocity found in the rest of the list. Replacing them will push this score closer to an absolute 9.</li>
-        </ul>
-      </div>
-    </div>
 
-    <div class="pillar-card">
-      <div class="pillar-header">
-        <span class="pillar-title">4. Speed & Mana Base</span>
-        <span class="pillar-score-pill">7.5 / 10</span>
+      <div class="pillar-card">
+        <div class="pillar-header">
+          <div class="pillar-title">5. Win Conditions & Closeness to "Infinite"</div>
+          <div class="pillar-score">8.0 / 10</div>
+        </div>
+        <div class="pillar-content">
+          <p>The deck possesses an incredibly lethal top end. <strong>Exquisite Blood</strong> forms a hard, infinite winning loop with <strong>Bloodthirsty Conqueror</strong>, <strong>Vito, Thorn of the Dusk Rose</strong>, or <strong>Syr Konrad, the Grim</strong> whenever any opponent loses life or you gain it.</p>
+          <p>Furthermore, <strong>Chandra's Ignition</strong> cast on a highly buffed, double-striking, or lifelinked Valgavoth represents an un-counterable wave of lethal damage that instantly eliminates the table while padding your life total into the hundreds. It is an incredibly resilient win-con profile that requires immediate interaction from opponents.</p>
+        </div>
       </div>
-      <div class="pillar-content">
-        <p>The land suite is exceptionally robust for a two-color casual list, utilizing premier duals, utility targets, and high-yield acceleration assets.</p>
-        <ul>
-          <li><strong>High-Value Lands:</strong> <strong>Blood Crypt</strong>, <strong>Luxury Suite</strong>, <strong>Haunted Ridge</strong>, and <strong>Urborg, Tomb of Yawgmoth</strong> ensure perfect color fixing. <strong>Cabal Coffers</strong> paired with Urborg provides explosive late-game mana generation.</li>
-          <li><strong>Utility Lands:</strong> <strong>Witch's Clinic</strong> offers a massive swing by giving <strong>Valgavoth</strong> lifelink, turning his massive attacks into full life resets.</li>
-          <li><strong>Mana Base Acceleration Needs:</strong> While the lands are optimized, the fast-mana artifact package could be accelerated. Relying on 4-mana pieces like <strong>Solemn Simulacrum</strong> slows down an otherwise blistering Rakdos framework.</li>
-        </ul>
-      </div>
-    </div>
 
-    <div class="pillar-card">
-      <div class="pillar-header">
-        <span class="pillar-title">5. Win Conditions & Closeness to "Infinite"</span>
-        <span class="pillar-score-pill">6.5 / 10</span>
-      </div>
-      <div class="pillar-content">
-        <p>The deck balances fair combat damage with unfair, highly efficient life-drain spikes.</p>
-        <ul>
-          <li><strong>The Explicit Combo:</strong> The list includes the definitive <strong>Exquisite Blood</strong> + <strong>Bloodthirsty Conqueror</strong> loop, which creates an immediate, infinite life-drain win condition when any player loses life or gains life.</li>
-          <li><strong>Burst Clocks:</strong> <strong>Chandra's Ignition</strong> cast on an inflated <strong>Valgavoth</strong> can easily wipe out a three-player pod in a single resolution.</li>
-          <li><strong>Combat Clocks:</strong> Even without combos, the pure stat-line velocity of <strong>Valgavoth</strong> threats means commander damage kills become live possibilities by turn 5.</li>
-        </ul>
-        <blockquote>Strategic Note: Adding another primary dynamic component line like Vito, Thorn of the Dusk Rose increases redundancy for the Exquisite Blood win condition.</blockquote>
-      </div>
     </div>
   </div>
 
