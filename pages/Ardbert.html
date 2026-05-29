@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hey Bert !!! - Core Deck Analysis</title>
+  <title>Hey Bert !!! - Core Analysis & Audit</title>
   <style>
-    /* Default Dark Mode Palette */
     :root {
       --bg-main: #0d1117;
       --bg-card: #161b22;
@@ -21,8 +20,6 @@
       --text-dark-heading: #ffffff;
       --pill-bg-light: #30363d;
     }
-
-    /* Extracted Light Mode Palette */
     [data-theme="light"] {
       --bg-main: #f8fafc;
       --bg-card: #ffffff;
@@ -38,71 +35,170 @@
       --pill-bg-light: #f1f5f9;
       --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background-color: var(--bg-main); color: var(--text-main); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.5; padding: 2rem; }
-    
-    .header-container { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); margin-bottom: 1rem; }
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 2rem;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+    }
     h1 { color: var(--text-dark-heading); font-size: 2rem; }
-    h2 { color: var(--text-dark-heading); margin-bottom: 1rem; }
-    
-    .theme-toggle { background: transparent; border: 1px solid var(--border-color); padding: 0.5rem 1rem; color: var(--text-main); border-radius: 6px; cursor: pointer; font-weight: 500; transition: border-color 0.2s, color 0.2s; }
-    .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
-
-    .nav-tabs { display: flex; border-bottom: 1px solid var(--border-color); margin-bottom: 2rem; gap: 0.5rem; }
-    .nav-link { display: block; padding: 0.75rem 1rem; text-decoration: none; color: var(--text-light); border-radius: 6px 6px 0 0; transition: color 0.2s, background-color 0.2s; font-weight: 500; margin-bottom: -1px; }
-    .nav-link:hover { color: var(--accent); background-color: rgba(88, 166, 255, 0.1); }
-    .nav-link.active { color: var(--accent); background-color: var(--pill-bg-light); border-bottom: 2px solid var(--accent); }
-
-    .grid-top { display: grid; grid-template-columns: 320px 1fr; gap: 2rem; margin-bottom: 2rem; }
-    
-    .commander-pane { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; align-items: center; box-shadow: var(--card-shadow); }
-    .commander-img { background-size: contain; background-repeat: no-repeat; background-position: top center; width: 100%; height: auto; aspect-ratio: 63 / 88; box-shadow: var(--card-shadow); border-radius: 4.75% / 3.5%; margin-bottom: 1.5rem; }
-    
-    .score-badge { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; padding: 1rem; background-color: var(--pill-bg-light); border-radius: 8px; border: 1px solid var(--border-color); }
-    .score-num { font-size: 3.5rem; font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 0.25rem; }
-    .score-label { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-light); }
-
-    .meta-pane { display: flex; flex-direction: column; gap: 1.5rem; }
-    .meta-table-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; box-shadow: var(--card-shadow); }
-    .meta-table { width: 100%; border-collapse: collapse; }
-    .meta-table td { padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); }
-    .meta-table tr:last-child td { border-bottom: none; }
-    .meta-table td.label { font-weight: 600; color: var(--text-light); width: 30%; }
-    .meta-table td.value { color: var(--text-main); font-weight: 500; }
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .nav-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 2rem;
+      gap: 0.5rem;
+    }
+    .nav-link {
+      color: var(--text-light);
+      text-decoration: none;
+      padding: 0.75rem 1rem;
+      border-radius: 6px 6px 0 0;
+      transition: all 0.2s;
+    }
+    .nav-link:hover {
+      color: var(--accent);
+      background-color: rgba(88, 166, 255, 0.1);
+    }
+    .nav-link.active {
+      color: var(--accent);
+      background-color: var(--pill-bg-light);
+      font-weight: bold;
+      border-bottom: 2px solid var(--accent);
+    }
+    .top-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    .commander-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .card-frame {
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: top center;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 63 / 88;
+      box-shadow: var(--card-shadow);
+      border-radius: 4.75% / 3.5%;
+    }
+    .score-badge-container {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: var(--card-shadow);
+    }
+    .score-title { color: var(--text-light); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+    .score-num { font-size: 3.5rem; font-weight: 800; color: var(--accent-green); margin: 0.5rem 0; }
+    .score-scale { color: var(--text-light); font-size: 0.85rem; }
+    .meta-overview-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .meta-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .meta-table td {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .meta-table td:first-child { color: var(--text-light); width: 35%; font-weight: 600; }
+    .meta-table td:last-child { color: var(--text-dark-heading); }
     .meta-table a { color: var(--accent); text-decoration: none; }
     .meta-table a:hover { text-decoration: underline; }
-
-    .summary-callout { background-color: rgba(88, 166, 255, 0.07); border-left: 4px solid var(--accent); border-radius: 0 12px 12px 0; padding: 1.5rem; font-size: 1.05rem; line-height: 1.6; color: var(--text-main); }
-
-    .full-width-column { display: flex; flex-direction: column; gap: 1.5rem; }
-    .pillar-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; box-shadow: var(--card-shadow); }
-    .pillar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
-    .pillar-title { font-size: 1.25rem; font-weight: 700; color: var(--text-dark-heading); }
-    .pillar-score { background-color: var(--pill-bg-light); border: 1px solid var(--border-color); padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 700; color: var(--accent); }
-    .pillar-content p { margin-bottom: 1rem; color: var(--text-main); text-align: justify; }
-    
-    b, strong { color: var(--text-dark-heading); font-weight: 600; }
-
-    @media (max-width: 900px) {
-      .grid-top { grid-template-columns: 1fr; }
-      .commander-pane { max-width: 400px; margin: 0 auto; width: 100%; }
-      body { padding: 1rem; }
+    .summary-callout {
+      background-color: rgba(88, 166, 255, 0.05);
+      border-left: 4px solid var(--accent);
+      padding: 1.25rem;
+      border-radius: 0 8px 8px 0;
+      line-height: 1.6;
     }
-
+    .summary-callout h3 { margin-bottom: 0.5rem; color: var(--text-dark-heading); }
+    .bottom-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .pillar-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+    .pillar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .pillar-title { color: var(--text-dark-heading); font-size: 1.4rem; font-weight: 700; }
+    .pillar-score {
+      background-color: var(--pill-bg-light);
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .pillar-content { line-height: 1.7; }
+    .pillar-content ul { margin-top: 1rem; padding-left: 1.5rem; }
+    .pillar-content li { margin-bottom: 0.5rem; }
+    strong { color: var(--text-dark-heading); }
+    
+    @media (max-width: 900px) {
+      .top-grid { grid-template-columns: 1fr; }
+      .commander-sidebar { align-items: center; }
+      .card-frame { max-width: 320px; }
+      .score-badge-container { width: 100%; max-width: 320px; }
+    }
     @media print {
-      body { background-color: #ffffff !important; color: #000000 !important; padding: 0; }
-      .theme-toggle, .nav-tabs { display: none !important; }
-      .pillar-card, .commander-pane, .meta-table-card { box-shadow: none !important; border: 1px solid #000000 !important; background-color: #ffffff !important; page-break-inside: avoid; }
-      .summary-callout { background-color: #ffffff !important; border: 1px solid #000000 !important; color: #000000 !important; }
-      :root, [data-theme="light"] { --text-dark-heading: #000000; --text-main: #000000; --accent: #000000; --pill-bg-light: #ffffff; }
+      body { background: white; color: black; padding: 0; }
+      .theme-toggle, .nav-tabs { display: none; }
+      .pillar-card, .meta-overview-card, .score-badge-container { box-shadow: none; border: 1px solid #ccc; background: white; page-break-inside: avoid; }
+      * { color: black !important; }
     }
   </style>
 </head>
 <body>
 
   <div class="header-container">
-    <h1>Hey Bert !!!</h1>
+    <h1>Hey Bert !!! — Dashboard</h1>
     <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
   </div>
 
@@ -112,91 +208,88 @@
     <a href="Ardbert_upgrade.html" class="nav-link">Upgrade Blueprint</a>
   </div>
 
-  <div class="grid-top">
-    <div class="commander-pane">
-      <div class="commander-img" style="background-image: url('https://cards.scryfall.io/large/front/9/f/9fc1ac8a-bbd4-4d17-81d9-fd04876084b1.jpg?1748704478');"></div>
-      <div class="score-badge">
+  <div class="top-grid">
+    <div class="commander-sidebar">
+      <div class="card-frame" style="background-image: url('https://cards.scryfall.io/large/front/9/f/9fc1ac8a-bbd4-4d17-81d9-fd04876084b1.jpg?1748704478');"></div>
+      <div class="score-badge-container">
+        <div class="score-title">Calibrated Power Level</div>
         <div class="score-num">6.5</div>
-        <div class="score-label">Power Level Rating</div>
+        <div class="score-scale">High-Power Casual / Optimized (Non-Combo)</div>
       </div>
     </div>
 
-    <div class="meta-pane">
-      <div class="meta-table-card">
-        <table class="meta-table">
-          <tr>
-            <td class="label">Commander</td>
-            <td class="value">Ardbert, Warrior of Darkness</td>
-          </tr>
-          <tr>
-            <td class="label">Archetype</td>
-            <td class="value">Orzhov Legends Matter Aristocrats</td>
-          </tr>
-          <tr>
-            <td class="label">Est. Turn to Win</td>
-            <td class="value">Turn 8 - 10 (Uninterrupted)</td>
-          </tr>
-          <tr>
-            <td class="label">Source Decklist</td>
-            <td class="value"><a href="https://archidekt.com/decks/20667925/hey_bert_" target="_blank">Archidekt Link</a></td>
-          </tr>
-        </table>
-      </div>
+    <div class="meta-overview-card">
+      <table class="meta-table">
+        <tr><td>Commander</td><td><strong>Ardbert, Warrior of Darkness</strong></td></tr>
+        <tr><td>Archetype</td><td>Legendary Aristocrats / Midrange Reanimator</td></tr>
+        <tr><td>Est. Turn to Win</td><td>Turn 7 - 9 (Uninterrupted)</td></tr>
+        <tr><td>Source Decklist</td><td><a href="https://archidekt.com/decks/20667925/hey_bert_" target="_blank">Archidekt Link</a></td></tr>
+      </table>
 
       <div class="summary-callout">
-        <strong>Executive Summary:</strong> This deck is an aristocratic Orzhov "Legends Matter" mid-range engine. It seeks to generate high individual value from legendary creatures like <b>Kambal, Consul of Allocation</b>, <b>Liesa, Shroud of Dusk</b>, and <b>Shadrix Silverquill</b> to bleed opponents out through incremental tax effects and combat steps. The underlying core leverages death-trigger engines like <b>Ratadrabik of Urborg</b>, <b>Teysa, Orzhov Scion</b>, and <b>Elenda, Saint of Dusk</b> to create overwhelming board states when trading pieces or wiping the board. It wins by turning legendary recursion and token creation loops into unstoppable combat damage or death-trigger drains.
+        <h3>Executive Strategy Summary</h3>
+        <p>This deck is an optimized Orzhov engine built to grind down opponents via relentless recursive loops. It leverages high-value legendary targets alongside powerful protective assets to manipulate combat dynamics and graveyard states. By intentionally removing infinite combinations, the list maximizes interactive gameplay value, establishing an absolute mid-to-late-game dominance that thrives heavily on attrition.</p>
       </div>
     </div>
   </div>
 
-  <div class="full-width-column">
+  <div class="bottom-section">
     <div class="pillar-card">
       <div class="pillar-header">
-        <div class="pillar-title">Synergy & Engine</div>
-        <div class="pillar-score">8.5 / 10</div>
+        <span class="pillar-title">Synergy & Engine</span>
+        <span class="pillar-score">7.5 / 10</span>
       </div>
       <div class="pillar-content">
-        <p>The synergy here is incredibly high, fueled by the legendary supertype restriction. <b>Ratadrabik of Urborg</b> stands out as the ultimate anchor, turning every dying legendary creature into a non-legendary Zombie copy, completely breaking the legend rule when combined with <b>Moira and Teshar</b> or <b>Zoraline, Cosmos Caller</b>. Additional engines like <b>Relic of Legends</b> and <b>Heroes' Podium</b> transform your legendary density into massive mana acceleration and lethal stat pumps, respectively. <b>Amalia Benavides Aguirre</b> and <b>Karlov of the Ghost Council</b> synergize heavily with your low-level life drain pieces, converting small, passive lifegain triggers into aggressive card filtration and targeted removal.</p>
+        <p>The deck boasts incredibly deep mechanical synergy by pairing legendary-matters structural pieces with highly recursive aristocrat engines. <strong>Ratadrabik of Urborg</strong> acts as an absolute anchor, turning every dying legendary creature into a non-legendary zombie token copy, allowing you to double-dip on powerful death triggers. Value engines like <strong>Teysa, Opulent Oligarch</strong> and <strong>Zoraline, Cosmos Caller</strong> seamlessly keep resources flowing from the yard back to the battlefield while <strong>Breena, the Demagogue</strong> and <strong>Mangara, the Diplomat</strong> systematically punish your opponents' actions with massive card-draw advantages.</p>
+        <ul>
+          <li><strong>Synergy Loop:</strong> Having <strong>Ratadrabik of Urborg</strong> and <strong>Athreos, God of Passage</strong> out simultaneously creates an unmanageable psychological choice for your opponents, yielding immediate token rewards while recovering the base creature asset.</li>
+        </ul>
       </div>
     </div>
 
     <div class="pillar-card">
       <div class="pillar-header">
-        <div class="pillar-title">Interaction & Board Control</div>
-        <div class="pillar-score">7.5 / 10</div>
+        <span class="pillar-title">Interaction & Board Control</span>
+        <span class="pillar-score">7.0 / 10</span>
       </div>
       <div class="pillar-content">
-        <p>The deck boasts a robust, versatile removal package that makes it highly interactive. Point-removal spells like <b>Swords to Plowshares</b>, <b>Path to Exile</b>, and <b>Anguished Unmaking</b> handle immediate threats efficiently, while utility pieces like <b>Despark</b>, <b>Fracture</b>, and <b>Stroke of Midnight</b> patch vulnerabilities to non-creature permanents. On the board-wipe side, <b>Farewell</b> and <b>Austere Command</b> offer incredible flexibility, allowing you to sculpt asymmetric board wipes that preserve your legendary enchantments or planeswalkers like <b>Kaya the Inexorable</b> while decimating your opponents' assets.</p>
+        <p>The interaction profile is highly adaptable and pinpoint accurate. Standard premier Orzhov instant-speed removal spells including <strong>Swords to Plowshares</strong>, <strong>Path to Exile</strong>, <strong>Anguished Unmaking</strong>, and <strong>Despark</strong> ensure that any distinct threat can be easily managed. The mass board wipe configuration is equally stellar: <strong>Farewell</strong> and <strong>Austere Command</strong> deliver unmatched tactical flexibility, while <strong>Promise of Loyalty</strong> serves as an exceptional political reset tool that actively leaves your best legendary asset intact.</p>
+        <ul>
+          <li><strong>Tactical Warning:</strong> The list leans heavily into single-target responses rather than recurring, engine-driven control features. Getting locked into top-decking situations against multiple broad board states can quickly cause interaction velocity to stall.</li>
+        </ul>
       </div>
     </div>
 
     <div class="pillar-card">
       <div class="pillar-header">
-        <div class="pillar-title">Consistency & Tutors</div>
-        <div class="pillar-score">4.5 / 10</div>
+        <span class="pillar-title">Consistency & Tutors</span>
+        <span class="pillar-score">4.0 / 10</span>
       </div>
       <div class="pillar-content">
-        <p>Consistency is the deck's main bottleneck. It relies entirely on raw draw spells like <b>Night's Whisper</b>, <b>Phyrexian Arena</b>, and reactive draw engines like <b>Trouble in Pairs</b>, <b>Mangara, the Diplomat</b>, and <b>Breena, the Demagogue</b>. Because the list features zero traditional tutors, finding crucial combo-disruptors or specific payoff pieces like <b>Ratadrabik of Urborg</b> depends strictly on top-deck variance. While <b>Zoraline, Cosmos Caller</b> and <b>Sevinne's Reclamation</b> offer excellent graveyard recursion to repeat your threats, the deck can occasionally stall out if its primary draw engines are suppressed.</p>
+        <p>In adherence to clean high-power casual formats, the deck implements <strong>zero traditional black tutors</strong> (e.g., <strong>Demonic Tutor</strong> or <strong>Vampiric Tutor</strong>). Instead, card velocity is fueled completely by pure card-draw engines like <strong>Night's Whisper</strong>, <strong>Phyrexian Arena</strong>, and <strong>Trouble in Pairs</strong>. While this guarantees high gameplay variance and refreshing natural lines, it naturally caps overall structural consistency math, putting you at the total mercy of your top decks to track down key missing synergy pieces.</p>
       </div>
     </div>
 
     <div class="pillar-card">
       <div class="pillar-header">
-        <div class="pillar-title">Speed & Mana Base</div>
-        <div class="pillar-score">6.0 / 10</div>
+        <span class="pillar-title">Speed & Mana Base</span>
+        <span class="pillar-score">6.5 / 10</span>
       </div>
       <div class="pillar-content">
-        <p>The mana base is operational but features a few low-tempo lands and an average ramp package. Traditional accelerators like <b>Sol Ring</b>, <b>Arcane Signet</b>, and <b>Talisman of Hierarchy</b> provide standard early turns, while <b>Archaeomancer's Map</b> helps you keep pace against green ramp decks. However, the land package contains several slow entries like <b>Eclipsed Steppe</b>, <b>Shineshadow Snarl</b>, and basic land-dependent utility slots that can cause awkward sequencing in the first three turns. The average converted mana cost is slightly high, requiring a cleaner transition into mid-game mana chunks.</p>
+        <p>The mana base is stable and functional, running key dual-color lands such as <strong>Godless Shrine</strong>, <strong>Isolated Chapel</strong>, and <strong>Caves of Koilos</strong> alongside supportive legend environments like <strong>Great Hall of the Citadel</strong>. Acceleration utilizes legendary components beautifully, with <strong>Relic of Legends</strong> performing as a massive mana-producing powerhouse alongside basic staples like <strong>Sol Ring</strong> and <strong>Arcane Signet</strong>.</p>
+        <ul>
+          <li><strong>The Bottleneck:</strong> The list suffers from a heavy concentration of high-cost 4 and 5-drop legendary cards. Paired with a standard land count, initial hands can often feel slow and clunky if initial land drops or early ramp rocks are missed.</li>
+        </ul>
       </div>
     </div>
 
     <div class="pillar-card">
       <div class="pillar-header">
-        <div class="pillar-title">Win Conditions & Closeness to "Infinite"</div>
-        <div class="pillar-score">5.0 / 10</div>
+        <span class="pillar-title">Win Conditions & Closeness to "Infinite"</span>
+        <span class="pillar-score">5.5 / 10</span>
       </div>
       <div class="pillar-content">
-        <p>Per your deckbuilding rules, there are zero deterministic infinite loops here. Instead, the deck aims to close out matches using heavy combat engines and value cascades. <b>Primevals' Glorious Rebirth</b> acts as a massive win condition, reanimating an entire graveyard of legendary threats at once. If <b>Heroes' Podium</b> or <b>Deathbringer Liege</b> are on the field, the resulting stat bonuses turn your legendary army into a lethal combat threat. The absence of infinite combos lowers its ceiling against true high-power competitive lists, but it functions perfectly as a dominant, fair mid-range threat.</p>
+        <p>Strictly obeying your deckbuilding constraints, there are <strong>completely zero infinite combos</strong> integrated within the list. Win-states are driven entirely via honest combat steps, high-impact combat pumps, or incremental draining loops. Top-end finishers like <strong>Primevals' Glorious Rebirth</strong> can completely resurrect an entire graveyard army in a single turn, while <strong>Heroes' Podium</strong> scales up to turn your legendary board into immense un-blockable threats. Continuous bleed elements like <strong>Kambal, Consul of Allocation</strong> and <strong>Liesa, Shroud of Dusk</strong> consistently compress your opponents' life totals over time.</p>
       </div>
     </div>
   </div>
