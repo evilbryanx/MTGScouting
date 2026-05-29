@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shazzam - Upgrade Blueprint</title>
+  <style>
+    /* Default Dark Mode Palette */
+    :root {
+      --bg-main: #0d1117;
+      --bg-card: #161b22;
+      --border-color: #30363d;
+      --text-main: #c9d1d9;
+      --text-light: #8b949e;
+      --accent: #58a6ff;
+      --accent-green: #2ea44f;
+      --badge-remove: #f85149;
+      --badge-unrestricted: #a371f7;
+      --badge-budget: #3fb950;
+
+      /* Shared structural constants */
+      --card-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      --text-dark-heading: #ffffff;
+      --pill-bg-light: #30363d;
+    }
+
+    /* Extracted Light Mode Palette */
+    [data-theme="light"] {
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --text-main: #1e293b;
+      --text-light: #475569;
+      --accent: #2563eb;
+      --accent-green: #16a34a;
+      --badge-remove: #ef4444;
+      --badge-unrestricted: #7c3aed;
+      --badge-budget: #22c55e;
+
+      /* Light mode structural overrides */
+      --text-dark-heading: #0f172a;
+      --pill-bg-light: #f1f5f9;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      padding: 2rem;
+    }
+
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+    }
+
+    h1 {
+      color: var(--text-dark-heading);
+      font-size: 2rem;
+    }
+
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .nav-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 2rem;
+      gap: 0.5rem;
+    }
+
+    .nav-link {
+      color: var(--text-light);
+      text-decoration: none;
+      padding: 0.75rem 1.2rem;
+      font-weight: 600;
+      border-radius: 6px 6px 0 0;
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--accent);
+      background-color: rgba(88, 166, 255, 0.1);
+    }
+
+    .nav-link.active {
+      color: var(--accent);
+      background-color: var(--pill-bg-light);
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .meta-overview-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .meta-overview-title {
+      font-size: 1.25rem;
+      color: var(--text-dark-heading);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .upgrade-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+    }
+
+    .upgrade-table th, .upgrade-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .upgrade-table th {
+      background-color: var(--pill-bg-light);
+      color: var(--text-dark-heading);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+    }
+
+    .card-remove {
+      color: var(--badge-remove);
+      font-weight: 700;
+    }
+
+    .card-unrestricted {
+      color: var(--badge-unrestricted);
+      font-weight: 700;
+    }
+
+    .card-budget {
+      color: var(--badge-budget);
+      font-weight: 700;
+    }
+
+    .pill-metric {
+      display: inline-block;
+      background-color: var(--pill-bg-light);
+      padding: 0.25rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-align: center;
+      color: var(--text-main);
+    }
+
+    .velocity-high {
+      color: var(--accent-green);
+      font-weight: bold;
+    }
+
+    .velocity-low {
+      color: var(--text-light);
+    }
+
+    /* Print Overrides */
+    @media print {
+      body {
+        background: white !important;
+        color: black !important;
+        padding: 0;
+      }
+      .theme-toggle, .nav-tabs {
+        display: none !important;
+      }
+      .meta-overview-card, .upgrade-table {
+        background: white !important;
+        border: 1px solid #ccc !important;
+        box-shadow: none !important;
+      }
+      .upgrade-table th {
+        background: #f1f5f9 !important;
+        color: black !important;
+      }
+      .card-remove, .card-unrestricted, .card-budget, .velocity-high {
+        color: black !important;
+      }
+    }
+
+    /* Mobile Layout Transformation */
+    @media (max-width: 768px) {
+      .upgrade-table, .upgrade-table tbody, .upgrade-table tr, .upgrade-table td {
+        display: block;
+        width: 100%;
+      }
+
+      .upgrade-table thead {
+        display: none;
+      }
+
+      .upgrade-table tr {
+        margin-bottom: 1.5rem;
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 0.5rem;
+        box-shadow: var(--card-shadow);
+      }
+
+      .upgrade-table td {
+        border-bottom: 1px solid var(--border-color);
+        padding: 0.75rem 0.5rem;
+        position: relative;
+        padding-top: 1.75rem;
+      }
+
+      .upgrade-table td:last-child {
+        border-bottom: none;
+      }
+
+      .upgrade-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        top: 0.25rem;
+        left: 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--text-light);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-container">
+    <h1>Shazzam — Tactical Upgrades</h1>
+    <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
+  </div>
+
+  <div class="nav-tabs">
+    <a href="../index.html" class="nav-link">Back to list</a>
+    <a href="Azor.html" class="nav-link">Core Analysis & Audit</a>
+    <a href="Azor_upgrade.html" class="nav-link active">Upgrade Blueprint</a>
+  </div>
+
+  <div class="meta-overview-card">
+    <div class="meta-overview-title">Upgrade Strategic Directives</div>
+    <p>This matrix maps 10 precise structural upgrades focused on stripping away non-synergistic, high-mana casual elements and establishing high-velocity blink loops, reliable early-game draw engines, and optimized mana production.</p>
+  </div>
+
+  <table class="upgrade-table">
+    <thead>
+      <tr>
+        <th>Card to Remove</th>
+        <th>Replace With (Unrestricted)</th>
+        <th>Replace With (Budget < $5)</th>
+        <th>Impact Metric</th>
+        <th>Velocity</th>
+        <th>Strategic Justification</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Lucent Liminid</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Brago, King Eternal</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Soulherder</td>
+        <td data-label="Impact Metric"><span class="pill-metric">Synergy & Engine</span></td>
+        <td data-label="Velocity" class="velocity-high">High Impact</td>
+        <td data-label="Strategic Justification">Replaces a vanilla enchantment creature with a premier, repeatable, multi-target blink engine to abuse Azor and value ETBs.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Zahid, Djinn of the Lamp</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Deadeye Navigator</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Mistmeadow Witch</td>
+        <td data-label="Impact Metric"><span class="pill-metric">Win Conditions</span></td>
+        <td data-label="Velocity" class="velocity-high">High Impact</td>
+        <td data-label="Strategic Justification">Swaps out a dead-end French-vanilla flyer for a definitive, repeatable blink engine that pairs with your creatures to lock down boards or draw your deck.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Curious Colossus</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Ephemerate</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Cloudshift</td>
+        <td data-label="Impact Metric"><span class="pill-metric">Synergy & Engine</span></td>
+        <td data-label="Velocity" class="velocity-high">High Impact</td>
+        <td data-label="Strategic Justification">Trading an expensive, non-synergistic vanilla body for a highly efficient 1-mana instant blink spell with Rebound to trigger Azor twice.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Momo, Friendly Flier</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Teleportation Circle</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Thassa, Deep-Dwelling</td>
+        <td data-label="Impact Metric"><span class="pill-metric">Synergy & Engine</span></td>
+        <td data-label="Velocity" class="velocity-high">High Impact</td>
+        <td data-label="Strategic Justification">Swaps a low-impact draft uncommon flyer for an indestructible/end-of-turn automated blink engine that drives your entire deck strategy.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Bender's Waterskin</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Archaeomancer</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Shipwreck Dowser</td>
+        <td data-label="Impact Metric"><span class="pill-metric">Synergy & Engine</span></td>
+        <td data-label="Velocity" class="velocity-high">High Impact</td>
+        <td data-label="Strategic Justification">Replaces a low-velocity, non-synergistic artifact with a powerful spell-recursion creature, establishing loops with your counterspells and blinks.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Ninth Bridge Patrol</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Smothering Tithe</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Monologue Tax</td>
+        <td data-label="Impact Metric"><span class="pill-metric">Speed & Mana Base</span></td>
+        <td data-label="Velocity" class="velocity-high">High Impact</td>
+        <td data-label="Strategic Justification">Drops a low-impact combat growth piece for a powerhouse mana engine, providing the raw gold capital required to cast and activate Azor.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Chronomantic Escape</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Cyclonic Rift</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Aetherize</td>
+        <td data-label="Impact Metric"><span class="pill-metric">Interaction</span></td>
+        <td data-label="Velocity" class="velocity-high">High Impact</td>
+        <td data-label="Strategic Justification">Exchanges a slow, easily broadcasted phase-out spell for the undisputed king of asymmetric, instant-speed mass-bounce interaction.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Voice of Victory</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Rhystic Study</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Watcher for Tomorrow</td>
+        <td data-label="Impact Metric"><span class="pill-metric">Consistency</span></td>
+        <td data-label="Velocity" class="velocity-high">High Impact</td>
+        <td data-label="Strategic Justification">Replaces an overcosted, low-impact casual anthem with a world-class, continuous card advantage draw engine to stop top-deck stalling.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Ertai's Scorn</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Mystical Tutor</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Arcane Denial</td>
+        <td data-label="Impact Metric"><span class="pill-metric">Consistency</span></td>
+        <td data-label="Velocity" class="velocity-high">High Impact</td>
+        <td data-label="Strategic Justification">Replaces an overcosted, situational 3-mana counter with hyper-efficient 1-to-2 mana interaction or targeted spell search.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">1x Island</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Flooded Strand</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Command Beacon</td>
+        <td data-label="Impact Metric"><span class="pill-metric">Speed & Mana Base</span></td>
+        <td data-label="Velocity" class="velocity-low">Low Impact</td>
+        <td data-label="Strategic Justification">Upgrades a basic land into a premium fetch land for color fixing, or a utility land that bypasses Commander tax for your 6-mana general.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    const toggleBtn = document.getElementById('themeToggle');
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      if (currentTheme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+        toggleBtn.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        toggleBtn.textContent = '🌙 Dark Mode';
+      }
+    });
+  </script>
+</body>
+</html>
