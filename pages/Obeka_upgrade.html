@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Ending — Upgrade Blueprint</title>
+  <style>
+    /* Default Dark Mode Palette */
+    :root {
+      --bg-main: #0d1117;
+      --bg-card: #161b22;
+      --border-color: #30363d;
+      --text-main: #c9d1d9;
+      --text-light: #8b949e;
+      --accent: #58a6ff;
+      --accent-green: #2ea44f;
+      --badge-remove: #f85149;
+      --badge-unrestricted: #a371f7;
+      --badge-budget: #3fb950;
+      --card-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      --text-dark-heading: #ffffff;
+      --pill-bg-light: #30363d;
+    }
+
+    /* Extracted Light Mode Palette */
+    [data-theme="light"] {
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --text-main: #1e293b;
+      --text-light: #475569;
+      --accent: #2563eb;
+      --accent-green: #16a34a;
+      --badge-remove: #ef4444;
+      --badge-unrestricted: #7c3aed;
+      --badge-budget: #22c55e;
+      --text-dark-heading: #0f172a;
+      --pill-bg-light: #f1f5f9;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      line-height: 1.5;
+    }
+
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+    }
+
+    h1 {
+      color: var(--text-dark-heading);
+      margin: 0;
+      font-size: 2.25rem;
+    }
+
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 1rem;
+      color: var(--text-main);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .nav-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 2rem;
+      gap: 0.5rem;
+    }
+
+    .nav-link {
+      padding: 0.75rem 1rem;
+      text-decoration: none;
+      color: var(--text-light);
+      border-radius: 6px 6px 0 0;
+      transition: all 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--accent);
+      background-color: var(--pill-bg-light);
+    }
+
+    .nav-link.active {
+      color: var(--accent);
+      background-color: var(--pill-bg-light);
+      font-weight: bold;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .meta-overview-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .upgrade-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+    }
+
+    .upgrade-table th {
+      background-color: var(--pill-bg-light);
+      color: var(--text-dark-heading);
+      font-weight: 600;
+      text-align: left;
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .upgrade-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+    }
+
+    .upgrade-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .card-rem { color: var(--badge-remove); font-weight: bold; }
+    .card-unr { color: var(--badge-unrestricted); font-weight: bold; }
+    .card-bud { color: var(--badge-budget); font-weight: bold; }
+
+    .metric-pill {
+      display: inline-block;
+      background-color: var(--pill-bg-light);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 768px) {
+      .upgrade-table, .upgrade-table tbody, .upgrade-table tr, .upgrade-table td {
+        display: block;
+        width: 100%;
+      }
+      .upgrade-table thead {
+        display: none;
+      }
+      .upgrade-table tr {
+        margin-bottom: 1.5rem;
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1rem;
+        box-shadow: var(--card-shadow);
+      }
+      .upgrade-table td {
+        border-bottom: none;
+        padding: 0.5rem 0;
+        position: relative;
+        padding-top: 1.5rem;
+      }
+      .upgrade-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: var(--text-light);
+        font-weight: bold;
+        letter-spacing: 0.05em;
+      }
+    }
+
+    @media print {
+      body { background: white; color: black; padding: 0; }
+      .theme-toggle, .nav-tabs { display: none !important; }
+      .upgrade-table, .meta-overview-card {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+        background: white !important;
+      }
+      .upgrade-table th { background: #eee !important; color: black !important; }
+      .card-rem, .card-unr, .card-bud { color: black !important; text-decoration: underline; }
+      .metric-pill { background: #ddd !important; color: black !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-container">
+    <h1>Happy Ending — Upgrade Blueprint</h1>
+    <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
+  </div>
+
+  <div class="nav-tabs">
+    <a href="../index.html" class="nav-link">Back to list</a>
+    <a href="Obeka.html" class="nav-link">Core Analysis & Audit</a>
+    <a href="Obeka_upgrade.html" class="nav-link active">Upgrade Blueprint</a>
+  </div>
+
+  <div class="meta-overview-card">
+    <h3 style="margin-top: 0; color: var(--text-dark-heading);">Upgrade Architecture Parameters</h3>
+    <p style="margin-bottom: 0; color: var(--text-light);">This swap matrix targets the 10 lowest-velocity or high-variance cards present in the current build. All recommendations explicitly obey the <strong>Zero-Infinite Combo</strong> constraint while significantly accelerating the consistency and power floor of the deck.</p>
+  </div>
+
+  <table class="upgrade-table">
+    <thead>
+      <tr>
+        <th>Card to Remove</th>
+        <th>Replace With (Optimal)</th>
+        <th>Replace With (Budget)</th>
+        <th>Impact Metric</th>
+        <th>Velocity</th>
+        <th>Strategic Justification</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-label="Card to Remove" class="card-rem">Curse of Obsession</td>
+        <td data-label="Replace With (Optimal)" class="card-unr">Necropotence</td>
+        <td data-label="Replace With (Budget)" class="card-bud">Phyrexian Arena</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Consistency</span></td>
+        <td data-label="Velocity">High Impact</td>
+        <td>Curse of Obsession is clunky and gives opponents a window to disrupt you. Necropotence provides immediate, unparalleled card-draw velocity without violating combo rules.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-rem">Identity Thief</td>
+        <td data-label="Replace With (Optimal)" class="card-unr">Auton Soldier</td>
+        <td data-label="Replace With (Budget)" class="card-bud">Mirrormade</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Synergy</span></td>
+        <td data-label="Velocity">High Impact</td>
+        <td>Identity Thief requires attacking and only lasts a turn. Auton Soldier copies any creature on the board, keeps Myriad permanently with Obeka, and avoids the legend rule.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-rem">Elturel Survivors</td>
+        <td data-label="Replace With (Optimal)" class="card-unr">Ancient Copper Dragon</td>
+        <td data-label="Replace With (Budget)" class="card-bud">Drakuseth, Maw of Flames</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Win Conditions</span></td>
+        <td data-label="Velocity">High Impact</td>
+        <td>Elturel Survivors is a vanilla attacker. Ancient Copper Dragon generated via Feldon or Mimic Vat creates game-ending mana advantages even if it only swings once.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-rem">Goldlust Triad</td>
+        <td data-label="Replace With (Optimal)" class="card-unr">Sneak Attack</td>
+        <td data-label="Replace With (Budget)" class="card-bud">Purphoros, Bronze-Blooded</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana</span></td>
+        <td data-label="Velocity">High Impact</td>
+        <td>Goldlust Triad is slow at 5 mana. Sneak Attack lets you cheat massive threats into play for a single red mana, using Obeka to bypass the end-step sacrifice clause.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-rem">Ideas Unbound</td>
+        <td data-label="Replace With (Optimal)" class="card-unr">Rhystic Study</td>
+        <td data-label="Replace With (Budget)" class="card-bud">Windfall</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Consistency</span></td>
+        <td data-label="Velocity">High Impact</td>
+        <td>Ideas Unbound is a neat trick with Obeka, but Rhystic Study provides continuous, game-long card draw and tax that forces opponents to slow down.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-rem">Come Back Wrong</td>
+        <td data-label="Replace With (Optimal)" class="card-unr">Toxic Deluge</td>
+        <td data-label="Replace With (Budget)" class="card-bud">Feed the Swarm</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Interaction</span></td>
+        <td data-label="Velocity">High Impact</td>
+        <td>Come Back Wrong is highly situational removal. Toxic Deluge offers an un-counterable answer to indestructible threats at a bargain mana cost.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-rem">Hide on the Ceiling</td>
+        <td data-label="Replace With (Optimal)" class="card-unr">Swan Song</td>
+        <td data-label="Replace With (Budget)" class="card-bud">An Offer You Can't Refuse</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Interaction</span></td>
+        <td data-label="Velocity">Low Impact</td>
+        <td>Hide on the Ceiling is a slow, multi-mana combat trick. Swapping for more hyper-efficient 1-mana counterspells ensures Obeka survives removal loops.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-rem">Corporeal Projection</td>
+        <td data-label="Replace With (Optimal)" class="card-unr">Bloodthirster</td>
+        <td data-label="Replace With (Budget)" class="card-bud">Port Razer</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Win Conditions</span></td>
+        <td data-label="Velocity">High Impact</td>
+        <td>Corporeal Projection is a one-off gimmick. Bloodthirster combined with clone effects creates multiple, crushing extra combat steps that close games instantly.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-rem">Hate Mirage</td>
+        <td data-label="Replace With (Optimal)" class="card-unr">Reanimate</td>
+        <td data-label="Replace With (Budget)" class="card-bud">Animate Dead</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Synergy</span></td>
+        <td data-label="Velocity">High Impact</td>
+        <td>Hate Mirage depends entirely on your opponents having good targets. Running premier black reanimation lets you abuse your own discarded high-impact targets.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-rem">Mountain</td>
+        <td data-label="Replace With (Optimal)" class="card-unr">Otawara, Soaring City</td>
+        <td data-label="Replace With (Budget)" class="card-bud">Maestros Theater</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana</span></td>
+        <td data-label="Velocity">Low Impact</td>
+        <td>Dropping a basic mountain for Otawara adds an un-counterable, utility bounce land to your mana base at zero deck-building cost.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    const toggleBtn = document.getElementById('themeToggle');
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      if (currentTheme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+        toggleBtn.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        toggleBtn.textContent = '🌙 Dark Mode';
+      }
+    });
+  </script>
+</body>
+</html>

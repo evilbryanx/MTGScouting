@@ -3,377 +3,362 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Commander Profile - Obeka, Brute Chronologist</title>
+  <title>Happy Ending — Core Analysis & Audit</title>
   <style>
+    /* Default Dark Mode Palette */
+    :root {
+      --bg-main: #0d1117;
+      --bg-card: #161b22;
+      --border-color: #30363d;
+      --text-main: #c9d1d9;
+      --text-light: #8b949e;
+      --accent: #58a6ff;
+      --accent-green: #2ea44f;
+      --badge-remove: #f85149;
+      --badge-unrestricted: #a371f7;
+      --badge-budget: #3fb950;
+      --card-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      --text-dark-heading: #ffffff;
+      --pill-bg-light: #30363d;
+    }
+
+    /* Extracted Light Mode Palette */
+    [data-theme="light"] {
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --text-main: #1e293b;
+      --text-light: #475569;
+      --accent: #2563eb;
+      --accent-green: #16a34a;
+      --badge-remove: #ef4444;
+      --badge-unrestricted: #7c3aed;
+      --badge-budget: #22c55e;
+      --text-dark-heading: #0f172a;
+      --pill-bg-light: #f1f5f9;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
     body {
-      font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
-      color: #1e293b;
-      background-color: #f8fafc;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       margin: 0;
-      padding: 15px;
-      line-height: 1.4;
-      font-size: 13px;
+      padding: 2rem;
+      line-height: 1.5;
     }
-    .sheet-container {
-      background-color: #ffffff;
-      max-width: 850px;
-      margin: 0 auto;
-      padding: 25px;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-    h1, h2, h3 {
-      margin: 0;
-      color: #0f172a;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
+
     .header-container {
-      border-bottom: 3px solid #475569;
-      padding-bottom: 8px;
-      margin-bottom: 15px;
       display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    @media (min-width: 600px) {
-      .header-container {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: flex-end;
-      }
-    }
-    .main-title {
-      font-size: 24px;
-      font-weight: 800;
-      color: #1e293b;
-    }
-    .deck-title {
-      font-weight: 700;
-      color: #475569;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .deck-title-value {
-      font-weight: 800;
-      color: #1e293b;
-      text-transform: none;
-      letter-spacing: normal;
-      font-size: 18px;
-      margin-left: 6px;
-    }
-    .profile-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-      margin-bottom: 12px;
-    }
-    @media (min-width: 650px) {
-      .profile-grid {
-        grid-template-columns: 240px 1fr;
-      }
-    }
-    .visual-column {
-      display: flex;
-      flex-direction: column;
+      justify-content: space-between;
       align-items: center;
+      padding-bottom: 1rem;
     }
-    .card-frame {
-      width: 230px;
-      height: 321px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-      background: #0f172a url('https://cards.scryfall.io/large/front/d/b/dbdb335d-3e45-4dd5-9e3e-c50ca0a4dfb6.jpg?1608911225') no-repeat center/cover;
+
+    h1 {
+      color: var(--text-dark-heading);
+      margin: 0;
+      font-size: 2.25rem;
     }
-    .score-badge {
-      margin-top: 15px;
-      background: #0f172a;
-      color: #ffffff;
-      padding: 10px 15px;
+
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 1rem;
+      color: var(--text-main);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .nav-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 2rem;
+      gap: 0.5rem;
+    }
+
+    .nav-link {
+      padding: 0.75rem 1rem;
+      text-decoration: none;
+      color: var(--text-light);
+      border-radius: 6px 6px 0 0;
+      transition: all 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--accent);
+      background-color: var(--pill-bg-light);
+    }
+
+    .nav-link.active {
+      color: var(--accent);
+      background-color: var(--pill-bg-light);
+      font-weight: bold;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .grid-split {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .left-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .commander-frame {
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: top center;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 63 / 88;
+      box-shadow: var(--card-shadow);
+      border-radius: 4.75% / 3.5%;
+    }
+
+    .score-badge-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
       border-radius: 8px;
+      padding: 1.5rem;
       text-align: center;
-      width: 180px;
+      box-shadow: var(--card-shadow);
     }
-    .score-title {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #94a3b8;
-    }
+
     .score-num {
-      font-size: 28px;
+      font-size: 4rem;
       font-weight: 800;
+      color: var(--accent);
       line-height: 1;
-      margin-top: 2px;
+      margin: 0.5rem 0;
     }
-    .data-table {
+
+    .right-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .meta-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 12px;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
     }
-    .data-table td {
-      padding: 8px 10px;
-      border-bottom: 1px solid #e2e8f0;
+
+    .meta-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
     }
-    .data-table tr:last-child td {
+
+    .meta-table tr:last-child td {
       border-bottom: none;
     }
-    .label {
-      font-weight: 700;
-      color: #475569;
-      width: 110px;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    @media (min-width: 400px) {
-      .label { width: 140px; font-size: 11px; }
-    }
-    .value {
-      color: #0f172a;
-      font-size: 13px;
-    }
-    .decklist-btn {
-      display: inline-block;
-      color: #2563eb;
-      text-decoration: none;
+
+    .meta-label {
       font-weight: 600;
-      font-size: 12px;
+      color: var(--text-light);
+      width: 30%;
     }
-    .decklist-btn:hover {
-      text-decoration: underline;
-    }
-    .callout-box {
-      background-color: #f8fafc;
-      border-left: 4px solid #475569;
-      padding: 12px 15px;
+
+    .summary-callout {
+      background-color: var(--bg-card);
+      border-left: 4px solid var(--accent);
+      border-top: 1px solid var(--border-color);
+      border-right: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1.5rem;
       border-radius: 0 8px 8px 0;
-      margin-top: 5px;
+      box-shadow: var(--card-shadow);
     }
-    .callout-title {
-      font-size: 11px;
-      font-weight: 700;
-      color: #334155;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-      letter-spacing: 0.5px;
-    }
-    .callout-text {
-      font-size: 12.5px;
-      color: #334155;
-      font-style: italic;
-    }
-    .section-heading {
-      font-size: 14px;
-      font-weight: 700;
-      border-bottom: 2px solid #e2e8f0;
-      padding-bottom: 4px;
-      margin-top: 20px;
-      margin-bottom: 10px;
-      color: #334155;
-    }
-    .pillar-stack {
+
+    .bottom-section {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 1.5rem;
     }
+
     .pillar-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
     }
+
     .pillar-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 6px;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
     }
-    .pillar-name {
+
+    .pillar-title {
+      font-size: 1.25rem;
       font-weight: 700;
-      font-size: 13px;
-      color: #1e293b;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      color: var(--text-dark-heading);
     }
+
     .pillar-score {
-      font-weight: 800;
-      font-size: 12px;
-      background: #f1f5f9;
-      padding: 2px 8px;
-      border-radius: 4px;
-      color: #0f172a;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--accent);
+      background-color: var(--pill-bg-light);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
     }
-    .pillar-desc {
-      font-size: 12.5px;
-      color: #334155;
-      text-align: justify;
-      line-height: 1.5;
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
     }
-    .pillar-desc ul {
-      margin: 8px 0 0 0;
-      padding-left: 20px;
+    a:hover {
+      text-decoration: underline;
     }
-    .pillar-desc li {
-      margin-bottom: 6px;
+
+    @media (max-width: 900px) {
+      .grid-split {
+        grid-template-columns: 1fr;
+      }
+      .left-col {
+        max-width: 350px;
+        margin: 0 auto;
+        width: 100%;
+      }
     }
+
     @media print {
-      @page {
-        size: letter;
-        margin: 0.4in 0.5in 0.4in 0.5in;
+      body { background: white; color: black; padding: 0; }
+      .theme-toggle, .nav-tabs { display: none !important; }
+      .pillar-card, .score-badge-card, .summary-callout, .meta-table {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+        background: white !important;
+        page-break-inside: avoid;
       }
-      body {
-        background-color: #ffffff;
-        padding: 0;
-      }
-      .sheet-container {
-        box-shadow: none;
-        padding: 0;
-        max-width: 100%;
-      }
-      .profile-grid {
-        grid-template-columns: 240px 1fr !important;
-      }
-      .header-container {
-        flex-direction: row !important;
-        justify-content: space-between !important;
-        align-items: flex-end !important;
-      }
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
+      .text-dark-heading, .score-num, .pillar-score { color: black !important; }
     }
   </style>
 </head>
 <body>
 
-  <div class="sheet-container">
-    <div class="header-container">
-      <div class="main-title">Obeka, Brute Chronologist</div>
-      <div class="deck-title">Deck Name <span class="deck-title-value">Happy Ending</span></div>
-    </div>
+  <div class="header-container">
+    <h1>Happy Ending — Commander Audit</h1>
+    <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
+  </div>
 
-    <div class="profile-grid">
-      <div class="visual-column">
-        <div class="card-frame"></div>
-        <div class="score-badge">
-          <div class="score-title">Power Rank Score</div>
-          <div class="score-num">7.5 <span style="font-size: 14px; color: #64748b;">/10</span></div>
-        </div>
-      </div>
+  <div class="nav-tabs">
+    <a href="../index.html" class="nav-link">Back to list</a>
+    <a href="Obeka.html" class="nav-link active">Core Analysis & Audit</a>
+    <a href="Obeka_upgrade.html" class="nav-link">Upgrade Blueprint</a>
+  </div>
 
-      <div>
-        <table class="data-table">
-          <tr>
-            <td class="label">Archetype</td>
-            <td class="value">Grixis Cheat / Clone Midrange-Combo</td>
-          </tr>
-          <tr>
-            <td class="label">Power Bracket</td>
-            <td class="value">High-Power Casual (Pub-Stomper Tier)</td>
-          </tr>
-          <tr>
-            <td class="label">Est. Turn to Win</td>
-            <td class="value">Turn 6 - 7 (Turn 5 with explosive Extra-Turn lines)</td>
-          </tr>
-          <tr>
-            <td class="label">Archidekt Link</td>
-            <td class="value">
-              <a class="decklist-btn" href="https://archidekt.com/decks/9367257/happy_ending" target="_blank">↗ View Full Decklist</a>
-            </td>
-          </tr>
-        </table>
-
-        <div class="callout-box">
-          <div class="callout-title">Definitive Playstyle Mechanics & Win Conditions</div>
-          <div class="callout-text">
-            The deck operates as a Grixis Cheat/Clone Midrange-Combo engine. It leverages copy effects and temporary reanimation abilities, utilizing Obeka, Brute Chronologist to bypass end-step cleanup steps. It wins by amassing an unstoppable, permanent army of cloned heavy-hitters or by assembling infinite token/turn loops.
-          </div>
-        </div>
+  <div class="grid-split">
+    <div class="left-col">
+      <div class="commander-frame" style="background-image: url('https://cards.scryfall.io/large/front/d/b/dbdb335d-3e45-4dd5-9e3e-c50ca0a4dfb6.jpg?1608911225');"></div>
+      <div class="score-badge-card">
+        <div style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-light);">Calibrated Power Score</div>
+        <div class="score-num">7.5</div>
+        <div style="color: var(--text-light); font-weight: 500;">High-Power Casual</div>
       </div>
     </div>
 
-    <div class="section-heading">Strategic Pillar Breakdown</div>
-    
-    <div class="pillar-stack">
-      <div class="pillar-card">
-        <div class="pillar-header">
-          <span class="pillar-name">1. Synergy & Engine</span>
-          <span class="pillar-score">9 / 10</span>
-        </div>
-        <div class="pillar-desc">
-          Your internal synergy is incredibly tightly wound. You have done a fantastic job including structural redundancy so the deck doesn't crumble if Obeka is heavily targeted.
-          <ul>
-            <li><strong>The Clone & Token Keepers:</strong> Cards like <strong>The Master, Multiplied</strong>, <strong>Flameshadow Conjuring</strong>, <strong>Jaxis, the Troublemaker</strong>, and <strong>Orthion, Hero of Lavabrink</strong> create temporary tokens that Obeka makes permanent. <strong>The Master, Multiplied</strong> is an absolute MVP here—completely overriding the legend rule and myriad sacrifice triggers all on his own.</li>
-            <li><strong>The Graveyard Engine:</strong> <strong>Araumi of the Dead Tide</strong>, <strong>Feldon of the Third Path</strong>, and <strong>Sedris, the Traitor King</strong> turn your graveyard into a permanent toolbox. Encore and Unearth triggers go on the stack at the end step; you end the turn, and suddenly those unearthed monsters are yours to keep.</li>
-            <li><strong>Redundancy Checks:</strong> Including <strong>Sundial of the Infinite</strong> and <strong>Discontinuity</strong> ensures that even if Obeka is stuck in the command zone with a massive tax, your deck can still function perfectly.</li>
-            <li><strong>The Vulnerabilities:</strong> A few cards like <strong>Avaricious Dragon</strong> and <strong>Curse of Obsession</strong> are highly explosive but can backfire disastrously if Obeka is removed in response to your end step, leaving you with an empty hand.</li>
-          </ul>
-        </div>
-      </div>
+    <div class="right-col">
+      <table class="meta-table">
+        <tr>
+          <td class="meta-label">Commander</td>
+          <td><strong>Obeka, Brute Chronologist</strong></td>
+        </tr>
+        <tr>
+          <td class="meta-label">Archetype</td>
+          <td>Grixis Turn-Loop / Cheater Midrange</td>
+        </tr>
+        <tr>
+          <td class="meta-label">Est. Turn to Win</td>
+          <td>Turn 6–8 (Uninterrupted)</td>
+        </tr>
+        <tr>
+          <td class="meta-label">Source Decklist</td>
+          <td><a href="https://archidekt.com/decks/9367257/happy_ending" target="_blank">Archidekt Link</a></td>
+        </tr>
+      </table>
 
-      <div class="pillar-card">
-        <div class="pillar-header">
-          <span class="pillar-name">2. Interaction & Board Control</span>
-          <span class="pillar-score">7 / 10</span>
-        </div>
-        <div class="pillar-desc">
-          Your interaction package is versatile, flavor-forward, and packs some excellent asymmetric punches.
-          <ul>
-            <li><strong>Asymmetric Wipes & Theft:</strong> <strong>Curse of the Swine</strong> exiles problematic threats while leaving your massive token clones intact. <strong>Come Back Wrong</strong> and <strong>Firbolg Flutist</strong> are excellent here—you steal an opponent's best creature, and instead of giving it back or sacrificing it, Obeka lets you keep it forever.</li>
-            <li><strong>Stack Manipulation:</strong> <strong>Swan Song</strong>, <strong>Counterspell</strong>, and <strong>Disallow</strong> provide crucial protection. <strong>Disallow</strong>, <strong>Time Stop</strong>, and <strong>Glorious End</strong> double as both interaction for opponents' turns and emergency safety valves to end your own turn if Obeka is tapped down.</li>
-            <li><strong>Room for Growth:</strong> The spot removal package is a bit light on instant-speed, low-mana flexible options. Swapping a high-mana sorcery removal for something like <strong>Terminate</strong>, <strong>Bedevil</strong>, or <strong>An Offer You Can't Refuse</strong> would push this score higher.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="pillar-card">
-        <div class="pillar-header">
-          <span class="pillar-name">3. Consistency & Tutors</span>
-          <span class="pillar-score">6.5 / 10</span>
-        </div>
-        <div class="pillar-desc">
-          The deck has massive raw card-drawing potential, though it relies heavily on making engines stick rather than precision tutoring.
-          <ul>
-            <li><strong>Jaw-Dropping Card Advantage:</strong> <strong>Ideas Unbound</strong> is a mind-blowing UU spell in this deck; Obeka lets you skip the end-step discard clause entirely. <strong>Day's Undoing</strong> acts as a fresh wheel of 7 cards without passing the turn to your opponents if cast on your turn and ended immediately.</li>
-            <li><strong>Filtering:</strong> <strong>Brainstorm</strong> and <strong>Mulldrifter</strong> (especially when cloned or reanimated) keep the gears turning.</li>
-            <li><strong>Consistency Bottleneck:</strong> This deck runs almost zero traditional tutors (like Demonic Tutor or Entomb). While this keeps the deck incredibly fun and high-variance for casual tables, it hurts the pure statistical consistency of finding your payoff pieces exactly when you need them.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="pillar-card">
-        <div class="pillar-header">
-          <span class="pillar-name">4. Speed & Mana Base</span>
-          <span class="pillar-score">7 / 10</span>
-        </div>
-        <div class="pillar-desc">
-          Your mana base is functional and your ramp is decent, but your curve leans slightly towards the heavier mid-to-late game.
-          <ul>
-            <li><strong>The Speed Packages:</strong> <strong>Final Fortune</strong>, <strong>Last Chance</strong>, and <strong>Alchemist's Gambit</strong> are your ultimate speed enables. For 2 mana, you take an extra turn, and Obeka clears the "you lose the game" trigger. This allows for incredibly explosive, early-game wins.</li>
-            <li><strong>Mana Synergies:</strong> <strong>Lotus Field</strong> is a spectacular inclusion. If you play it and respond to its enter-the-battlefield trigger by ending your turn with Obeka, you get a black-border Black Lotus land without sacrificing any lands.</li>
-            <li><strong>Optimization Goals:</strong> You have quite a few lands that enter the battlefield tapped under certain conditions (like <strong>Frostboil Snarl</strong>, <strong>Choked Estuary</strong>, and <strong>Smoldering Marsh</strong>). In a three-color deck wanting to cast strict costs like UU (<strong>Ideas Unbound</strong>) and RRR (<strong>Kiki-Jiki</strong>), a few more untapped pain lands or crowd lands would maximize efficiency.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="pillar-card">
-        <div class="pillar-header">
-          <span class="pillar-name">5. Win Conditions & Closeness to "Infinite"</span>
-          <span class="pillar-score">8.5 / 10</span>
-        </div>
-        <div class="pillar-desc">
-          This deck closes out games beautifully, shifting effortlessly between massive combat steps and definitive infinite loops.
-          <ul>
-            <li><strong>The Infinite Loops:</strong> You are running <strong>Kiki-Jiki, Mirror Breaker</strong>, which opens up easy infinite win states. While you aren't running his traditional one-card partner (Pestermite/Deceiver Exarch), combining Kiki-Jiki with copy-multipliers or cloning heavy-hitters with <strong>Blade of Selves</strong> (Myriad) quickly results in a table-shattering lethal stampede.</li>
-            <li><strong>The Value Overrun:</strong> Even without going infinite, making 5 permanent copies of <strong>Hellkite Courser</strong>, <strong>Zara, Renegade Recruiter</strong>, or <strong>Elturel Survivors</strong> with <strong>Orthion</strong> or <strong>The Master, Multiplied</strong> creates a combat step that no casual pod can realistically survive.</li>
-          </ul>
-        </div>
+      <div class="summary-callout">
+        <h3 style="margin-top: 0; color: var(--text-dark-heading);">Executive Summary</h3>
+        <p style="margin-bottom: 0;">This deck operates as a high-velocity Grixis "Cheat & Cheat Later" midrange-tempo build utilizing <strong>Obeka, Brute Chronologist</strong> as a structural loophole engine. By activating Obeka during your own clean-up step, you permanently exile delayed trigger templates such as "at the beginning of the next end step." This allows you to permanently keep hyper-efficient temporary clones, reanimated massive threats, and un-truncated extra turns. Win conditions revolve around overwhelming board presence generated by un-sacrificed tokens via <strong>The Master, Multiplied</strong>, <strong>Kiki-Jiki, Mirror Breaker</strong>, or lethal extra-turn combat loops via <strong>Final Fortune</strong> and <strong>Alchemist's Gambit</strong>.</p>
       </div>
     </div>
   </div>
 
+  <div class="bottom-section">
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <div class="pillar-title">Synergy & Engine</div>
+        <div class="pillar-score">9.5 / 10</div>
+      </div>
+      <p>The absolute crown jewel of this build. The synergy density here is pristine. Cards like <strong>Feldon of the Third Path</strong>, <strong>Mimic Vat</strong>, <strong>Araumi of the Dead Tide</strong>, and <strong>Kiki-Jiki, Mirror Breaker</strong> turn from high-value incremental tools into backbreaking permanent value generation engines under Obeka's gaze. Special mention goes to <strong>The Master, Multiplied</strong>, which acts as a secondary, passive redundant piece that prevents your tokens from ever needing an Obeka activation to survive. <strong>Wizards of Thay</strong> grants your extra-turn sorceries flash, turning your main phase liabilities into sweeping defensive or offensive instant-speed plays.</p>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <div class="pillar-title">Interaction & Board Control</div>
+        <div class="pillar-score">7.0 / 10</div>
+      </div>
+      <p>A highly respectable, compact interaction suite. You sport elite premier free protection spells like <strong>Fierce Guardianship</strong> and <strong>Deflecting Swat</strong> to shield Obeka, which is mandatory since the deck's structural engine chokes without her online. Board wipes like <strong>Cyclonic Rift</strong> and <strong>Blasphemous Act</strong> provide standard emergency resets. However, the spot removal is slightly lacking in card velocity, relying heavily on temporary theft/cloning effects like <strong>Zara, Renegade Recruiter</strong> and <strong>Firbolg Flutist</strong>. While stealing and keeping threats with Obeka is hilarious, it leaves you vulnerable to fast, non-creature combo engines.</p>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <div class="pillar-title">Consistency & Tutors</div>
+        <div class="pillar-score">4.5 / 10</div>
+      </div>
+      <p>This is the deck's primary bottleneck. You are running zero traditional black tutors (<strong>Demonic Tutor</strong>, <strong>Vampiric Tutor</strong>), meaning you are completely reliant on raw card draw engines like <strong>Mulldrifter</strong>, <strong>Ideas Unbound</strong>, and <strong>Painful Truths</strong>. While <strong>Brainstorm</strong> and <strong>Pull from Tomorrow</strong> help sift through cards, a bad opening hand or a well-timed board wipe can stall your engine out entirely. Without tutors, finding your definitive protection or your specific missing piece (a cloner vs. a clone target) is entirely left to variance.</p>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <div class="pillar-title">Speed & Mana Base</div>
+        <div class="pillar-score">7.5 / 10</div>
+      </div>
+      <p>The mana base is exceptionally solid, featuring premier Grixis duals (<strong>Watery Grave</strong>, <strong>Blood Crypt</strong>, <strong>Steam Vents</strong>) and efficient check/filter structures. Fast mana is bolstered by <strong>Sol Ring</strong>, <strong>Arcane Signet</strong>, and <strong>Lotus Field</strong> (which Obeka completely breaks by exiling the sacrificial trigger). The average mana value is slightly top-heavy due to a high density of 5+ drop reanimation targets and clone engines. This causes some clunky early-game turns if your low-cost rocks or draw spells aren't found immediately.</p>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <div class="pillar-title">Win Conditions & Closeness to "Infinite"</div>
+        <div class="pillar-score">6.5 / 10</div>
+      </div>
+      <p>Per your restriction, this deck features <strong>no infinite combos</strong>. There are no <em>Dualcaster Mage/Twinflame</em> loops or <em>Kiki-Jiki/Deceiver Exarch</em> instant-wins. Instead, the deck wins via severe, overwhelming combat value or pseudo-extra-turn locks using <strong>Time Stop</strong>, <strong>Discontinuity</strong>, <strong>Glorious End</strong>, and <strong>Last Chance</strong>. Because you have to swing to win, your win conditions are inherently healthier for casual metas, but it does mean your games will rarely end before Turn 6, as you must explicitly build a board state and find an opening.</p>
+    </div>
+  </div>
+
+  <script>
+    const toggleBtn = document.getElementById('themeToggle');
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      if (currentTheme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+        toggleBtn.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        toggleBtn.textContent = '🌙 Dark Mode';
+      }
+    });
+  </script>
 </body>
 </html>
