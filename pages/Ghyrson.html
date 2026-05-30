@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gun Show - Core Analysis & Audit</title>
+  <style>
+    /* Default Dark Mode Palette */
+    :root {
+      --bg-main: #0d1117;
+      --bg-card: #161b22;
+      --border-color: #30363d;
+      --text-main: #c9d1d9;
+      --text-light: #8b949e;
+      --accent: #58a6ff;
+      --accent-green: #2ea44f;
+      --badge-remove: #f85149;
+      --badge-unrestricted: #a371f7;
+      --badge-budget: #3fb950;
+
+      /* Shared structural constants */
+      --card-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      --text-dark-heading: #ffffff;
+      --pill-bg-light: #30363d;
+    }
+
+    /* Extracted Light Mode Palette */
+    [data-theme="light"] {
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --text-main: #1e293b;
+      --text-light: #475569;
+      --accent: #2563eb;
+      --accent-green: #16a34a;
+      --badge-remove: #ef4444;
+      --badge-unrestricted: #7c3aed;
+      --badge-budget: #22c55e;
+
+      /* Light mode structural overrides */
+      --text-dark-heading: #0f172a;
+      --pill-bg-light: #f1f5f9;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      padding: 2rem;
+    }
+
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    h1 { color: var(--text-dark-heading); font-size: 2rem; }
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 1rem;
+      color: var(--text-main);
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .nav-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      gap: 0.5rem;
+    }
+    .nav-link {
+      display: block;
+      padding: 0.75rem 1rem;
+      color: var(--text-light);
+      text-decoration: none;
+      border-radius: 6px 6px 0 0;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover {
+      color: var(--accent);
+      background-color: rgba(88, 166, 255, 0.1);
+    }
+    .nav-link.active {
+      color: var(--accent);
+      background-color: var(--pill-bg-light);
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .top-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    @media (max-width: 900px) {
+      .top-grid { grid-template-columns: 1fr; }
+    }
+
+    .left-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    .commander-frame {
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: top center;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 63 / 88;
+      box-shadow: var(--card-shadow);
+      border-radius: 4.75% / 3.5%;
+    }
+    .power-badge-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      width: 100%;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: var(--card-shadow);
+    }
+    .power-score {
+      font-size: 4rem;
+      font-weight: 800;
+      color: var(--accent-green);
+      line-height: 1;
+      margin-top: 0.5rem;
+    }
+
+    .right-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .meta-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+    }
+    .meta-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .meta-table tr:last-child td { border-bottom: none; }
+    .meta-label { color: var(--text-light); font-weight: 600; width: 30%; }
+    .meta-value { color: var(--text-dark-heading); font-weight: 500; }
+    .meta-value a { color: var(--accent); text-decoration: none; }
+    .meta-value a:hover { text-decoration: underline; }
+
+    .summary-callout {
+      background-color: var(--bg-card);
+      border-left: 4px solid var(--accent);
+      border-top: 1px solid var(--border-color);
+      border-right: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      border-radius: 0 8px 8px 0;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+    }
+    .summary-callout h3 { margin-bottom: 0.5rem; color: var(--text-dark-heading); }
+
+    .bottom-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .pillar-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+    .pillar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .pillar-title { color: var(--text-dark-heading); font-size: 1.35rem; font-weight: 700; }
+    .pillar-score {
+      background-color: var(--pill-bg-light);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .pillar-card ul { margin-left: 1.5rem; margin-top: 0.5rem; }
+    .pillar-card li { margin-bottom: 0.5rem; }
+
+    @media print {
+      body { background: white !important; color: #000 !important; }
+      .theme-toggle, .nav-tabs { display: none !important; }
+      .pillar-card, .meta-table, .power-badge-card, .summary-callout {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+        background: #fff !important;
+        page-break-inside: avoid;
+      }
+      .text-dark-heading { color: #000 !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-container">
+    <h1>Gun Show // Technical Operations Center</h1>
+    <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
+  </div>
+
+  <div class="nav-tabs">
+    <a href="../index.html" class="nav-link">Back to list</a>
+    <a href="Ghyrson.html" class="nav-link active">Core Analysis & Audit</a>
+    <a href="Ghyrson_upgrade.html" class="nav-link">Upgrade Blueprint</a>
+  </div>
+
+  <div class="top-grid">
+    <div class="left-col">
+      <div class="commander-frame" style="background-image: url('https://cards.scryfall.io/large/front/f/a/fa7349d9-c82f-4cf8-a852-92168d1f4966.jpg?1673309394');"></div>
+      <div class="power-badge-card">
+        <div style="color: var(--text-light); font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em;">Calibrated Power Score</div>
+        <div class="power-score">7.0</div>
+        <div style="color: var(--text-light); font-size: 0.85rem; margin-top: 0.5rem;">High-Power Casual Metric</div>
+      </div>
+    </div>
+
+    <div class="right-col">
+      <table class="meta-table">
+        <tr>
+          <td class="meta-label">Commander</td>
+          <td class="meta-value">Ghyrson Starn, Kelermorph</td>
+        </tr>
+        <tr>
+          <td class="meta-label">Archetype</td>
+          <td class="meta-value">Izzet Pingers / Spellslinger</td>
+        </tr>
+        <tr>
+          <td class="meta-label">Est. Turn to Win</td>
+          <td class="meta-value">Turn 6–8 (Uninterrupted)</td>
+        </tr>
+        <tr>
+          <td class="meta-label">Source Decklist</td>
+          <td class="meta-value"><a href="https://archidekt.com/decks/14998546/gun_show_20" target="_blank">Archidekt Link</a></td>
+        </tr>
+      </table>
+
+      <div class="summary-callout">
+        <h3>Definitive Playstyle Mechanics & Win Conditions</h3>
+        <p>This deck is a high-octane <strong>Izzet Pingers / Spellslinger</strong> build that weaponizes <strong>Ghyrson Starn, Kelermorph</strong>'s ability to turn minor, 1-damage pinpricks into lethal, 3-damage bolts. The strategy revolves around deploying cheap, repeatable pingers (<strong>Thermo-Alchemist</strong>, <strong>Kessig Flamebreather</strong>) or symmetric damage triggers (<strong>Caltrops</strong>, **Razorkin Needlehead**) and multiplying their output via your Commander. Win conditions are achieved through critical-mass burn, lethal commander damage via infect (<strong>Grafted Exoskeleton</strong>), or sudden card-draw velocity fueled by curiosity effects (<strong>Curiosity</strong>, <strong>Tandem Lookout</strong>) converting into raw damage loops.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-section">
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <span class="pillar-title">Synergy & Engine</span>
+        <span class="pillar-score">9.5 / 10</span>
+      </div>
+      <p>This is the absolute crown jewel of the deck. The synergy density between <strong>Ghyrson Starn, Kelermorph</strong> and your 1-damage sources is staggeringly high.</p>
+      <ul>
+        <li>Continuous pingers like <strong>Thermo-Alchemist</strong>, <strong>Firebrand Archer</strong>, <strong>Erebor Flamesmith</strong>, and <strong>Kessig Flamebreather</strong> transform every instant and sorcery into an asymmetrical lightning storm.</li>
+        <li>The interaction between <strong>Ghyrson</strong> and "Curiosity" effects (<strong>Curiosity</strong>, <strong>Tandem Lookout</strong>, <strong>Quicksilver Dagger</strong>) creates an explosive card-advantage engine: pinging an opponent for 1 triggers Ghyrson to deal 2 more, which can draw you multiple cards per turn, instantly restocking your hand to fuel more spells.</li>
+        <li>Symmetric punishers like <strong>Caltrops</strong> completely shut down token or aggro strategies, turning incoming attacks into 3-damage execution squads. <strong>Razorkin Needlehead</strong> and <strong>Immolation Shaman</strong> punish standard game actions with highly amplified retaliatory damage.</li>
+      </ul>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <span class="pillar-title">Interaction & Board Control</span>
+        <span class="pillar-score">8.5 / 10</span>
+      </div>
+      <p>The deck excels at sweeping opposing boards while keeping its own engines intact through low-cost asymmetric wipes.</p>
+      <ul>
+        <li>Low-cost asymmetric board wipes like <strong>Blazing Volley</strong>, <strong>End the Festivities</strong>, <strong>Electrickery</strong>, <strong>Boiling Earth</strong>, and <strong>Scouring Sands</strong> normally deal 1 damage to opponents' creatures. With <strong>Ghyrson</strong> active, they become 3-damage asymmetric board wipes for just 1 or 2 mana.</li>
+        <li>The interaction suite is incredibly robust, featuring elite, free, or hyper-efficient counter-magic: <strong>Fierce Guardianship</strong>, <strong>Deflecting Swat</strong>, <strong>An Offer You Can't Refuse</strong>, <strong>Swan Song</strong>, and classic <strong>Counterspell</strong>.</li>
+        <li><strong>Tactical Warning:</strong> While excellent against creature decks and the stack, the deck is noticeably soft to non-creature, non-stack permanent types (Enchantments like <em>Rhystic Study</em> or <em>Smothering Tithe</em>). Your only clean answer to an established enchantment is <strong>Chaos Warp</strong>.</li>
+      </ul>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <span class="pillar-title">Consistency & Tutors</span>
+        <span class="pillar-score">4.0 / 10</span>
+      </div>
+      <p>This is the deck's primary structural vulnerability, creating a notable performance bottleneck under pressure.</p>
+      <ul>
+        <li>You have <strong>zero traditional tutors</strong> to find key synergy pieces (like <strong>Basilisk Collar</strong> or <strong>Curiosity</strong>). If <strong>Ghyrson</strong> is repeatedly removed, or if you fail to draw into a mass-pinger engine, the deck can stall out completely.</li>
+        <li>You rely entirely on raw card draw and selection (<strong>Expressive Iteration</strong>, <strong>Fact or Fiction</strong>, <strong>Teferi's Ageless Insight</strong>) to find your missing puzzle pieces. While your card draw is highly explosive *when* an engine is online, your baseline structural consistency before assembling a piece is low.</li>
+      </ul>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <span class="pillar-title">Speed & Mana Base</span>
+        <span class="pillar-score">7.0 / 10</span>
+      </div>
+      <p>The acceleration suite is compact and appropriate for the deck's low average mana value, but the land configuration contains minor efficiency traps.</p>
+      <ul>
+        <li>Fast mana is solid, anchored by <strong>Sol Ring</strong>, <strong>Arcane Signet</strong>, <strong>Talisman of Creativity</strong>, and <strong>Fellwar Stone</strong>. Because your curve is low, you don't need a massive ramp package.</li>
+        <li>The land matrix contains optimization traps: lands like <strong>Study Hall</strong>, <strong>Desolate Lighthouse</strong>, and <strong>Shivan Gorge</strong> present heavy colorless requirements or high activation costs for minimal returns.</li>
+        <li>Premium duals like <strong>Spirebluff Canal</strong>, <strong>Stormcarved Coast</strong>, and <strong>Cascade Bluffs</strong> ensure you rarely struggle for fixing early on.</li>
+      </ul>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <span class="pillar-title">Win Conditions & Closeness to "Infinite"</span>
+        <span class="pillar-score">6.0 / 10</span>
+      </div>
+      <p>The deck operates beautifully within specified casual restrictions while maximizing dynamic damage scaling.</p>
+      <ul>
+        <li>In strict adherence to your <strong>No Infinite Combos</strong> rule, the deck avoids the classic <em>Niv-Mizzet, Parun + Curiosity</em> loop. Drawing a card with Niv-Mizzet will deal 1 damage, triggering Ghyrson for 2, but you must manually break the chain or win purely via remaining deck size without going infinite.</li>
+        <li><strong>Grafted Exoskeleton</strong> provides a devastating alternative vector, giving <strong>Ghyrson</strong> infect; a single ping trigger results in 3 poison counters, allowing you to eliminate an opponent in a single turn cycle off just a few triggers.</li>
+        <li><strong>Chandra's Incinerator</strong> converts face-burn into clean removal, allowing <strong>Niv-Mizzet, Parun</strong> or a massive <strong>Psychosis Crawler</strong> blowout to end the game cleanly.</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    const toggleBtn = document.getElementById('themeToggle');
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      if (currentTheme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+        toggleBtn.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        toggleBtn.textContent = '🌙 Dark Mode';
+      }
+    });
+  </script>
+</body>
+</html>

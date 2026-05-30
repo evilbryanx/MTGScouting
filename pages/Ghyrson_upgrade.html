@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gun Show - Upgrade Blueprint</title>
+  <style>
+    /* Default Dark Mode Palette */
+    :root {
+      --bg-main: #0d1117;
+      --bg-card: #161b22;
+      --border-color: #30363d;
+      --text-main: #c9d1d9;
+      --text-light: #8b949e;
+      --accent: #58a6ff;
+      --accent-green: #2ea44f;
+      --badge-remove: #f85149;
+      --badge-unrestricted: #a371f7;
+      --badge-budget: #3fb950;
+
+      /* Shared structural constants */
+      --card-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      --text-dark-heading: #ffffff;
+      --pill-bg-light: #30363d;
+    }
+
+    /* Extracted Light Mode Palette */
+    [data-theme="light"] {
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --text-main: #1e293b;
+      --text-light: #475569;
+      --accent: #2563eb;
+      --accent-green: #16a34a;
+      --badge-remove: #ef4444;
+      --badge-unrestricted: #7c3aed;
+      --badge-budget: #22c55e;
+
+      /* Light mode structural overrides */
+      --text-dark-heading: #0f172a;
+      --pill-bg-light: #f1f5f9;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      padding: 2rem;
+    }
+
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    h1 { color: var(--text-dark-heading); font-size: 2rem; }
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 1rem;
+      color: var(--text-main);
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .nav-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      gap: 0.5rem;
+    }
+    .nav-link {
+      display: block;
+      padding: 0.75rem 1rem;
+      color: var(--text-light);
+      text-decoration: none;
+      border-radius: 6px 6px 0 0;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover {
+      color: var(--accent);
+      background-color: rgba(88, 166, 255, 0.1);
+    }
+    .nav-link.active {
+      color: var(--accent);
+      background-color: var(--pill-bg-light);
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .meta-overview-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+    .meta-overview-card h3 { color: var(--text-dark-heading); margin-bottom: 0.5rem; }
+
+    /* Desktop Table Layout */
+    .upgrade-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+    }
+    .upgrade-table th {
+      background-color: var(--pill-bg-light);
+      color: var(--text-dark-heading);
+      font-weight: 600;
+      text-align: left;
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .upgrade-table td {
+      padding: 1.25rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+    }
+    .upgrade-table tr:last-child td { border-bottom: none; }
+
+    .card-del { color: var(--badge-remove); font-weight: 700; }
+    .card-unres { color: var(--badge-unrestricted); font-weight: 700; }
+    .card-budg { color: var(--badge-budget); font-weight: 700; }
+    
+    .metric-pill {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      background-color: var(--pill-bg-light);
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    .velocity-tag { font-weight: 600; }
+
+    /* Mobile Transformation Mechanics */
+    @media (max-width: 768px) {
+      .upgrade-table, .upgrade-table tbody, .upgrade-table tr, .upgrade-table td {
+        display: block;
+        width: 100%;
+      }
+      .upgrade-table thead { display: none; }
+      .upgrade-table tr {
+        margin-bottom: 1.5rem;
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1rem;
+        box-shadow: var(--card-shadow);
+      }
+      .upgrade-table td {
+        border-bottom: 1px solid var(--border-color);
+        padding: 0.75rem 0.25rem;
+        position: relative;
+        padding-top: 1.75rem;
+      }
+      .upgrade-table td:last-child { border-bottom: none; }
+      .upgrade-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        top: 0;
+        left: 0.25rem;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-light);
+        font-weight: 700;
+      }
+    }
+
+    @media print {
+      body { background: white !important; color: #000 !important; }
+      .theme-toggle, .nav-tabs { display: none !important; }
+      .upgrade-table, .meta-overview-card {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+        background: #fff !important;
+      }
+      th { background: #eee !important; color: #000 !important; }
+      td { border-bottom: 1px solid #ccc !important; }
+      .card-del, .card-unres, .card-budg { color: #000 !important; text-decoration: underline; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-container">
+    <h1>Gun Show // Targeted Tactical Upgrade Matrix</h1>
+    <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
+  </div>
+
+  <div class="nav-tabs">
+    <a href="../index.html" class="nav-link">Back to list</a>
+    <a href="Ghyrson.html" class="nav-link">Core Analysis & Audit</a>
+    <a href="Ghyrson_upgrade.html" class="nav-link active">Upgrade Blueprint</a>
+  </div>
+
+  <div class="meta-overview-card">
+    <h3>Deployment Directives</h3>
+    <p>This blueprint prioritizes structural acceleration and high-velocity response engineering. All recommended swaps preserve the strict <strong>No Infinite Combos</strong> core operational logic mandated for high-power casual execution.</p>
+  </div>
+
+  <table class="upgrade-table">
+    <thead>
+      <tr>
+        <th style="width: 15%;">Card to Remove</th>
+        <th style="width: 18%;">Replace With (Unrestricted)</th>
+        <th style="width: 18%;">Replace With (Budget)</th>
+        <th style="width: 15%;">Impact Metric</th>
+        <th style="width: 10%;">Velocity</th>
+        <th style="width: 24%;">Strategic Justification</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-label="Card to Remove" class="card-del">Shivan Gorge</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unres">Otawara, Soaring City</td>
+        <td data-label="Replace With (Budget)" class="card-budg">Volcanic Spite</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana</span></td>
+        <td data-label="Velocity" class="velocity-tag" style="color: var(--accent-green);">High</td>
+        <td>Shivan Gorge requires 4 total mana to trigger a baseline 1-damage event. Otawara fixes early drop constraints and provides uncounterable interaction.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-del">Study Hall</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unres">Plaza of Heroes</td>
+        <td data-label="Replace With (Budget)" class="card-budg">Command Tower</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana</span></td>
+        <td data-label="Velocity" class="velocity-tag" style="color: var(--text-light);">Low</td>
+        <td>Eliminates a slow utility land for perfect multi-color consistency and critical legendary permanent defensive preservation tools.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-del">Niv-Mizzet, Dracogenius</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unres">The One Ring</td>
+        <td data-label="Replace With (Budget)" class="card-budg">Sorcerer Class</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Consistency</span></td>
+        <td data-label="Velocity" class="velocity-tag" style="color: var(--accent-green);">High</td>
+        <td>Swaps out an incredibly mana-intensive, low-impact 6-drop threat for unmatched, persistent automated card volume advantages.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-del">Boiling Earth</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unres">Vandalblast</td>
+        <td data-label="Replace With (Budget)" class="card-budg">By Force</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Interaction</span></td>
+        <td data-label="Velocity" class="velocity-tag" style="color: var(--accent-green);">High</td>
+        <td>Prunes out redundant 1-damage symmetric spells to resolve an acute strategic vulnerability against structural artifact boards.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-del">Magic Damper</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unres">Rhystic Study</td>
+        <td data-label="Replace With (Budget)" class="card-budg">Windfall</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Synergy & Engine</span></td>
+        <td data-label="Velocity" class="velocity-tag" style="color: var(--accent-green);">High</td>
+        <td>Excises narrow silver-bullet options in favor of raw structural velocity assets needed to quickly chain spells without native tutors.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-del">Weftstalker Ardent</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unres">Polymorphist's Jest</td>
+        <td data-label="Replace With (Budget)" class="card-budg">Imprisoned in the Moon</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Interaction</span></td>
+        <td data-label="Velocity" class="velocity-tag" style="color: var(--accent-green);">High</td>
+        <td>Replaces a low-impact vanilla attacker with an effect that turns an opponent's entire board into easily swept 1/1 Frogs.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-del">Starfield Vocalist</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unres">Glint-Horn Buccaneer</td>
+        <td data-label="Replace With (Budget)" class="card-budg">Surge Engine</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Win Conditions</span></td>
+        <td data-label="Velocity" class="velocity-tag" style="color: var(--accent-green);">High</td>
+        <td>Glint-Horn triggers off discards during cleanup or wheels, dealing exactly 1 damage to face to activate Ghyrson's amplified burst windows.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-del">Starwinder</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unres">Ophidian Eye</td>
+        <td data-label="Replace With (Budget)" class="card-budg">Bident of Thassa</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Synergy & Engine</span></td>
+        <td data-label="Velocity" class="velocity-tag" style="color: var(--accent-green);">High</td>
+        <td>Removes a clunky 5-drop for an instantaneous flash aura, doubling down on the essential Curiosity engine architecture.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-del">Kumano, Master Yamabushi</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unres">Jeska's Will</td>
+        <td data-label="Replace With (Budget)" class="card-budg">Big Score</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana</span></td>
+        <td data-label="Velocity" class="velocity-tag" style="color: var(--accent-green);">High</td>
+        <td>Trading out a massive mana-sink source for explosive mana injection phases and deep deck-delving impulse windows.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-del">Electrolyze</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unres">Mana Drain</td>
+        <td data-label="Replace With (Budget)" class="card-budg">Delay</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Interaction</span></td>
+        <td data-label="Velocity" class="velocity-tag" style="color: var(--text-light);">Low</td>
+        <td>Swaps an outdated 3-mana piece for high-tier stack control to aggressively defend fragile engine blocks from spot removal.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    const toggleBtn = document.getElementById('themeToggle');
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      if (currentTheme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+        toggleBtn.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        toggleBtn.textContent = '🌙 Dark Mode';
+      }
+    });
+  </script>
+</body>
+</html>
