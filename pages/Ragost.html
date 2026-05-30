@@ -3,378 +3,239 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Commander Profile - Ragost, Deft Gastronaut</title>
+  <title>Bisquey Business - Core Analysis</title>
   <style>
-    body {
-      font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
-      color: #1e293b;
-      background-color: #f8fafc;
-      margin: 0;
-      padding: 15px;
-      line-height: 1.4;
-      font-size: 13px;
+    /* Default Dark Mode Palette */
+    :root {
+      --bg-main: #0d1117;
+      --bg-card: #161b22;
+      --border-color: #30363d;
+      --text-main: #c9d1d9;
+      --text-light: #8b949e;
+      --accent: #58a6ff;
+      --accent-green: #2ea44f;
+      --badge-remove: #f85149;
+      --badge-unrestricted: #a371f7;
+      --badge-budget: #3fb950;
+      --card-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      --text-dark-heading: #ffffff;
+      --pill-bg-light: #30363d;
     }
-    .sheet-container {
-      background-color: #ffffff;
-      max-width: 850px;
-      margin: 0 auto;
-      padding: 25px;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
+    /* Extracted Light Mode Palette */
+    [data-theme="light"] {
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --text-main: #1e293b;
+      --text-light: #475569;
+      --accent: #2563eb;
+      --accent-green: #16a34a;
+      --badge-remove: #ef4444;
+      --badge-unrestricted: #7c3aed;
+      --badge-budget: #22c55e;
+      --text-dark-heading: #0f172a;
+      --pill-bg-light: #f1f5f9;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
-    h1, h2, h3 {
-      margin: 0;
-      color: #0f172a;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background-color: var(--bg-main); color: var(--text-main); padding: 2rem; line-height: 1.5; transition: background-color 0.3s, color 0.3s; }
+    
+    .header-container { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 1rem; }
+    h1 { color: var(--text-dark-heading); font-size: 2rem; }
+    
+    .theme-toggle { background: transparent; border: 1px solid var(--border-color); padding: 0.5rem 1rem; border-radius: 6px; color: var(--text-main); cursor: pointer; font-weight: 500; transition: border-color 0.2s, color 0.2s; }
+    .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+    
+    .nav-tabs { display: flex; border-bottom: 1px solid var(--border-color); margin-top: 1rem; margin-bottom: 2rem; gap: 0.5rem; }
+    .nav-link { text-decoration: none; color: var(--text-light); padding: 0.75rem 1rem; border-radius: 6px 6px 0 0; font-weight: 500; transition: color 0.2s, background-color 0.2s; border-bottom: 2px solid transparent; }
+    .nav-link:hover { color: var(--accent); background-color: var(--pill-bg-light); }
+    .nav-link.active { color: var(--accent); background-color: var(--pill-bg-light); border-bottom: 2px solid var(--accent); }
+    
+    .grid-layout { display: grid; grid-template-columns: 320px 1fr; gap: 2rem; margin-bottom: 2rem; }
+    .left-col { display: flex; flex-direction: column; gap: 1.5rem; }
+    
+    .card-frame { background-size: contain; background-repeat: no-repeat; background-position: top center; width: 100%; height: auto; aspect-ratio: 63 / 88; box-shadow: var(--card-shadow); border-radius: 4.75% / 3.5%; }
+    
+    .power-badge-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; text-align: center; box-shadow: var(--card-shadow); }
+    .power-score { font-size: 4rem; font-weight: 800; color: var(--accent-green); line-height: 1; margin-top: 0.5rem; }
+    
+    .meta-table-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; box-shadow: var(--card-shadow); margin-bottom: 1.5rem; }
+    .meta-table { width: 100%; border-collapse: collapse; }
+    .meta-table td { padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); }
+    .meta-table tr:last-child td { border-bottom: none; }
+    .meta-label { font-weight: 600; color: var(--text-light); width: 40%; }
+    .meta-val { color: var(--text-main); }
+    .meta-val a { color: var(--accent); text-decoration: none; }
+    .meta-val a:hover { text-decoration: underline; }
+    
+    .summary-callout { background-color: var(--pill-bg-light); border-left: 4px solid var(--accent); padding: 1.5rem; border-radius: 0 8px 8px 0; font-size: 1.1rem; color: var(--text-main); box-shadow: var(--card-shadow); }
+    
+    .pillars-container { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem; }
+    .pillar-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 2rem; box-shadow: var(--card-shadow); }
+    .pillar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 1rem; }
+    .pillar-title { font-size: 1.4rem; color: var(--text-dark-heading); font-weight: 700; }
+    .pillar-score-pill { background-color: var(--pill-bg-light); padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 600; color: var(--accent); }
+    
+    .pillar-content ul { padding-left: 1.5rem; margin-top: 0.75rem; }
+    .pillar-content li { margin-bottom: 0.5rem; }
+    
+    @media (max-width: 900px) {
+      .grid-layout { grid-template-columns: 1fr; }
+      .left-col { max-width: 350px; margin: 0 auto; width: 100%; }
     }
-    .header-container {
-      border-bottom: 3px solid #475569;
-      padding-bottom: 8px;
-      margin-bottom: 15px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    @media (min-width: 600px) {
-      .header-container {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: flex-end;
-      }
-    }
-    .main-title {
-      font-size: 24px;
-      font-weight: 800;
-      color: #1e293b;
-      text-transform: uppercase;
-    }
-    .deck-title {
-      font-weight: 700;
-      color: #475569;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .deck-title-value {
-      font-weight: 800;
-      color: #2563eb;
-      text-transform: none;
-      letter-spacing: normal;
-      font-size: 18px;
-      margin-left: 6px;
-    }
-    .profile-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-      margin-bottom: 12px;
-    }
-    @media (min-width: 650px) {
-      .profile-grid {
-        grid-template-columns: 240px 1fr;
-      }
-    }
-    .visual-column {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .card-frame {
-      width: 230px;
-      height: 321px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-      background: #0f172a url('https://cards.scryfall.io/large/front/4/a/4a62293d-63a7-4038-b3e9-197bb2b9ec90.jpg?1752947769') no-repeat center/cover;
-    }
-    .score-badge {
-      margin-top: 15px;
-      background: #0f172a;
-      color: #ffffff;
-      padding: 10px 15px;
-      border-radius: 8px;
-      text-align: center;
-      width: 180px;
-    }
-    .score-title {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #94a3b8;
-    }
-    .score-num {
-      font-size: 28px;
-      font-weight: 800;
-      line-height: 1;
-      margin-top: 2px;
-    }
-    .data-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 12px;
-    }
-    .data-table td {
-      padding: 8px 10px;
-      border-bottom: 1px solid #e2e8f0;
-    }
-    .data-table tr:last-child td {
-      border-bottom: none;
-    }
-    .label {
-      font-weight: 700;
-      color: #475569;
-      width: 110px;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    @media (min-width: 400px) {
-      .label { width: 140px; font-size: 11px; }
-    }
-    .value {
-      color: #0f172a;
-      font-size: 13px;
-    }
-    .decklist-btn {
-      display: inline-block;
-      color: #2563eb;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 12px;
-    }
-    .decklist-btn:hover {
-      text-decoration: underline;
-    }
-    .callout-box {
-      background-color: #f8fafc;
-      border-left: 4px solid #475569;
-      padding: 12px 15px;
-      border-radius: 0 8px 8px 0;
-      margin-top: 5px;
-    }
-    .callout-title {
-      font-size: 11px;
-      font-weight: 700;
-      color: #334155;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-      letter-spacing: 0.5px;
-    }
-    .callout-text {
-      font-size: 12.5px;
-      color: #334155;
-      font-style: italic;
-    }
-    .section-heading {
-      font-size: 14px;
-      font-weight: 700;
-      border-bottom: 2px solid #e2e8f0;
-      padding-bottom: 4px;
-      margin-top: 20px;
-      margin-bottom: 10px;
-      color: #334155;
-    }
-    .pillar-stack {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .pillar-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-    }
-    .pillar-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-    }
-    .pillar-name {
-      font-weight: 700;
-      font-size: 13px;
-      color: #1e293b;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .pillar-score {
-      font-weight: 800;
-      font-size: 12px;
-      background: #f1f5f9;
-      padding: 2px 8px;
-      border-radius: 4px;
-      color: #0f172a;
-    }
-    .pillar-desc {
-      font-size: 12.5px;
-      color: #334155;
-      text-align: justify;
-      line-height: 1.5;
-    }
-    .pillar-desc ul {
-      margin: 8px 0 0 0;
-      padding-left: 20px;
-    }
-    .pillar-desc li {
-      margin-bottom: 6px;
-    }
+    
     @media print {
-      @page {
-        size: letter;
-        margin: 0.4in 0.5in 0.4in 0.5in;
-      }
-      body {
-        background-color: #ffffff;
-        padding: 0;
-      }
-      .sheet-container {
-        box-shadow: none;
-        padding: 0;
-        max-width: 100%;
-      }
-      .profile-grid {
-        grid-template-columns: 240px 1fr !important;
-      }
-      .header-container {
-        flex-direction: row !important;
-        justify-content: space-between !important;
-        align-items: flex-end !important;
-      }
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
+      body { background: white !important; color: black !important; padding: 0; }
+      .theme-toggle, .nav-tabs { display: none !important; }
+      .pillar-card, .meta-table-card, .power-badge-card { box-shadow: none !important; border: 1px solid #ccc !important; background: white !important; page-break-inside: avoid; }
+      :root, [data-theme="light"] { --text-dark-heading: #000000; --text-main: #000000; --text-light: #333333; }
     }
   </style>
 </head>
 <body>
 
-  <div class="sheet-container">
-    <div class="header-container">
-      <div class="main-title">Ragost, Deft Gastronaut</div>
-      <div class="deck-title">Deck Name <span class="deck-title-value">Bisquey Business</span></div>
+  <div class="header-container">
+    <div>
+      <h1>Bisquey Business</h1>
+      <p style="color: var(--text-light)">Strategic Core Analysis & Performance Audit</p>
+    </div>
+    <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
+  </div>
+
+  <div class="nav-tabs">
+    <a href="../index.html" class="nav-link">Back to list</a>
+    <a href="Ragost.html" class="nav-link active">Core Analysis & Audit</a>
+    <a href="Ragost_upgrade.html" class="nav-link">Upgrade Blueprint</a>
+  </div>
+
+  <div class="grid-layout">
+    <div class="left-col">
+      <div class="card-frame" style="background-image: url('https://cards.scryfall.io/large/front/4/a/4a62293d-63a7-4038-b3e9-197bb2b9ec90.jpg?1752947769');"></div>
+      <div class="power-badge-card">
+        <div style="font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; color: var(--text-light)">Calibrated Power Level</div>
+        <div class="power-score">6.5</div>
+        <div style="font-size: 0.9rem; color: var(--text-light); margin-top: 0.5rem;">High-Power Casual</div>
+      </div>
     </div>
 
-    <div class="profile-grid">
-      <div class="visual-column">
-        <div class="card-frame"></div>
-        <div class="score-badge">
-          <div class="score-title">Power Rank Score</div>
-          <div class="score-num">7 <span style="font-size: 14px; color: #64748b;">/10</span></div>
-        </div>
-      </div>
-
-      <div>
-        <table class="data-table">
+    <div>
+      <div class="meta-table-card">
+        <table class="meta-table">
           <tr>
-            <td class="label">Archetype</td>
-            <td class="value">Artifact-Token Aristocrats & Value Engine</td>
+            <td class="meta-label">Commander</td>
+            <td class="meta-val"><strong>Ragost, Deft Gastronaut</strong></td>
           </tr>
           <tr>
-            <td class="label">Power Bracket</td>
-            <td class="value">High-Power Casual</td>
+            <td class="meta-label">Archetype</td>
+            <td class="meta-val">Artifact Aristocrats / Theft-Sacrifice</td>
           </tr>
           <tr>
-            <td class="label">Est. Turn to Win</td>
-            <td class="value">Turn 7 - 8</td>
+            <td class="meta-label">Est. Turn to Win</td>
+            <td class="meta-val">Turn 7 - 9 (Uninterrupted)</td>
           </tr>
           <tr>
-            <td class="label">Archidekt Link</td>
-            <td class="value">
-              <a class="decklist-btn" href="https://archidekt.com/decks/14967416/bisquey_business" target="_blank">↗ View Full Decklist</a>
-            </td>
+            <td class="meta-label">Source Decklist</td>
+            <td class="meta-val"><a href="https://archidekt.com/decks/14967416/bisquey_business" target="_blank">Archidekt Link</a></td>
           </tr>
         </table>
-
-        <div class="callout-box">
-          <div class="callout-title">Definitive Playstyle Mechanics & Win Conditions</div>
-          <div class="callout-text">
-            The deck functions as an artifact-token aristocrats and value engine, utilizing Ragost alongside token multipliers to turn cracked Food, Treasures, and Clues into massive card and board advantage. It wins by turning temporary theft spells into permanent sacrifice value, drowning opponents in a jaw-dropping casual card advantage loop, or closing the game instantly with massive artifact-synergy threats.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="section-heading">Strategic Pillar Breakdown</div>
-    
-    <div class="pillar-stack">
-      <div class="pillar-card">
-        <div class="pillar-header">
-          <span class="pillar-name">1. Synergy & Engine</span>
-          <span class="pillar-score">9.5 / 10</span>
-        </div>
-        <div class="pillar-desc">
-          The internal synergy of this deck is stunningly beautiful, creating an intricate web of puzzle pieces that lock together perfectly.
-          <ul>
-            <li><strong>The Golden Trio:</strong> <strong>Academy Manufactor</strong>, <strong>Nuka-Cola Vending Machine</strong>, and <strong>Oltec Matterweaver</strong> form a legendary engine here. Cracking a single Food with the Vending Machine triggers a Treasure creation, which <strong>Academy Manufactor</strong> replaces with a Food, a Clue, and a Treasure. This creates near-infinite loops of untapping, tapping, and drawing.</li>
-            <li><strong>The Chef's Kiss (Theft + Sac):</strong> Your inclusion of <strong>Bloody Betrayal</strong>, <strong>Mass Mutiny</strong>, <strong>Mob Rule</strong>, and <strong>Vengeful Possession</strong> isn't just for combat disruption. Stealing your opponents' best creatures, attacking them, and then sacrificing those stolen creatures to <strong>Ragost</strong> or <strong>Witch's Oven</strong> before the end step is a brutal, high-tempo value engine.</li>
-            <li><strong>Value Engines & Lifegain:</strong> <strong>Soul Warden</strong> and <strong>Soul's Attendant</strong> trigger easily off your high creature output, instantly activating <strong>The Gaffer</strong> for extra card draw and pairing perfectly with <strong>Rosie Cotton of South Lane</strong> to distribute massive +1/+1 counters across your board.</li>
-          </ul>
-        </div>
       </div>
 
-      <div class="pillar-card">
-        <div class="pillar-header">
-          <span class="pillar-name">2. Interaction & Board Control</span>
-          <span class="pillar-score">8.5 / 10</span>
-        </div>
-        <div class="pillar-desc">
-          Your removal package is highly tailored, showcasing efficient spot removal and beautifully asymmetrical board wipes.
-          <ul>
-            <li><strong>Asymmetrical Sweepers:</strong> <strong>The Battle of Bywater</strong> is an absolute superstar in this list, wiping out high-power threats while completely sparing your utility creatures and leaving you with a pile of Food tokens. <strong>Slaughter the Strong</strong> accomplishes a similar goal, allowing you to keep Ragost and your small engine creatures while forcing opponents to bin their massive commanders.</li>
-            <li><strong>Nuclear Options:</strong> <strong>Farewell</strong> serves as your ultimate reset button. While it can hurt an artifact deck, the flexibility to selectively exile exactly what is threatening you makes it a necessity.</li>
-            <li><strong>Spot Efficiency:</strong> <strong>Dispatch</strong> is effectively a one-mana, instant-speed Exile spell with no downside, given how easily you achieve Metalcraft. Paired with classic staples like <strong>Swords to Plowshares</strong>, <strong>Path to Exile</strong>, and <strong>Wear // Tear</strong>, your instant-speed interactive game is incredibly lean.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="pillar-card">
-        <div class="pillar-header">
-          <span class="pillar-name">3. Consistency & Tutors</span>
-          <span class="pillar-score">7.5 / 10</span>
-        </div>
-        <div class="pillar-desc">
-          For a non-black, non-blue deck, this list boasts an impressive amount of card velocity and filtering, though it naturally lacks universal tutors.
-          <ul>
-            <li><strong>Graveyard Tutors:</strong> <strong>Goblin Engineer</strong> is your mvp tutor, letting you tutor critical pieces like <strong>Academy Manufactor</strong> or <strong>Nuka-Cola Vending Machine</strong> directly to the graveyard and welding away a spare Food or Treasure to bring them directly to the battlefield.</li>
-            <li><strong>Card Selection & Raw Draw:</strong> <strong>Ichor Wellspring</strong> paired with your sacrifice outlets offers brilliant card-filtering. <strong>Professional Face-Breaker</strong> converts your Treasures into impulsive card draw, while <strong>Smuggler's Share</strong> and <strong>Seize the Spotlight</strong> capitalize beautifully on your opponents' greed to keep your hand completely full.</li>
-            <li><strong>Room for Growth:</strong> Because Boros lacks raw, unrestricted tutors, your consistency relies heavily on digging through your deck. A well-timed board wipe before your engine settles can sometimes leave you digging for a few turns to restart the engine.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="pillar-card">
-        <div class="pillar-header">
-          <span class="pillar-name">4. Speed & Mana Base</span>
-          <span class="pillar-score">8.0 / 10</span>
-        </div>
-        <div class="pillar-desc">
-          Your mana base is clean, functional, and highly optimized for a two-color deck, avoiding tap-land traps while ensuring you hit your colored pips on time.
-          <ul>
-            <li><strong>Ramp & Utility:</strong> Beyond standard stalwarts like <strong>Sol Ring</strong> and <strong>Arcane Signet</strong>, <strong>Archaeomancer's Map</strong> provides excellent catch-up ramp while acting as a relevant artifact body. <strong>Monologue Tax</strong> capitalizes on casual multiplayer patterns to generate a steady stream of Treasures.</li>
-            <li><strong>Land Selection:</strong> Including artifact lands like <strong>Ancient Den</strong> and <strong>Great Furnace</strong> is a smart move, giving you disposable artifact targets for recursion or sacrifice in a pinch. Duals like <strong>Sacred Foundry</strong>, <strong>Clifftop Retreat</strong>, and <strong>Battlefield Forge</strong> guarantee you rarely suffer from color screw.</li>
-            <li><strong>The Curve:</strong> Your average mana value is quite low and aggressive, meaning you can easily deploy multiple threats or interaction pieces in a single turn cycle.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="pillar-card">
-        <div class="pillar-header">
-          <span class="pillar-name">5. Win Conditions & Closeness to "Infinite"</span>
-          <span class="pillar-score">8.0 / 10</span>
-        </div>
-        <div class="pillar-desc">
-          This deck excels at closing out games through high-synergy combat multipliers and massive, sudden alternative win conditions, intentionally avoiding infinite combos.
-          <ul>
-            <li><strong>The Inescapable Locks:</strong> While the deck does not rely on infinite combos, it features devastating, soft-lock synergies. Resolving <strong>Mycosynth Lattice</strong> alongside <strong>Clock of Omens</strong> or <strong>Liquimetal Coating</strong> allows you to tap down opponents' lands or turn their best permanents into artifacts to be stolen or destroyed.</li>
-            <li><strong>Alternative Win-Cons:</strong> <strong>Hellkite Tyrant</strong> is a terrifying ticking clock in this deck. With your ability to flood the board with Food, Clue, and Treasure tokens, checking for 20 artifacts on your upkeep is an incredibly realistic, game-ending threat.</li>
-            <li><strong>The Table-Shattering Lethal Stampede:</strong> If a slower drain game isn't working, <strong>Mob Rule</strong> acts as a sudden, massive overrun effect. Turning an opponent's massive army against the rest of the table—and then sacrificing that army to your utility pieces—is a definitive way to close out a game.</li>
-          </ul>
-        </div>
+      <div class="summary-callout">
+        <strong>Executive Summary:</strong> <strong>Bisquey Business</strong> is an artifact-aristocrat and theft-sacrifice engine deck built entirely around utilizing <strong>Ragost, Deft Gastronaut</strong> as a high-velocity utility piece. The mechanical core relies on taking control of opponents' key artifacts and creatures via temporary theft spells, utilizing them for maximum combat value or tapping utility, and then sacrificing them to value engines before they can be returned. The deck converts these sacrificed cardboard assets into massive piles of Food, Clues, and Treasures. It leverages token-multiplier synergies to drown opponents in card advantage and chip damage, culminating in explosive non-infinite combat steps, massive artifact drain effects, or alt-win conditions like <strong>Hellkite Tyrant</strong>.
       </div>
     </div>
   </div>
 
+  <h2 style="color: var(--text-dark-heading); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-top: 3rem;">Strategic Pillar Deep-Dive</h2>
+
+  <div class="pillars-container">
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <div class="pillar-title">1. Synergy & Engine</div>
+        <div class="pillar-score-pill">8.5 / 10</div>
+      </div>
+      <div class="pillar-content">
+        <p>The deck functions as a highly synergistic, well-oiled engine room. <strong>Ragost, Deft Gastronaut</strong> acts as a brilliant payoff for sacrificing artifacts, turning your utility pieces into life gain, card draw, or scry velocity.</p>
+        <ul>
+          <li><strong>Token Multipliers:</strong> The inclusion of <strong>Academy Manufactor</strong> alongside <strong>Nuka-Cola Vending Machine</strong> and <strong>Oltec Matterweaver</strong> forms the absolute golden triangle of the deck. Generating a Food token instantly cascades into a Treasure and a Clue, triggering <strong>Crime Novelist</strong> to generate massive pools of red mana.</li>
+          <li><strong>Sacrifice Outlets & Value Loops:</strong> <strong>Witch's Oven</strong>, <strong>Clock of Omens</strong>, and <strong>Goblin Engineer</strong> provide instantaneous, instant-speed sacrifice opportunities. This guarantees that any creature borrowed with <strong>Bloody Betrayal</strong>, <strong>Mass Mutiny</strong>, or <strong>Mob Rule</strong> is ground up into culinary components before the end step. <strong>Ichor Wellspring</strong>, <strong>Prized Statue</strong>, and <strong>Myr Retriever</strong> ensure that your graveyard loops remain highly active, recycling your engine components seamlessly.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <div class="pillar-title">2. Interaction & Board Control</div>
+        <div class="pillar-score-pill">7.0 / 10</div>
+      </div>
+      <div class="pillar-content">
+        <p>The interactive suite leverages Boros’s premium removal alongside specialized theft-based board disruption.</p>
+        <ul>
+          <li><strong>Targeted Removal:</strong> <strong>Swords to Plowshares</strong>, <strong>Path to Exile</strong>, and <strong>Dispatch</strong> represent the absolute gold standard for instant-speed, spot creature removal. <strong>Dispatch</strong> is almost always a hard 1-mana exile spell given how easily this deck achieves Metalcraft. <strong>Wear // Tear</strong> offers clean, modular removal for problematic enchantments or opposing stax pieces.</li>
+          <li><strong>Theft as Disruption:</strong> Spells like <strong>Seize the Spotlight</strong> and <strong>Mob Verdict</strong> serve dual purposes. They strip critical blocking lines or engine pieces from your opponents while feeding your own material requirements.</li>
+          <li><strong>Board Wipes:</strong> <strong>Farewell</strong>, <strong>The Battle of Bywater</strong>, and <strong>Slaughter the Strong</strong> are perfectly asymmetric. <strong>Slaughter the Strong</strong> and <strong>The Battle of Bywater</strong> consistently spare your utility creatures (like <strong>Astrid Peth</strong>, <strong>Rosie Cotton of South Lane</strong>, and <strong>Ragost</strong>) while completely dismantling massive commander-centric boards or tall green stompy strategies.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <div class="pillar-title">3. Consistency & Tutors</div>
+        <div class="pillar-score-pill">4.0 / 10</div>
+      </div>
+      <div class="pillar-content">
+        <p>This is where the deck intentionally throttles its power level to remain within a casual ecosystem.</p>
+        <ul>
+          <li><strong>Tutor Limitations:</strong> The deck consciously avoids a heavy tutor suite. <strong>Goblin Engineer</strong> is the primary specialized tutor, acting as an exceptional tool to place <strong>Academy Manufactor</strong>, <strong>Clock of Omens</strong>, or <strong>Nuka-Cola Vending Machine</strong> directly into the graveyard for immediate reanimation. Outside of this, the deck relies purely on raw velocity.</li>
+          <li><strong>Draw Engines:</strong> What the deck lacks in direct tutoring, it attempts to offset through explosive draw engines. <strong>The Gaffer</strong> triggers incredibly easily due to <strong>Ragost</strong>'s culinary output. <strong>Smuggler's Share</strong> and <strong>Monologue Tax</strong> capitalize heavily on opponents' game actions to keep your hand full and your board state populated with Treasures. However, without cards like <em>Enlightened Tutor</em> or <em>Gambit</em>, assembling specific three-card engine pairs relies heavily on natural card draw.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <div class="pillar-title">4. Speed & Mana Base</div>
+        <div class="pillar-score-pill">6.5 / 10</div>
+      </div>
+      <div class="pillar-content">
+        <p>The mana base is highly functional but contains notable avenues for structural speed optimizations.</p>
+        <ul>
+          <li><strong>Acceleration:</strong> The ramp package is solid for a mid-power casual deck. <strong>Sol Ring</strong>, <strong>Arcane Signet</strong>, <strong>Boros Signet</strong>, and <strong>Talisman of Conviction</strong> provide the standard, necessary turn-2 acceleration. <strong>Archaeomancer's Map</strong> provides excellent land-catchup utility.</li>
+          <li><strong>Land Assessment:</strong> The inclusion of <strong>Great Furnace</strong> and <strong>Ancient Den</strong> is highly strategic, providing immediate artifact count for Metalcraft or casual sacrifice fodder. However, the presence of 26 basic lands (13 Plains, 13 Mountain) alongside slower duals like <strong>Boros Garrison</strong> and <strong>Furycalm Snarl</strong> noticeably limits the deck’s explosive potential. The color requirements can occasionally stumble on turns 1-3 when attempting to balance early white utility creatures with red-heavy theft spells.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pillar-card">
+      <div class="pillar-header">
+        <div class="pillar-title">5. Win Conditions & Closeness to "Infinite"</div>
+        <div class="pillar-score-pill">5.5 / 10</div>
+      </div>
+      <div class="pillar-content">
+        <p>The deck respects the user’s explicit <strong>No Infinite Combos</strong> rule perfectly, relying on high-synergy, overlapping combat states and explosive mass-theft sequences to cross the finish line.</p>
+        <ul>
+          <li><strong>Combat Finishers:</strong> <strong>Virtue of Loyalty</strong> provides continuous, incremental team-wide growth, transforming a small army of food tokens or utility creatures into genuine lethal threats. <strong>Yuffie, Materia Hunter</strong> and <strong>Sami, Wildcat Captain</strong> capitalize on the massive artifact count to swing for lethal commander-adjacent numbers.</li>
+          <li><strong>Alternative Win States:</strong> <strong>Hellkite Tyrant</strong> acts as an absolute powerhouse alternative win condition. Given how easily <strong>Academy Manufactor</strong> and <strong>Ragost</strong> can clog the board with 20+ tokens in a single rotation, a single untap step with <strong>Hellkite Tyrant</strong> frequently wins the game on the spot.</li>
+          <li><strong>Closeness to Infinite:</strong> While cards like <strong>Clock of Omens</strong> and <strong>Academy Manufactor</strong> border on loop-heavy territory, the lack of traditional layout multipliers (such as *Ruthless Knave* or *Splinter Twin* effects) guarantees the deck remains entirely within the bounds of a legal, high-power, fair casual decklist.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const toggleBtn = document.getElementById('themeToggle');
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      if (currentTheme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+        toggleBtn.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        toggleBtn.textContent = '🌙 Dark Mode';
+      }
+    });
+  </script>
 </body>
 </html>

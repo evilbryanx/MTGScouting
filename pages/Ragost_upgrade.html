@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bisquey Business - Upgrade Blueprint</title>
+  <style>
+    /* Default Dark Mode Palette */
+    :root {
+      --bg-main: #0d1117;
+      --bg-card: #161b22;
+      --border-color: #30363d;
+      --text-main: #c9d1d9;
+      --text-light: #8b949e;
+      --accent: #58a6ff;
+      --accent-green: #2ea44f;
+      --badge-remove: #f85149;
+      --badge-unrestricted: #a371f7;
+      --badge-budget: #3fb950;
+      --card-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      --text-dark-heading: #ffffff;
+      --pill-bg-light: #30363d;
+    }
+
+    /* Extracted Light Mode Palette */
+    [data-theme="light"] {
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --text-main: #1e293b;
+      --text-light: #475569;
+      --accent: #2563eb;
+      --accent-green: #16a34a;
+      --badge-remove: #ef4444;
+      --badge-unrestricted: #7c3aed;
+      --badge-budget: #22c55e;
+      --text-dark-heading: #0f172a;
+      --pill-bg-light: #f1f5f9;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background-color: var(--bg-main); color: var(--text-main); padding: 2rem; line-height: 1.5; transition: background-color 0.3s, color 0.3s; }
+    
+    .header-container { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 1rem; }
+    h1 { color: var(--text-dark-heading); font-size: 2rem; }
+    
+    .theme-toggle { background: transparent; border: 1px solid var(--border-color); padding: 0.5rem 1rem; border-radius: 6px; color: var(--text-main); cursor: pointer; font-weight: 500; transition: border-color 0.2s, color 0.2s; }
+    .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+    
+    .nav-tabs { display: flex; border-bottom: 1px solid var(--border-color); margin-top: 1rem; margin-bottom: 2rem; gap: 0.5rem; }
+    .nav-link { text-decoration: none; color: var(--text-light); padding: 0.75rem 1rem; border-radius: 6px 6px 0 0; font-weight: 500; transition: color 0.2s, background-color 0.2s; border-bottom: 2px solid transparent; }
+    .nav-link:hover { color: var(--accent); background-color: var(--pill-bg-light); }
+    .nav-link.active { color: var(--accent); background-color: var(--pill-bg-light); border-bottom: 2px solid var(--accent); }
+
+    .meta-overview-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem 1.5rem; box-shadow: var(--card-shadow); margin-bottom: 2rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .meta-item { display: flex; flex-direction: column; }
+    .meta-label { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-light); font-weight: 600; }
+    .meta-value { font-size: 1.1rem; color: var(--text-main); font-weight: 700; }
+
+    .upgrade-table { width: 100%; border-collapse: separate; border-spacing: 0; background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; box-shadow: var(--card-shadow); margin-bottom: 3rem; }
+    .upgrade-table th { background-color: var(--pill-bg-light); padding: 1rem; text-align: left; color: var(--text-dark-heading); font-weight: 600; border-bottom: 1px solid var(--border-color); }
+    .upgrade-table td { padding: 1.25rem 1rem; border-bottom: 1px solid var(--border-color); vertical-align: top; }
+    .upgrade-table tr:last-child td { border-bottom: none; }
+
+    .card-remove { color: var(--badge-remove); font-weight: 700; }
+    .card-unrestricted { color: var(--badge-unrestricted); font-weight: 700; }
+    .card-budget { color: var(--badge-budget); font-weight: 700; }
+
+    .impact-pill { background-color: var(--pill-bg-light); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600; color: var(--text-main); display: inline-block; text-align: center; width: 100%; white-space: nowrap; }
+    .velocity-tag { font-weight: 700; text-transform: uppercase; font-size: 0.85rem; }
+    .velocity-high { color: var(--accent-green); }
+    .velocity-low { color: var(--text-light); }
+
+    @media (max-width: 768px) {
+      .upgrade-table, .upgrade-table tbody, .upgrade-table tr, .upgrade-table td { display: block; width: 100%; }
+      .upgrade-table thead { display: none; }
+      .upgrade-table tr { margin-bottom: 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--bg-card); box-shadow: var(--card-shadow); padding: 0.5rem 0; }
+      .upgrade-table td { border-bottom: 1px solid var(--border-color); padding: 0.75rem 1rem; position: relative; padding-top: 1.75rem; }
+      .upgrade-table td:last-child { border-bottom: none; }
+      
+      .upgrade-table td::before { content: attr(data-label); position: absolute; top: 0.4rem; left: 1rem; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-light); letter-spacing: 0.5px; }
+      .impact-pill { text-align: left; width: auto; padding: 0.15rem 0.5rem; }
+    }
+
+    @media print {
+      body { background: white !important; color: black !important; padding: 0; }
+      .theme-toggle, .nav-tabs { display: none !important; }
+      .upgrade-table, .meta-overview-card { box-shadow: none !important; border: 1px solid #ccc !important; background: white !important; page-break-inside: avoid; }
+      th { background-color: #f0f0f0 !important; color: black !important; }
+      :root, [data-theme="light"] { --text-dark-heading: #000000; --text-main: #000000; --text-light: #333333; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-container">
+    <div>
+      <h1>Bisquey Business</h1>
+      <p style="color: var(--text-light)">Tactical Card Replacement Blueprint Matrix</p>
+    </div>
+    <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
+  </div>
+
+  <div class="nav-tabs">
+    <a href="../index.html" class="nav-link">Back to list</a>
+    <a href="Ragost.html" class="nav-link">Core Analysis & Audit</a>
+    <a href="Ragost_upgrade.html" class="nav-link active">Upgrade Blueprint</a>
+  </div>
+
+  <div class="meta-overview-card">
+    <div class="meta-item">
+      <span class="meta-label">Deck Restrictions</span>
+      <span class="meta-value" style="color: var(--badge-remove)">No Infinite Combos</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Target Replacements</span>
+      <span class="meta-value">10 Surgical Swaps</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Optimization Vector</span>
+      <span class="meta-value" style="color: var(--accent)">Velocity & Base Speed</span>
+    </div>
+  </div>
+
+  <table class="upgrade-table">
+    <thead>
+      <tr>
+        <th style="width: 15%">Card to Remove</th>
+        <th style="width: 15%">Replace With (Unrestricted)</th>
+        <th style="width: 15%">Replace With (Budget)</th>
+        <th style="width: 15%">Impact Metric</th>
+        <th style="width: 10%">Velocity</th>
+        <th style="width: 30%">Strategic Justification</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Furycalm Snarl</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Spectator Seating</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Sundown Pass</td>
+        <td data-label="Impact Metric"><span class="impact-pill">Speed & Mana Base</span></td>
+        <td data-label="Velocity" class="velocity-tag velocity-high">High</td>
+        <td data-label="Strategic Justification">Snarl lands are notoriously clunky and often enter tapped in the mid-to-late game. Both alternatives provide reliable dual-color access without impeding early-game momentum.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Boros Garrison</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Arid Mesa</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Battlefield Forge</td>
+        <td data-label="Impact Metric"><span class="impact-pill">Speed & Mana Base</span></td>
+        <td data-label="Velocity" class="velocity-tag velocity-high">High</td>
+        <td data-label="Strategic Justification">Bounce lands drastically slow down explosive operational turns and present a glaring target for strip mine effects. Fetch lands thin the deck and ensure instant access to proper colors.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Stridehangar Automaton</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Dockside Extortionist</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Xorn</td>
+        <td data-label="Impact Metric"><span class="impact-pill">Synergy & Engine</span></td>
+        <td data-label="Velocity" class="velocity-tag velocity-high">High</td>
+        <td data-label="Strategic Justification">Automaton provides very low mechanical velocity for its cost. Replacing it with premier red token production exponentially accelerates the value generation of your commander.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Plains (x1)</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Urza's Saga</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Buried Ruin</td>
+        <td data-label="Impact Metric"><span class="impact-pill">Consistency & Tutors</span></td>
+        <td data-label="Velocity" class="velocity-tag velocity-high">High</td>
+        <td data-label="Strategic Justification">Saga acts as an uncounterable tutor for your premium 0 or 1-drop artifact pieces like <strong>Sol Ring</strong> or <strong>Witch's Oven</strong> while doubling as a threat construct generator.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Mountain (x1)</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Ancient Tomb</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Demolition Field</td>
+        <td data-label="Impact Metric"><span class="impact-pill">Speed & Mana Base</span></td>
+        <td data-label="Velocity" class="velocity-tag velocity-high">High</td>
+        <td data-label="Strategic Justification">Replacing a standard basic mountain with explosive colorless acceleration unlocks your mid-game theft packages a full turn or two faster.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Mass Mutiny</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Insurrection</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Coercive Recruit</td>
+        <td data-label="Impact Metric"><span class="impact-pill">Win Conditions</span></td>
+        <td data-label="Velocity" class="velocity-tag velocity-high">High</td>
+        <td data-label="Strategic Justification">Mass Mutiny can feel underwhelming if opponents have small boards. Insurrection completely closes the game on the spot, turning the entire table’s arsenal against them.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Bloody Betrayal</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Jeska's Will</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Seize the Spotlight</td>
+        <td data-label="Impact Metric"><span class="impact-pill">Speed & Mana Base</span></td>
+        <td data-label="Velocity" class="velocity-tag velocity-high">High</td>
+        <td data-label="Strategic Justification">Single-target theft spells can frequently rot in hand. <strong>Jeska's Will</strong> provides unparalleled red card advantage and explosive mana production in casual pods.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Deflecting Palm</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Deflecting Swat</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Everybody Lives!</td>
+        <td data-label="Impact Metric"><span class="impact-pill">Interaction</span></td>
+        <td data-label="Velocity" class="velocity-tag velocity-low">Low</td>
+        <td data-label="Strategic Justification">Deflecting Palm is a hilarious trick but highly situational. Premium protection ensures your engine pieces like <strong>Academy Manufactor</strong> survive catastrophic board wipes.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Monologue Tax</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Smothering Tithe</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Monologue Tax (Keep)</td>
+        <td data-label="Impact Metric"><span class="impact-pill">Synergy & Engine</span></td>
+        <td data-label="Velocity" class="velocity-tag velocity-high">High</td>
+        <td data-label="Strategic Justification">Monologue Tax triggers far less frequently than anticipated in modern metas. <strong>Smothering Tithe</strong> forces immense pressure on opponents and yields staggering artifact counts.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Apothecary White</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Esper Sentinel</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Sram, Senior Edificer</td>
+        <td data-label="Impact Metric"><span class="impact-pill">Consistency & Tutors</span></td>
+        <td data-label="Velocity" class="velocity-tag velocity-high">High</td>
+        <td data-label="Strategic Justification">Apothecary White requires significant combat setup to generate value. <strong>Esper Sentinel</strong> provides immediate, low-cost, continuous card drawing power from turn one.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    const toggleBtn = document.getElementById('themeToggle');
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      if (currentTheme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+        toggleBtn.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        toggleBtn.textContent = '🌙 Dark Mode';
+      }
+    });
+  </script>
+</body>
+</html>
