@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Samson and Young Goliath - Upgrade Blueprint</title>
+  <style>
+    /* Default Dark Mode Palette */
+    :root {
+      --bg-main: #0d1117;
+      --bg-card: #161b22;
+      --border-color: #30363d;
+      --text-main: #c9d1d9;
+      --text-light: #8b949e;
+      --accent: #58a6ff;
+      --accent-green: #2ea44f;
+      --badge-remove: #f85149;
+      --badge-unrestricted: #a371f7;
+      --badge-budget: #3fb950;
+      --card-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      --text-dark-heading: #ffffff;
+      --pill-bg-light: #30363d;
+    }
+
+    /* Light Mode Palette */
+    [data-theme="light"] {
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --text-main: #1e293b;
+      --text-light: #475569;
+      --accent: #2563eb;
+      --accent-green: #16a34a;
+      --badge-remove: #ef4444;
+      --badge-unrestricted: #7c3aed;
+      --badge-budget: #22c55e;
+      --text-dark-heading: #0f172a;
+      --pill-bg-light: #f1f5f9;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Header & Navigation Styles */
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    h1 {
+      color: var(--text-dark-heading);
+      font-size: 2rem;
+    }
+
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .nav-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      gap: 0.5rem;
+    }
+
+    .nav-link {
+      display: block;
+      padding: 0.75rem 1rem;
+      color: var(--text-light);
+      text-decoration: none;
+      border-radius: 6px 6px 0 0;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--accent);
+      background-color: var(--pill-bg-light);
+    }
+
+    .nav-link.active {
+      color: var(--accent);
+      background-color: var(--pill-bg-light);
+      border-bottom: 2px solid var(--accent);
+    }
+
+    /* Metadata Overview Card */
+    .meta-overview-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .meta-overview-card h2 {
+      color: var(--text-dark-heading);
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Upgrade Table Core View (Desktop) */
+    .upgrade-table-wrapper {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+    }
+
+    .upgrade-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .upgrade-table th {
+      background-color: var(--pill-bg-light);
+      color: var(--text-dark-heading);
+      padding: 1rem;
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .upgrade-table td {
+      padding: 1.25rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+      font-size: 0.95rem;
+    }
+
+    .upgrade-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Action Profile Color Variables */
+    .card-remove {
+      color: var(--badge-remove);
+      font-weight: bold;
+    }
+
+    .card-unrestricted {
+      color: var(--badge-unrestricted);
+      font-weight: bold;
+    }
+
+    .card-budget {
+      color: var(--badge-budget);
+      font-weight: bold;
+    }
+
+    /* Center Text Pills for Metrics */
+    .metric-pill {
+      display: inline-block;
+      background-color: var(--pill-bg-light);
+      color: var(--text-main);
+      padding: 0.25rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .velocity-high {
+      color: var(--accent-green);
+      font-weight: 700;
+    }
+
+    /* Mobile Layout Transformation */
+    @media (max-width: 768px) {
+      .upgrade-table, .upgrade-table tbody, .upgrade-table tr, .upgrade-table td {
+        display: block;
+        width: 100%;
+      }
+
+      .upgrade-table thead {
+        display: none; /* Hide primary headings visually */
+      }
+
+      .upgrade-table tr {
+        margin-bottom: 1.5rem;
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1rem;
+        box-shadow: var(--card-shadow);
+      }
+
+      .upgrade-table td {
+        border-bottom: 1px solid var(--border-color);
+        padding: 0.75rem 0.5rem;
+        position: relative;
+        padding-top: 2rem; /* Make space for pseudo elements headers */
+      }
+
+      .upgrade-table td:last-child {
+        border-bottom: none;
+      }
+
+      /* Inject cellular labels instantly via CSS data attribute targeting */
+      .upgrade-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        font-weight: bold;
+        color: var(--text-light);
+        letter-spacing: 0.05em;
+      }
+      
+      .metric-pill {
+        display: inline-block;
+        margin-top: 0.25rem;
+      }
+    }
+
+    /* Print Recovery Styles Sheet Instruction */
+    @media print {
+      body {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        padding: 0;
+      }
+      .theme-toggle, .nav-tabs {
+        display: none !important;
+      }
+      .meta-overview-card, .upgrade-table-wrapper, .upgrade-table tr {
+        background-color: #ffffff !important;
+        border: 1px solid #000000 !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+      }
+      * {
+        color: #000000 !important;
+      }
+      .metric-pill {
+        background-color: #eeeeee !important;
+        border: 1px solid #000000 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header-container">
+      <h1>Samson and Young Goliath</h1>
+      <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
+    </div>
+
+    <div class="nav-tabs">
+      <a href="../index.html" class="nav-link">Back to list</a>
+      <a href="Rafiq.html" class="nav-link">Core Analysis & Audit</a>
+      <a href="Rafiq_upgrade.html" class="nav-link active">Upgrade Blueprint</a>
+    </div>
+
+    <div class="meta-overview-card">
+      <h2>Targeted Tactical Upgrade Matrix</h2>
+      <p>This matrix maps out the top 10 targeted swaps to clean up deck mechanics, fix your mana curve, optimize speed, and ensure complete legal format adherence across casual metas.</p>
+    </div>
+
+    <div class="upgrade-table-wrapper">
+      <table class="upgrade-table">
+        <thead>
+          <tr>
+            <th style="width: 18%;">Card to Remove</th>
+            <th style="width: 18%;">Replace With (Unrestricted)</th>
+            <th style="width: 18%;">Replace With (Budget)</th>
+            <th style="width: 16%;">Impact Metric</th>
+            <th style="width: 10%;">Velocity</th>
+            <th style="width: 20%;">Strategic Justification</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Blazing Archon</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Teferi's Protection</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Ghostly Prison</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Interaction & Control</span></td>
+            <td data-label="Velocity" class="velocity-high">High Impact</td>
+            <td data-label="Strategic Justification">Swaps out a clunky, easily targeted 9-mana creature for highly efficient defensive options that stop aggressive boards without stalling your own mana development.</td>
+          </tr>
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Ghalta, Primal Hunger</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Sovereigns of Lost Alara</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Danitha Capashen, Paragon</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Synergy & Engine</span></td>
+            <td data-label="Velocity" class="velocity-high">High Impact</td>
+            <td data-label="Strategic Justification">Exchanges a giant vanilla attacker for specialized tools that instantly tutor/attach high-impact Auras or slash execution costs.</td>
+          </tr>
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Planar Cleansing</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Swords to Plowshares</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Generous Gift</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Interaction & Control</span></td>
+            <td data-label="Velocity" class="velocity-high">High Impact</td>
+            <td data-label="Strategic Justification">Trades an expensive, self-sabotaging sweep spell that breaks your own boards for low-cost, instant-speed targeted removal spells.</td>
+          </tr>
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Flywheel Racer</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Sol Ring</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Arcane Signet</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana Base</span></td>
+            <td data-label="Velocity" class="velocity-high">High Impact</td>
+            <td data-label="Strategic Justification">Upgrades a conditional, slow vehicle mana source to premier, unrestricted mana rocks to land **Rafiq** consistently on turns 2 or 3.</td>
+          </tr>
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Bugenhagen, Wise Elder</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Sythis, Harvest's Hand</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Sram, Senior Edificer</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Consistency & Tutors</span></td>
+            <td data-label="Velocity" class="velocity-high">High Impact</td>
+            <td data-label="Strategic Justification">Removes an invalid silver-bordered creature for top-tier "Enchantress" engines to continuously draw cards when casting Auras.</td>
+          </tr>
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Jackal, Genius Geneticist</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Sylvan Library</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Kediss, Emberclaw Familiar</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Consistency & Tutors</span></td>
+            <td data-label="Velocity" class="velocity-high">High Impact</td>
+            <td data-label="Strategic Justification">Replaces an illegal card with premium visual card selection, or a high-utility combat asset that echoes single-target damage to all opponents at once.</td>
+          </tr>
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Ouroboroid</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Enlightened Tutor</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Heliod's Pilgrim</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Consistency & Tutors</span></td>
+            <td data-label="Velocity" class="velocity-high">High Impact</td>
+            <td data-label="Strategic Justification">Trades a weak un-card to implement elite instant tutoring capabilities capable of instantly finding your core protection or unblockable Auras.</td>
+          </tr>
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Jumbo Cactuar</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Colossal Hammer</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Belt of Giant Strength</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Win Conditions</span></td>
+            <td data-label="Velocity" class="velocity-high">High Impact</td>
+            <td data-label="Strategic Justification">Exchanges an illegal sticker card for explosive legal stat adjustments that turn **Rafiq's** native double strike into a single-turn kill.</td>
+          </tr>
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Sejiri Refuge</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Flooded Strand</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Command Tower</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana Base</span></td>
+            <td data-label="Velocity" class="velocity-high">High Impact</td>
+            <td data-label="Strategic Justification">Replaces an inefficient tapped lifegain land with an elite fetch land or universal casual command hub to ensure clean untapped sequencing.</td>
+          </tr>
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Graypelt Refuge</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Windswept Heath</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Exotic Orchard</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana Base</span></td>
+            <td data-label="Velocity" class="velocity-high">High Impact</td>
+            <td data-label="Strategic Justification">Removes an outclassed, slow tap-land for highly reliable untapped mana fixing options to speed up mid-game deployment windows.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const toggleBtn = document.getElementById('themeToggle');
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      if (currentTheme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+        toggleBtn.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        toggleBtn.textContent = '🌙 Dark Mode';
+      }
+    });
+  </script>
+</body>
+</html>
