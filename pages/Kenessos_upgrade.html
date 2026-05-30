@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KLOS Encounters - Tactical Upgrade Matrix</title>
+  <style>
+    /* Default Dark Mode Palette */
+    :root {
+      --bg-main: #0d1117;
+      --bg-card: #161b22;
+      --border-color: #30363d;
+      --text-main: #c9d1d9;
+      --text-light: #8b949e;
+      --accent: #58a6ff;
+      --accent-green: #2ea44f;
+      --badge-remove: #f85149;
+      --badge-unrestricted: #a371f7;
+      --badge-budget: #3fb950;
+
+      /* Shared structural constants */
+      --card-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      --text-dark-heading: #ffffff;
+      --pill-bg-light: #30363d;
+    }
+
+    /* Extracted Light Mode Palette */
+    [data-theme="light"] {
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --text-main: #1e293b;
+      --text-light: #475569;
+      --accent: #2563eb;
+      --accent-green: #16a34a;
+      --badge-remove: #ef4444;
+      --badge-unrestricted: #7c3aed;
+      --badge-budget: #22c55e;
+
+      /* Light mode structural overrides */
+      --text-dark-heading: #0f172a;
+      --pill-bg-light: #f1f5f9;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    h1, h2 {
+      color: var(--text-dark-heading);
+      margin-top: 0;
+    }
+
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 1rem;
+      color: var(--text-main);
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
+    }
+
+    .nav-link {
+      color: var(--text-light);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--accent);
+      background-color: rgba(88, 166, 255, 0.1);
+    }
+
+    .nav-link.active {
+      color: var(--text-dark-heading);
+      background-color: var(--pill-bg-light);
+    }
+
+    .meta-overview-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .meta-item-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-light);
+    }
+
+    .meta-item-value {
+      font-weight: 600;
+      color: var(--text-dark-heading);
+    }
+
+    .upgrade-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+    }
+
+    .upgrade-table th {
+      background-color: var(--pill-bg-light);
+      color: var(--text-dark-heading);
+      text-align: left;
+      padding: 1rem;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .upgrade-table td {
+      padding: 1.25rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+    }
+
+    .upgrade-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .card-action {
+      font-weight: 700;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .action-remove { color: var(--badge-remove); }
+    .action-unrestricted { color: var(--badge-unrestricted); }
+    .action-budget { color: var(--badge-budget); }
+
+    .pill-metric {
+      display: inline-block;
+      background: var(--pill-bg-light);
+      color: var(--text-main);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 768px) {
+      .upgrade-table, .upgrade-table tbody, .upgrade-table tr, .upgrade-table td {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .upgrade-table thead {
+        display: none;
+      }
+      .upgrade-table tr {
+        margin-bottom: 1.5rem;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        box-shadow: var(--card-shadow);
+        padding: 0.5rem 0;
+      }
+      .upgrade-table td {
+        border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+        padding: 0.75rem 1rem;
+        position: relative;
+      }
+      .upgrade-table td:last-child {
+        border-bottom: none;
+      }
+      .upgrade-table td::before {
+        content: attr(data-label);
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--text-light);
+        margin-bottom: 0.25rem;
+      }
+    }
+
+    @media print {
+      body {
+        background: white !important;
+        color: #000 !important;
+        padding: 0;
+      }
+      .theme-toggle, .nav-tabs {
+        display: none !important;
+      }
+      .upgrade-table, .meta-overview-card {
+        box-shadow: none !important;
+        border: 1px solid #000 !important;
+        background: white !important;
+      }
+      .upgrade-table th {
+        background: #f1f5f9 !important;
+        color: #000 !important;
+        border-bottom: 1px solid #000 !important;
+      }
+      .card-action {
+        color: #000 !important;
+      }
+      :root, [data-theme="light"] {
+        --text-dark-heading: #000000;
+        --text-main: #000000;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header-container">
+      <div>
+        <h1 style="margin:0;">KLOS Encounters</h1>
+        <p style="margin: 0.25rem 0 0 0; color: var(--text-light);">Targeted Tactical Upgrade Matrix</p>
+      </div>
+      <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
+    </div>
+
+    <div class="nav-tabs">
+      <a href="../index.html" class="nav-link">Back to list</a>
+      <a href="Kenessos.html" class="nav-link">Core Analysis & Audit</a>
+      <a href="Kenessos_upgrade.html" class="nav-link active">Upgrade Blueprint</a>
+    </div>
+
+    <div class="meta-overview-card">
+      <div class="meta-item">
+        <span class="meta-item-label">Deck Rule</span>
+        <span class="meta-item-value">No Infinite Combos</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-item-label">Focus Strategy</span>
+        <span class="meta-item-value">Top-Deck Acceleration</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-item-label">Target Upgrades</span>
+        <span class="meta-item-value">10 Surgical Swaps</span>
+      </div>
+    </div>
+
+    <table class="upgrade-table">
+      <thead>
+        <tr>
+          <th style="width: 22%;">Card to Remove</th>
+          <th style="width: 22%;">Replace With (Optimal)</th>
+          <th style="width: 22%;">Replace With (Budget)</th>
+          <th style="width: 14%; text-align: center;">Impact Metric</th>
+          <th style="width: 20%;">Strategic Justification</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-label="Card to Remove">
+            <span class="card-action action-remove">Summon: Leviathan</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Vanilla Creature</span>
+          </td>
+          <td data-label="Replace With (Optimal)">
+            <span class="card-action action-unrestricted">Portal to Phyrexia</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Asymmetric Control</span>
+          </td>
+          <td data-label="Replace With (Budget)">
+            <span class="card-action action-budget">Gyruda, Doom of Depths</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">ETB Steal/Mill</span>
+          </td>
+          <td data-label="Impact Metric" style="text-align: center;">
+            <span class="pill-metric">Win Conditions</span><br>
+            <span style="font-size:0.75rem; color:var(--badge-remove); font-weight:600;">High Velocity</span>
+          </td>
+          <td data-label="Strategic Justification">
+            Outclasses a vanilla, high-cost draft common with a massive impact piece that triggers off top-deck cheats or introduces immediate reanimation value.
+          </td>
+        </tr>
+        <tr>
+          <td data-label="Card to Remove">
+            <span class="card-action action-remove">1x Island</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Basic Land</span>
+          </td>
+          <td data-label="Replace With (Optimal)">
+            <span class="card-action action-unrestricted">Misty Rainforest</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Premium Fetch Land</span>
+          </td>
+          <td data-label="Replace With (Budget)">
+            <span class="card-action action-budget">Simic Growth Chamber</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Bounce Fixing</span>
+          </td>
+          <td data-label="Impact Metric" style="text-align: center;">
+            <span class="pill-metric">Speed & Base</span><br>
+            <span style="font-size:0.75rem; color:var(--text-light); font-weight:600;">Low Velocity</span>
+          </td>
+          <td data-label="Strategic Justification">
+            Swapping a basic Island for a fetch land allows for instant-speed shuffling to clear away unwanted cards revealed on top by Kenessos.
+          </td>
+        </tr>
+        <tr>
+          <td data-label="Card to Remove">
+            <span class="card-action action-remove">Joint Exploration</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Instant Cantrip</span>
+          </td>
+          <td data-label="Replace With (Optimal)">
+            <span class="card-action action-unrestricted">Worldly Tutor</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Creature Tutor</span>
+          </td>
+          <td data-label="Replace With (Budget)">
+            <span class="card-action action-budget">Scroll Rack</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Hand Stacking</span>
+          </td>
+          <td data-label="Impact Metric" style="text-align: center;">
+            <span class="pill-metric">Consistency</span><br>
+            <span style="font-size:0.75rem; color:var(--badge-remove); font-weight:600;">High Velocity</span>
+          </td>
+          <td data-label="Strategic Justification">
+            Replaces a low-velocity kicker spell with a premier tutor or continuous top-deck manipulator to guarantee your largest sea monsters are always on top.
+          </td>
+        </tr>
+        <tr>
+          <td data-label="Card to Remove">
+            <span class="card-action action-remove">Nadir Kraken</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Mana-Sink Threat</span>
+          </td>
+          <td data-label="Replace With (Optimal)">
+            <span class="card-action action-unrestricted">Monster Manual</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Hand Cheat Engine</span>
+          </td>
+          <td data-label="Replace With (Budget)">
+            <span class="card-action action-budget">Lurking Predators</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Triggers off Opponents</span>
+          </td>
+          <td data-label="Impact Metric" style="text-align: center;">
+            <span class="pill-metric">Synergy & Engine</span><br>
+            <span style="font-size:0.75rem; color:var(--badge-remove); font-weight:600;">High Velocity</span>
+          </td>
+          <td data-label="Strategic Justification">
+            Trades a slow token-generator that demands extra mana investment for a resilient backup cheat-engine that breaks open the hand or top-deck.
+          </td>
+        </tr>
+        <tr>
+          <td data-label="Card to Remove">
+            <span class="card-action action-remove">Monstrosity of the Lake</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Clunky Sea Monster</span>
+          </td>
+          <td data-label="Replace With (Optimal)">
+            <span class="card-action action-unrestricted">Avacyn's Pilgrim</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Mana Acceleration</span>
+          </td>
+          <td data-label="Replace With (Budget)">
+            <span class="card-action action-budget">Birds of Paradise</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Fixing Dork</span>
+          </td>
+          <td data-label="Impact Metric" style="text-align: center;">
+            <span class="pill-metric">Speed & Base</span><br>
+            <span style="font-size:0.75rem; color:var(--badge-remove); font-weight:600;">High Velocity</span>
+          </td>
+          <td data-label="Strategic Justification">
+            Lowers the deck's average mana value by trading a clunky, mana-intensive late-game creature for vital early-game mana acceleration.
+          </td>
+        </tr>
+        <tr>
+          <td data-label="Card to Remove">
+            <span class="card-action action-remove">Opt</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Single Cantrip</span>
+          </td>
+          <td data-label="Replace With (Optimal)">
+            <span class="card-action action-unrestricted">Sylvan Library</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Draw & Filter</span>
+          </td>
+          <td data-label="Replace With (Budget)">
+            <span class="card-action action-budget">Mirri's Guile</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Upkeep Top Filter</span>
+          </td>
+          <td data-label="Impact Metric" style="text-align: center;">
+            <span class="pill-metric">Synergy & Engine</span><br>
+            <span style="font-size:0.75rem; color:var(--badge-remove); font-weight:600;">High Velocity</span>
+          </td>
+          <td data-label="Strategic Justification">
+            Replaces a one-time cantrip with a permanent engine that filters three cards deep every single turn cycle to maximize Kenessos flips.
+          </td>
+        </tr>
+        <tr>
+          <td data-label="Card to Remove">
+            <span class="card-action action-remove">Starwinder</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Slower Bounce Spec</span>
+          </td>
+          <td data-label="Replace With (Optimal)">
+            <span class="card-action action-unrestricted">Kenessos's Vanguard</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Haste & Hexproof</span>
+          </td>
+          <td data-label="Replace With (Budget)">
+            <span class="card-action action-budget">Tromokratis</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Evasive Finisher</span>
+          </td>
+          <td data-label="Impact Metric" style="text-align: center;">
+            <span class="pill-metric">Win Conditions</span><br>
+            <span style="font-size:0.75rem; color:var(--badge-remove); font-weight:600;">High Velocity</span>
+          </td>
+          <td data-label="Strategic Justification">
+            Cuts a high-CMC, low-impact bounce creature for an on-theme sea monster that protects your board or provides massive, evasion-based damage.
+          </td>
+        </tr>
+        <tr>
+          <td data-label="Card to Remove">
+            <span class="card-action action-remove">Stormsurge Kraken</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Vanilla Card Draw</span>
+          </td>
+          <td data-label="Replace With (Optimal)">
+            <span class="card-action action-unrestricted">Rhystic Study</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Rhystic Draw Tax</span>
+          </td>
+          <td data-label="Replace With (Budget)">
+            <span class="card-action action-budget">Mystic Remora</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Early Noncreature Tax</span>
+          </td>
+          <td data-label="Impact Metric" style="text-align: center;">
+            <span class="pill-metric">Synergy & Engine</span><br>
+            <span style="font-size:0.75rem; color:var(--badge-remove); font-weight:600;">High Velocity</span>
+          </td>
+          <td data-label="Strategic Justification">
+            Swaps a conditional combat draw piece for a premier, asymmetric draw engine that taxes opponents and keeps your hand completely full.
+          </td>
+        </tr>
+        <tr>
+          <td data-label="Card to Remove">
+            <span class="card-action action-remove">Sea-Dasher Octopus</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Mutate Target Draw</span>
+          </td>
+          <td data-label="Replace With (Optimal)">
+            <span class="card-action action-unrestricted">Consecrated Sphinx</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Explosive Synergy Draw</span>
+          </td>
+          <td data-label="Replace With (Budget)">
+            <span class="card-action action-budget">Nezahal, Primal Tide</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Resilient Sea Monster</span>
+          </td>
+          <td data-label="Impact Metric" style="text-align: center;">
+            <span class="pill-metric">Synergy & Engine</span><br>
+            <span style="font-size:0.75rem; color:var(--text-light); font-weight:600;">Medium Velocity</span>
+          </td>
+          <td data-label="Strategic Justification">
+            Trades a small mutate creature for a massive, hard-to-interact-with threat that draws massive amounts of cards over a single turn cycle.
+          </td>
+        </tr>
+        <tr>
+          <td data-label="Card to Remove">
+            <span class="card-action action-remove">Curse of the Swine</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Exile Sorcery Removal</span>
+          </td>
+          <td data-label="Replace With (Optimal)">
+            <span class="card-action action-unrestricted">Imprisoned in the Moon</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Commander Neutralization</span>
+          </td>
+          <td data-label="Replace With (Budget)">
+            <span class="card-action action-budget">Kenrith's Transformation</span>
+            <span style="font-size: 0.85rem; color: var(--text-light);">Cantrip Threat Shut-down</span>
+          </td>
+          <td data-label="Impact Metric" style="text-align: center;">
+            <span class="pill-metric">Interaction</span><br>
+            <span style="font-size:0.75rem; color:var(--text-light); font-weight:600;">Medium Velocity</span>
+          </td>
+          <td data-label="Strategic Justification">
+            Replaces an sorcery-speed mass removal spell with premium, targeted commander-neutralization that shuts down problematic engines permanently.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const toggleBtn = document.getElementById('themeToggle');
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      if (currentTheme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+        toggleBtn.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        toggleBtn.textContent = '🌙 Dark Mode';
+      }
+    });
+  </script>
+</body>
+</html>
