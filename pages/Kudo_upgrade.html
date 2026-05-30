@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Un Bearable - Upgrade Blueprint</title>
+  <style>
+    /* Default Dark Mode Palette */
+    :root {
+      --bg-main: #0d1117;
+      --bg-card: #161b22;
+      --border-color: #30363d;
+      --text-main: #c9d1d9;
+      --text-light: #8b949e;
+      --accent: #58a6ff;
+      --accent-green: #2ea44f;
+      --badge-remove: #f85149;
+      --badge-unrestricted: #a371f7;
+      --badge-budget: #3fb950;
+      --card-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      --text-dark-heading: #ffffff;
+      --pill-bg-light: #30363d;
+    }
+
+    /* Light Mode Palette */
+    [data-theme="light"] {
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --text-main: #1e293b;
+      --text-light: #475569;
+      --accent: #2563eb;
+      --accent-green: #16a34a;
+      --badge-remove: #ef4444;
+      --badge-unrestricted: #7c3aed;
+      --badge-budget: #22c55e;
+      --text-dark-heading: #0f172a;
+      --pill-bg-light: #f1f5f9;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Header & Navigation Styles */
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    h1 {
+      color: var(--text-dark-heading);
+      font-size: 2.25rem;
+      font-weight: 800;
+    }
+
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 1rem;
+      margin: 1.5rem 0 2rem 0;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
+    }
+
+    .nav-link {
+      color: var(--text-light);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--accent);
+      background-color: var(--pill-bg-light);
+    }
+
+    .nav-link.active {
+      color: var(--text-dark-heading);
+      background-color: var(--pill-bg-light);
+    }
+
+    .meta-overview-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .meta-info {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .meta-item strong {
+      color: var(--text-dark-heading);
+    }
+
+    /* Upgrade Table Core View (Desktop) */
+    .upgrade-table-container {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+    }
+
+    .upgrade-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .upgrade-table th {
+      background-color: var(--pill-bg-light);
+      color: var(--text-dark-heading);
+      font-weight: 700;
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .upgrade-table td {
+      padding: 1.25rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+    }
+
+    .upgrade-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Action Profile Coloring Rules */
+    .card-remove {
+      color: var(--badge-remove);
+      font-weight: 700;
+    }
+
+    .card-unrestricted {
+      color: var(--badge-unrestricted);
+      font-weight: 700;
+    }
+
+    .card-budget {
+      color: var(--badge-budget);
+      font-weight: 700;
+    }
+
+    /* Structural Background Metric Pills */
+    .metric-pill {
+      display: inline-block;
+      background-color: var(--pill-bg-light);
+      color: var(--text-main);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .velocity-badge {
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+    }
+    .velocity-high { color: var(--badge-remove); }
+    .velocity-low { color: var(--accent); }
+
+    /* Mobile Layout Transformation (768px and below) */
+    @media (max-width: 768px) {
+      .upgrade-table, .upgrade-table tbody, .upgrade-table tr, .upgrade-table td {
+        display: block;
+        width: 100%;
+      }
+      
+      .upgrade-table thead {
+        display: none; /* Hide primary row visually */
+      }
+
+      .upgrade-table tr {
+        margin-bottom: 1.5rem;
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: var(--card-shadow);
+      }
+
+      .upgrade-table td {
+        border-bottom: 1px solid var(--border-color);
+        padding: 0.75rem 0.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .upgrade-table td:last-child {
+        border-bottom: none;
+      }
+
+      /* Dynamic cell text headers injected via content attributes */
+      .upgrade-table td::before {
+        content: attr(data-label);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: var(--text-light);
+        margin-bottom: 0.25rem;
+        letter-spacing: 0.05em;
+      }
+    }
+
+    /* Print Formatting Rules */
+    @media print {
+      body {
+        background: white !important;
+        color: #000000 !important;
+        padding: 0;
+      }
+      :root {
+        --bg-main: #ffffff;
+        --bg-card: #ffffff;
+        --border-color: #cccccc;
+        --text-main: #000000;
+        --text-dark-heading: #000000;
+        --pill-bg-light: #eeeeee;
+      }
+      .theme-toggle, .nav-tabs {
+        display: none !important;
+      }
+      .upgrade-table-container, .meta-overview-card {
+        box-shadow: none !important;
+      }
+      .upgrade-table tr {
+        page-break-inside: avoid;
+      }
+      .card-remove, .card-unrestricted, .card-budget {
+        color: #000000 !important;
+        text-decoration: underline;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header-container">
+      <div>
+        <h1>Un Bearable — Upgrade Blueprint</h1>
+      </div>
+      <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
+    </div>
+
+    <div class="nav-tabs">
+      <a href="../index.html" class="nav-link">Back to list</a>
+      <a href="Kudo.html" class="nav-link">Core Analysis & Audit</a>
+      <a href="Kudo_upgrade.html" class="nav-link active">Upgrade Blueprint</a>
+    </div>
+
+    <div class="meta-overview-card">
+      <div class="meta-info">
+        <div class="meta-item"><strong>Commander:</strong> Kudo, King Among Bears</div>
+        <div class="meta-item"><strong>Swaps Detailed:</strong> 10 Tactical Changes</div>
+        <div class="meta-item"><strong>Target Meta:</strong> High-Power Casual</div>
+      </div>
+    </div>
+
+    <div class="upgrade-table-container">
+      <table class="upgrade-table">
+        <thead>
+          <tr>
+            <th>Card to Remove</th>
+            <th>Replace With (Unrestricted)</th>
+            <th>Replace With (Budget)</th>
+            <th>Impact Metric</th>
+            <th>Velocity</th>
+            <th>Strategic Justification</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Praetor's Counsel</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Smothering Tithe</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Welcoming Vampire</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Consistency & Tutors</span></td>
+            <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+            <td data-label="Strategic Justification">Replaces a clunky, 8-mana late-game recovery spell with immediate early-to-midgame value, accelerating your mana or drawing consistent cards.</td>
+          </tr>
+
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Arasta of the Endless Web</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Avacyn, Angel of Hope</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Clever Concealment</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Interaction & Control</span></td>
+            <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+            <td data-label="Strategic Justification">Arasta is too reactive. Avacyn or Clever Concealment protects your complex, high-commitment board from the symmetrical wipes that dismantle your strategy.</td>
+          </tr>
+
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Karametra, God of Harvests</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">The Great Henge</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Guardian Project</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Synergy & Engine</span></td>
+            <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+            <td data-label="Strategic Justification">Replaces a slow, 5-mana ramp piece with an elite engine that draws cards, adds mana, and distributes +1/+1 counters on top of Kudo's baseline.</td>
+          </tr>
+
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Cultivate</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Mana Crypt</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Avacyn's Pilgrim</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana Base</span></td>
+            <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+            <td data-label="Strategic Justification">Lowers the deck’s mana curve dramatically, shifting away from slow 3-mana sorceries to maximize explosive, early-turn deployment.</td>
+          </tr>
+
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Kodama's Reach</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Sol Ring</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Llanowar Elves</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana Base</span></td>
+            <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+            <td data-label="Strategic Justification">Speeds up the deck's opening velocity. Dropping mana dorks early gives you immediate bodies that convert into 2/2 attackers once Kudo drops.</td>
+          </tr>
+
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Sun Titan</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Delney, Streetwise Lookout</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Rumor Gatherer</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Synergy & Engine</span></td>
+            <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+            <td data-label="Strategic Justification">Delney is a masterclass addition; since Kudo forces all your creatures to be base 2/2, Delney triggers double combat and ETB abilities across your entire deck.</td>
+          </tr>
+
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Vigor</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Akroma's Will</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Unbreakable Formation</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Win Conditions</span></td>
+            <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+            <td data-label="Strategic Justification">Swaps a slow, defensive 6-mana creature for a flexible, modal spell that saves your team from a wipe or serves as an alpha-strike game finisher.</td>
+          </tr>
+
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Blossoming Bogbeast</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Moonshaker Cavalry</td>
+            <td data-label="Replace With (Budget)" class="card-budget">End-Raze Forerunners</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Win Conditions</span></td>
+            <td data-label="Velocity" class="velocity-badge velocity-high">High</td>
+            <td data-label="Strategic Justification">Replaces a slow, attack-dependent pump creature with an immediate, explosive, flying-enabled finishes that mimics Craterhoof Behemoth.</td>
+          </tr>
+
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Fortified Village</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Savannah</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Horizon Canopy</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana Base</span></td>
+            <td data-label="Velocity" class="velocity-badge velocity-low">Low</td>
+            <td data-label="Strategic Justification">Upgrades a conditional tap-land to a premier dual or utility land to guarantee perfect, unhindered mana deployment on critical early turns.</td>
+          </tr>
+
+          <tr>
+            <td data-label="Card to Remove" class="card-remove">Scattered Groves</td>
+            <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Windswept Heath</td>
+            <td data-label="Replace With (Budget)" class="card-budget">Brushland</td>
+            <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana Base</span></td>
+            <td data-label="Velocity" class="velocity-badge velocity-low">Low</td>
+            <td data-label="Strategic Justification">Swaps out a slow, always-tapped cycling land for a pristine fetch or untapped pain land to keep your tempo fast and perfectly on-curve.</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const toggleBtn = document.getElementById('themeToggle');
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      if (currentTheme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+        toggleBtn.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        toggleBtn.textContent = '🌙 Dark Mode';
+      }
+    });
+  </script>
+</body>
+</html>

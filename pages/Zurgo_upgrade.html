@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I go, Zurgo - Upgrade Blueprint</title>
+  <style>
+    /* Default Dark Mode Palette */
+    :root {
+      --bg-main: #0d1117;
+      --bg-card: #161b22;
+      --border-color: #30363d;
+      --text-main: #c9d1d9;
+      --text-light: #8b949e;
+      --accent: #58a6ff;
+      --accent-green: #2ea44f;
+      --badge-remove: #f85149;
+      --badge-unrestricted: #a371f7;
+      --badge-budget: #3fb950;
+      --card-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      --text-dark-heading: #ffffff;
+      --pill-bg-light: #30363d;
+    }
+
+    /* Extracted Light Mode Palette */
+    [data-theme="light"] {
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --text-main: #1e293b;
+      --text-light: #475569;
+      --accent: #2563eb;
+      --accent-green: #16a34a;
+      --badge-remove: #ef4444;
+      --badge-unrestricted: #7c3aed;
+      --badge-budget: #22c55e;
+      --text-dark-heading: #0f172a;
+      --pill-bg-light: #f1f5f9;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    h1 {
+      color: var(--text-dark-heading);
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 1rem;
+      color: var(--text-main);
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .nav-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      gap: 0.5rem;
+    }
+
+    .nav-link {
+      padding: 0.75rem 1rem;
+      color: var(--text-light);
+      text-decoration: none;
+      border-radius: 6px 6px 0 0;
+      transition: all 0.2s;
+      font-weight: 500;
+    }
+
+    .nav-link:hover {
+      color: var(--accent);
+      background-color: rgba(88, 166, 255, 0.1);
+    }
+
+    .nav-link.active {
+      color: var(--accent);
+      background-color: var(--pill-bg-light);
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .meta-overview-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .upgrade-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+    }
+
+    .upgrade-table th {
+      background-color: rgba(255,255,255,0.02);
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-dark-heading);
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .upgrade-table td {
+      padding: 1.25rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+    }
+
+    .upgrade-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .card-remove {
+      color: var(--badge-remove);
+      font-weight: 600;
+    }
+
+    .card-unrestricted {
+      color: var(--badge-unrestricted);
+      font-weight: 600;
+    }
+
+    .card-budget {
+      color: var(--badge-budget);
+      font-weight: 600;
+    }
+
+    .metric-pill {
+      display: inline-block;
+      background-color: var(--pill-bg-light);
+      color: var(--text-main);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .velocity-badge {
+      font-weight: 600;
+    }
+    .vel-high {
+      color: var(--accent-green);
+    }
+
+    @media (max-width: 768px) {
+      .upgrade-table, .upgrade-table tbody, .upgrade-table tr, .upgrade-table td {
+        display: block;
+        width: 100%;
+      }
+      .upgrade-table thead {
+        display: none;
+      }
+      .upgrade-table tr {
+        margin-bottom: 1.5rem;
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1rem;
+        box-shadow: var(--card-shadow);
+      }
+      .upgrade-table td {
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        padding: 0.75rem 0.5rem;
+        position: relative;
+        text-align: left;
+      }
+      .upgrade-table td:last-child {
+        border-bottom: none;
+      }
+      .upgrade-table td::before {
+        content: attr(data-label);
+        display: block;
+        font-size: 0.6875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-light);
+        margin-bottom: 0.25rem;
+        font-weight: 700;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+        color: #000;
+        padding: 0;
+      }
+      .theme-toggle, .nav-tabs {
+        display: none !important;
+      }
+      .upgrade-table, .meta-overview-card {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+        background: #fff !important;
+      }
+      .upgrade-table th {
+        border-bottom: 2px solid #ccc !important;
+        color: #000 !important;
+      }
+      .card-remove, .card-unrestricted, .card-budget {
+        color: #000 !important;
+        text-decoration: underline;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-container">
+    <h1>I go, Zurgo Dashboard</h1>
+    <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
+  </div>
+
+  <div class="nav-tabs">
+    <a href="../index.html" class="nav-link">Back to list</a>
+    <a href="Zurgo.html" class="nav-link">Core Analysis & Audit</a>
+    <a href="Zurgo_upgrade.html" class="nav-link active">Upgrade Blueprint</a>
+  </div>
+
+  <div class="meta-overview-card">
+    <h3>Targeted Strategy Overview</h3>
+    <p>This tactical roadmap targets lower-velocity mana structures and underperforming mid-range pieces, swapping them directly for optimal alternatives to heighten speed, explosiveness, and engine protection.</p>
+  </div>
+
+  <table class="upgrade-table">
+    <thead>
+      <tr>
+        <th style="width: 18%;">Card to Remove</th>
+        <th style="width: 18%;">Replace With (Unrestricted)</th>
+        <th style="width: 18%;">Replace With (Budget)</th>
+        <th style="width: 15%;">Impact Metric</th>
+        <th style="width: 10%;">Velocity</th>
+        <th style="width: 21%;">Strategic Justification</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Temple of Silence</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Spectator Seating</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Sulfur Springs</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana Base</span></td>
+        <td data-label="Velocity" class="velocity-badge vel-high">High</td>
+        <td>Eliminates a tapped land to ensure your aggressive low-curve drops land precisely on time.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Temple of Triumph</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Sacred Foundry</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Caves of Koilos</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana Base</span></td>
+        <td data-label="Velocity" class="velocity-badge vel-high">High</td>
+        <td>Swapping out a slow scry land for an untapped mana source preserves your critical early-turn tempo.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Infantry Shield</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Sol Ring</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Arcane Signet</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Speed & Mana Base</span></td>
+        <td data-label="Velocity" class="velocity-badge vel-high">High</td>
+        <td>Replaces a low-impact, clunky equipment with premier mana acceleration to speed up your general game plan.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Ainok Strike Leader</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Ophiomancer</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Garrison Cat</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Synergy & Engine</span></td>
+        <td data-label="Velocity" class="velocity-badge vel-high">High</td>
+        <td>Swaps out an inefficient, mana-intensive dash token creator for a high-velocity, reliable token generator.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Mardu Siegebreaker</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Plumb the Forbidden</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Village Rites</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Consistency & Tutors</span></td>
+        <td data-label="Velocity" class="velocity-badge vel-high">High</td>
+        <td>Replaces an underwhelming, high-cost vanilla attacker with a premier, instant-speed sacrifice card-draw outlet.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Avenger of the Fallen</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Luminous Broodmoth</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Juri, Master of the Revue</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Win Conditions</span></td>
+        <td data-label="Velocity" class="velocity-badge vel-high">High</td>
+        <td>Upgrades an inefficient token producer into a massive recursion engine or an explosive, scaling sacrifice threat.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Bone-Cairn Butcher</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Blood Artist</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Zulaport Cutthroat</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Win Conditions</span></td>
+        <td data-label="Velocity" class="velocity-badge vel-high">High</td>
+        <td>Swaps a low-impact creature for an essential aristocrat drain piece that punishes opponents for wiping your board.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Exalted Sunborn</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Phyrexian Altar</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Ashnod's Altar</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Synergy & Engine</span></td>
+        <td data-label="Velocity" class="velocity-badge vel-high">High</td>
+        <td>Trading an expensive, slow mana sink for a premier sacrifice outlet unlocks explosive, high-velocity combo turns.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Windcrag Siege</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Necropotence</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Black Market Connections</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Consistency & Tutors</span></td>
+        <td data-label="Velocity" class="velocity-badge vel-high">High</td>
+        <td>Swaps a slow, conditional draw enchantment for an elite card advantage engine to ensure your hand stays full.</td>
+      </tr>
+      <tr>
+        <td data-label="Card to Remove" class="card-remove">Voice of Victory</td>
+        <td data-label="Replace With (Unrestricted)" class="card-unrestricted">Shared Animosity</td>
+        <td data-label="Replace With (Budget)" class="card-budget">Mardu Ascendancy</td>
+        <td data-label="Impact Metric"><span class="metric-pill">Win Conditions</span></td>
+        <td data-label="Velocity" class="velocity-badge vel-high">High</td>
+        <td>Replaces a clunky, high-mana anthem creature with an incredibly explosive, low-cost combat win condition.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    const toggleBtn = document.getElementById('themeToggle');
+    toggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      if (currentTheme === 'light') {
+        document.documentElement.removeAttribute('data-theme');
+        toggleBtn.textContent = '☀️ Light Mode';
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        toggleBtn.textContent = '🌙 Dark Mode';
+      }
+    });
+  </script>
+</body>
+</html>
