@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Space Ghost and Dino Boy - Core Deck Analysis</title>
+  <title>Space Ghost and Dino Boy - Core Analysis & Audit</title>
   <style>
     /* Default Dark Mode Palette */
     :root {
@@ -22,7 +22,7 @@
       --pill-bg-light: #30363d;
     }
 
-    /* Light Mode Palette Override */
+    /* Extracted Light Mode Palette */
     [data-theme="light"] {
       --bg-main: #f8fafc;
       --bg-card: #ffffff;
@@ -40,75 +40,66 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; bg-color: var(--bg-main); background-color: var(--bg-main); color: var(--text-main); line-height: 1.6; padding: 2rem; }
+    body { background-color: var(--bg-main); color: var(--text-main); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; padding: 2rem; line-height: 1.5; }
     
-    .header-container { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem; }
-    .header-titles h1 { color: var(--text-dark-heading); font-size: 2.25rem; font-weight: 800; }
-    .header-titles p { color: var(--text-light); font-size: 1.1rem; margin-top: 0.25rem; }
+    .header-container { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1rem; }
+    h1 { color: var(--text-dark-heading); font-size: 2rem; }
     
-    .theme-toggle { background: transparent; border: 1px solid var(--border-color); padding: 0.5rem 1rem; border-radius: 6px; color: var(--text-main); font-weight: 500; cursor: pointer; transition: all 0.2s ease; }
+    .theme-toggle { background: transparent; border: 1px solid var(--border-color); padding: 0.5rem 1rem; color: var(--text-main); border-radius: 6px; cursor: pointer; transition: all 0.2s ease; font-weight: 500; }
     .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
 
     .nav-tabs { display: flex; border-bottom: 1px solid var(--border-color); margin-bottom: 2rem; gap: 0.5rem; }
-    .nav-link { text-decoration: none; color: var(--text-light); padding: 0.75rem 1.25rem; font-weight: 600; border-radius: 6px 6px 0 0; border-bottom: 2px solid transparent; transition: all 0.2s ease; }
-    .nav-link:hover { color: var(--accent); background-color: rgba(88, 166, 255, 0.1); }
-    .nav-link.active { color: var(--accent); border-bottom-color: var(--accent); background-color: var(--pill-bg-light); }
+    .nav-link { text-decoration: none; color: var(--text-light); padding: 0.75rem 1.2rem; border-radius: 6px 6px 0 0; transition: all 0.2s ease; font-weight: 500; border-bottom: 2px solid transparent; }
+    .nav-link:hover { color: var(--accent); background-color: var(--pill-bg-light); }
+    .nav-link.active { color: var(--accent); background-color: var(--pill-bg-light); border-bottom: 2px solid var(--accent); }
 
-    .grid-top { display: grid; grid-template-columns: 320px 1fr; gap: 2rem; margin-bottom: 2rem; }
-    .commander-sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
-    .card-frame { background-size: contain; background-repeat: no-repeat; background-position: top center; width: 100%; height: auto; aspect-ratio: 63 / 88; box-shadow: var(--card-shadow); border-radius: 4.75% / 3.5%; }
+    .grid-layout { display: grid; grid-template-columns: 320px 1fr; gap: 2rem; margin-bottom: 2rem; }
+    .left-column { display: flex; flex-direction: column; gap: 1.5rem; }
     
-    .power-badge-box { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; text-align: center; box-shadow: var(--card-shadow); }
-    .power-badge-title { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-light); font-weight: 700; }
-    .power-badge-num { font-size: 4.5rem; font-weight: 900; color: var(--accent); line-height: 1.1; margin: 0.5rem 0; }
-    .power-badge-scale { font-size: 1rem; color: var(--text-light); }
-
-    .meta-overview-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; box-shadow: var(--card-shadow); height: fit-content; }
-    .meta-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
-    .meta-table td { padding: 0.75rem 0; border-bottom: 1px solid var(--border-color); }
-    .meta-table td:first-child { font-weight: 600; color: var(--text-light); width: 35%; }
-    .meta-table td:last-child { color: var(--text-dark-heading); font-weight: 500; }
-    .meta-table a { color: var(--accent); text-decoration: none; }
-    .meta-table a:hover { text-decoration: underline; }
-
-    .summary-callout { background-color: rgba(88, 166, 255, 0.07); border-left: 4px solid var(--accent); padding: 1.25rem; border-radius: 0 8px 8px 0; margin-top: 1rem; }
-    .summary-callout h3 { color: var(--text-dark-heading); margin-bottom: 0.5rem; font-size: 1.1rem; }
-
+    .commander-frame { background-size: contain; background-repeat: no-repeat; background-position: top center; width: 100%; height: auto; aspect-ratio: 63 / 88; box-shadow: var(--card-shadow); border-radius: 4.75% / 3.5%; }
+    
+    .power-score-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; text-align: center; box-shadow: var(--card-shadow); }
+    .power-score-title { font-size: 0.9rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+    .power-score-num { font-size: 4rem; font-weight: 800; color: var(--accent-green); line-height: 1; margin: 0.5rem 0; }
+    
+    .meta-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; box-shadow: var(--card-shadow); margin-bottom: 1.5rem; }
+    .meta-table { width: 100%; border-collapse: collapse; }
+    .meta-table td { padding: 0.5rem 0; border-bottom: 1px solid var(--border-color); }
+    .meta-table td:first-child { font-weight: 600; color: var(--text-light); width: 40%; }
+    .meta-table td:last-child { color: var(--text-dark-heading); }
+    .meta-table tr:last-child td { border-bottom: none; }
+    
+    .summary-callout { background: rgba(88, 166, 255, 0.1); border-left: 4px solid var(--accent); padding: 1.5rem; border-radius: 0 8px 8px 0; font-size: 1.05rem; line-height: 1.6; }
+    
     .pillar-section { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1rem; }
-    .pillar-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.75rem; box-shadow: var(--card-shadow); }
+    .pillar-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; box-shadow: var(--card-shadow); }
     .pillar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 1rem; }
-    .pillar-title { font-size: 1.3rem; font-weight: 700; color: var(--text-dark-heading); }
-    .pillar-score { background-color: var(--pill-bg-light); padding: 0.35rem 0.75rem; border-radius: 20px; font-weight: 700; color: var(--accent); border: 1px solid var(--border-color); }
+    .pillar-title { font-size: 1.25rem; font-weight: 700; color: var(--text-dark-heading); }
+    .pillar-score { background: var(--pill-bg-light); padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: bold; font-size: 0.95rem; color: var(--accent); border: 1px solid var(--border-color); }
     
-    .pillar-content ul { list-style-position: inside; margin-top: 0.75rem; padding-left: 0.5rem; }
-    .pillar-content li { margin-bottom: 0.5rem; color: var(--text-main); }
-    .pillar-content strong { color: var(--text-dark-heading); }
-
-    blockquote { background-color: var(--bg-card); border-left: 4px solid var(--accent-green); padding: 1rem 1.25rem; margin: 1.5rem 0; border-radius: 0 8px 8px 0; font-style: italic; color: var(--text-main); }
-
+    .pillar-content h4 { color: var(--text-dark-heading); margin: 1rem 0 0.5rem 0; font-size: 1rem; }
+    .pillar-content h4:first-of-type { margin-top: 0; }
+    .pillar-content ul { padding-left: 1.25rem; margin-bottom: 1rem; }
+    .pillar-content li { margin-bottom: 0.5rem; }
+    
     @media (max-width: 900px) {
-      .grid-top { grid-template-columns: 1fr; }
-      .commander-sidebar { align-items: center; }
-      .card-frame { max-width: 320px; }
-      .power-badge-box { width: 100%; max-width: 320px; }
+      .grid-layout { grid-template-columns: 1fr; }
+      .left-column { max-width: 320px; margin: 0 auto; width: 100%; }
     }
-
+    
     @media print {
       body { background: white !important; color: #000 !important; padding: 0; }
       .theme-toggle, .nav-tabs { display: none !important; }
-      .pillar-card, .meta-overview-card, .power-badge-box { background: white !important; border: 1px solid #ccc !important; box-shadow: none !important; page-break-inside: avoid; }
-      .text-dark-heading, .pillar-title, h1, h2 { color: #000 !important; }
-      .pillar-score { background: #eee !important; color: #000 !important; }
+      .pillar-card, .meta-card, .power-score-card { box-shadow: none !important; border: 1px solid #ccc !important; background: #fff !important; page-break-inside: avoid; }
+      var, p, li, td { color: #000 !important; }
+      h1, h2, h3, h4, .power-score-num { color: #000 !important; }
     }
   </style>
 </head>
 <body>
 
   <div class="header-container">
-    <div class="header-titles">
-      <h1>Space Ghost and Dino Boy</h1>
-      <p>Jodah, Archmage Eternal EDH Tactical Audit</p>
-    </div>
+    <h1>Space Ghost and Dino Boy</h1>
     <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
   </div>
 
@@ -118,136 +109,121 @@
     <a href="Jodah_upgrade.html" class="nav-link">Upgrade Blueprint</a>
   </div>
 
-  <div class="grid-top">
-    <div class="commander-sidebar">
-      <div class="card-frame" style="background-image: url('https://cards.scryfall.io/large/front/1/e/1ee86efa-248e-4251-b734-f8ad3e8a0344.jpg?1562732370');"></div>
-      <div class="power-badge-box">
-        <div class="power-badge-title">Power Calibration</div>
-        <div class="power-badge-num">6.0</div>
-        <div class="power-badge-scale">Optimized Casual Scale / 10</div>
+  <div class="grid-layout">
+    <div class="left-column">
+      <div class="commander-frame" style="background-image: url('https://cards.scryfall.io/large/front/1/e/1ee86efa-248e-4251-b734-f8ad3e8a0344.jpg?1562732370');"></div>
+      <div class="power-score-card">
+        <div class="power-score-title">Calibrated Power Level</div>
+        <div class="power-score-num">6.5</div>
+        <div style="color: var(--text-light); font-size: 0.85rem; font-weight: 500;">High-Power Casual</div>
       </div>
     </div>
-
-    <div class="meta-overview-card">
-      <table class="meta-table">
-        <tr>
-          <td>Commander</td>
-          <td>Jodah, Archmage Eternal</td>
-        </tr>
-        <tr>
-          <td>Archetype</td>
-          <td>5-Color WURBG Battlecruiser / Dinosaurs</td>
-        </tr>
-        <tr>
-          <td>Turn to Win</td>
-          <td>Turn 8 - 9 (Uninterrupted)</td>
-        </tr>
-        <tr>
-          <td>Source Decklist</td>
-          <td><a href="https://archidekt.com/decks/22456296/jeff_deck_jodah" target="_blank">Archidekt Link</a></td>
-        </tr>
-      </table>
-
+    
+    <div class="right-column">
+      <div class="meta-card">
+        <table class="meta-table">
+          <tr>
+            <td>Commander</td>
+            <td>Jodah, Archmage Eternal</td>
+          </tr>
+          <tr>
+            <td>Archetype</td>
+            <td>WUBRG / Primal Cascade Battlecruiser</td>
+          </tr>
+          <tr>
+            <td>Estimated Win Turn</td>
+            <td>Turn 7–9 (Uninterrupted)</td>
+          </tr>
+          <tr>
+            <td>Source Decklist</td>
+            <td><a href="https://archidekt.com/decks/22456296/jeff_deck_jodah" target="_blank" style="color: var(--accent); text-decoration: none;">Archidekt Link</a></td>
+          </tr>
+        </table>
+      </div>
+      
       <div class="summary-callout">
-        <h3>Executive Architecture Review</h3>
-        <p>This deck leverages <strong>Jodah, Archmage Eternal</strong> to bypass conventional mana requirements, cheating out high-impact Dinosaurs and devastating <strong>Ultimatum</strong> cycles. It functions as an optimized casual build capable of dominant late-game boards, but requires strategic refinements to improve consistency and velocity against high-speed tables.</p>
+        <strong>Executive Summary:</strong> This deck functions as a classic five-color WUBRG "Primal Cascade" and Battlecruiser strategy, utilizing <strong>Jodah, Archmage Eternal</strong> as a mana-cheating centerpiece. The primary mechanic revolves around assembling all five colors to exploit Jodah’s replacement ability, turning astronomical mana costs into a flat WUBRG payment to hardcast massive, game-ending threats like <strong>Omniscience</strong>, <strong>Progenitus</strong>, and various <em>Ultimatum</em> sorceries ahead of schedule. The deck features a distinct "Space Ghost and Dino Boy" thematic split, pitting cosmic anomalies against primordial Dinosaurs like <strong>Zacama, Primal Calamity</strong> and <strong>Gishath, Sun's Avatar</strong>. Win conditions rely entirely on massive combat steps backed by keywords from <strong>Surrak and Goreclaw</strong>, or overwhelming card/permanent advantage generated by cascading bombs like <strong>Genesis Ultimatum</strong> and <strong>Emergent Ultimatum</strong>.
       </div>
     </div>
   </div>
 
   <h2>Strategic Pillar Breakdown</h2>
+  <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0 1.5rem 0;">
+
   <div class="pillar-section">
-    
     <div class="pillar-card">
       <div class="pillar-header">
-        <div class="pillar-title">1. Synergy & Engine</div>
-        <div class="pillar-score">6.5 / 10</div>
+        <span class="pillar-title">Synergy & Engine</span>
+        <span class="pillar-score">7.2 / 10</span>
       </div>
       <div class="pillar-content">
-        <p>The operational core relies on setting up <strong>Jodah, Archmage Eternal</strong> alongside apex pieces like <strong>Omniscience</strong>, <strong>Progenitus</strong>, and <strong>Ulamog, the Ceaseless Hunger</strong>.</p>
+        <h4>Core Mechanics</h4>
+        <p>The mechanical engine relies heavily on bypassing standard mana curves. <strong>Jodah, Archmage Eternal</strong> serves as a focal point, turning standard top-deck heavy hitters into hyper-efficient spells.</p>
+        <h4>Key Synergies</h4>
         <ul>
-          <li><strong>Mechanical Anchors:</strong> Type-manipulating enablers such as <strong>Arcane Adaptation</strong>, <strong>Leyline of Transformation</strong>, and <strong>Leyline of the Guildpact</strong> work to integrate disparate tribal themes.</li>
-          <li><strong>Synergy Synchronization:</strong> These adjustments allow engines like <strong>Jhoira, Weatherlight Captain</strong> to capture draw triggers off mismatched creature spells.</li>
-          <li><strong>Strategic Tension:</strong> The framework experiences an internal split identity, shifting back and forth between an aggressive Dinosaur tribal build and a generic legendary high-end pile, causing clunky opening hands if the Commander is managed.</li>
+          <li><strong>Leyline of the Guildpact</strong> and <strong>Leyline of Mutation</strong> are premier engine enablers here. When opening with <strong>Leyline of the Guildpact</strong>, your lands automatically fix your colors, which pairs perfectly with <strong>Scion of Draco</strong> to immediately distribute keywords across your board for cheap.</li>
+          <li><strong>Jhoira, Weatherlight Captain</strong> provides a card-draw engine alongside legendary bombs like <strong>Elesh Norn, Grand Cenobite</strong> and <strong>Koma, Cosmos Serpent</strong>.</li>
         </ul>
+        <h4>Tactical Warnings</h4>
+        <p style="color: var(--badge-remove);">The deck suffers from a "commander dependency trap." If <strong>Jodah</strong> is repeatedly removed, high-cost cards like <strong>Ulamog, the Ceaseless Hunger</strong> and <strong>Yargle and Multani</strong> risk rotting in your hand. The engine lacks sufficient low-end velocity to cycle cards when your commander isn't on the battlefield.</p>
       </div>
     </div>
 
     <div class="pillar-card">
       <div class="pillar-header">
-        <div class="pillar-title">2. Interaction & Board Control</div>
-        <div class="pillar-score">5.5 / 10</div>
+        <span class="pillar-title">Interaction & Board Control</span>
+        <span class="pillar-score">5.5 / 10</span>
       </div>
       <div class="pillar-content">
-        <p>The control package relies heavily on massive, asymmetrical board states, trading quick response capabilities for broad board wipes.</p>
+        <h4>Core Mechanics</h4>
+        <p>Spot removal and board wipes are present but leaning heavily on high-CMC choices that can feel clunky if you are playing from behind without your color-fixing engines active.</p>
+        <h4>Key Synergies</h4>
         <ul>
-          <li><strong>Asymmetrical Cleansing:</strong> Resolutions of <strong>Ruinous Ultimatum</strong>, <strong>Urza's Ruinous Blast</strong>, and <strong>Eerie Ultimatum</strong> break gameplay open by entirely dismantling opposing zones while maintaining your board presence.</li>
-          <li><strong>Operational Gaps:</strong> Fast, instant-speed tools are minimal. Relying on slow utilities like <strong>Return to Dust</strong> or narrow options like <strong>Blessed Respite</strong> leaves the deck exposed to highly efficient combo strings or quick aggressive builds.</li>
+          <li><strong>Urza's Ruinous Blast</strong> acts as an asymmetric board wipe, preserving your high-value legendary threats while clearing opponents' boards.</li>
+          <li><strong>Ruinous Ultimatum</strong> is a one-sided blowout that wins games on the spot if successfully cast for WUBRG via Jodah.</li>
+          <li>For individual protection, <strong>Lightning Greaves</strong>, <strong>Swiftfoot Boots</strong>, and <strong>Whispersilk Cloak</strong> safeguard your fragile enablers.</li>
         </ul>
+        <h4>Tactical Warnings</h4>
+        <p style="color: var(--badge-remove);">Single-target interaction is incredibly sparse. Relying on <strong>Path to Exile</strong> and <strong>Return to Dust</strong> as your primary reactive spells leaves you highly vulnerable to fast combo decks or early-game aggressors. The deck lacks low-cost, flexible interaction to respond to threats when mana is constrained.</p>
       </div>
     </div>
 
     <div class="pillar-card">
       <div class="pillar-header">
-        <div class="pillar-title">3. Consistency & Tutors</div>
-        <div class="pillar-score">4.5 / 10</div>
+        <span class="pillar-title">Consistency & Tutors</span>
+        <span class="pillar-score">4.8 / 10</span>
       </div>
       <div class="pillar-content">
-        <p>Variance remains a major performance constraint due to a structural lack of targeted selection channels.</p>
+        <h4>Core Mechanics</h4>
+        <p>The deck runs minimal explicit tutors, relying instead on raw card-draw chunks and massive spell-copy/cascade effects to dig into answers.</p>
+        <h4>Key Synergies</h4>
         <ul>
-          <li><strong>Explosive Card Flow:</strong> Massive spells like <strong>Emergent Ultimatum</strong> and <strong>Genesis Ultimatum</strong> offer direct access to vast portions of the library, converting into immediate advantages when cast successfully.</li>
-          <li><strong>Structural Bottlenecks:</strong> With zero standard generic tutor configurations included, the build depends heavily on raw card drawing or randomized top-deck distributions. This accentuates variance when early engines are disrupted.</li>
+          <li><strong>Emergent Ultimatum</strong> acts as a powerful triple-tutor if cast, forcing opponents into a lose-lose choice between cards like <strong>Omniscience</strong>, <strong>Vorinclex, Voice of Hunger</strong>, or <strong>Eerie Ultimatum</strong>.</li>
+          <li>Outside of this, cards like <strong>Keruga, the Macrosage</strong> offer card draw in the mid-to-late game.</li>
         </ul>
+        <h4>Tactical Warnings</h4>
+        <p style="color: var(--badge-remove);">This category is the deck’s primary bottleneck. There are no reliable ways to fetch <strong>Jodah</strong> if he gets shuffled or put into the command zone with a massive tax, nor are there ways to guarantee finding your key color-fixing enchantments. The variance of this deck list is exceptionally high.</p>
       </div>
     </div>
 
     <div class="pillar-card">
       <div class="pillar-header">
-        <div class="pillar-title">4. Speed & Mana Base</div>
-        <div class="pillar-score">5.0 / 10</div>
+        <span class="pillar-title">Speed & Mana Base</span>
+        <span class="pillar-score">6.0 / 10</span>
       </div>
       <div class="pillar-content">
-        <p>The mana composition features excellent baseline fixing options, but sacrifices pacing due to the inclusions of lands that enter the battlefield tapped.</p>
+        <h4>Core Mechanics</h4>
+        <p>The mana base relies heavily on budget-tier tapped environments (Triomes, Crystals, and old-school Alara/Khans taplands) to guarantee WUBRG.</p>
+        <h4>Key Synergies</h4>
         <ul>
-          <li><strong>Fixing Architecture:</strong> <strong>Leyline of the Guildpact</strong>, <strong>Jegantha, the Wellspring</strong>, and the complete <em>Triome</em> spectrum ensure easy conversion into <strong>Jodah's</strong> critical $\text{WURBG}$ requirements.</li>
-          <li><strong>Tempo Drag:</strong> Standard three-mana infrastructure rocks like <strong>Indatha Crystal</strong> and <strong>Ketria Crystal</strong>, alongside lands like <strong>Rupture Spire</strong>, slow down development and force an extra turn delay compared to streamlined casual builds.</li>
+          <li><strong>Jegantha, the Wellspring</strong> provides a perfect WUBRG tap symbol, acting as an absolute powerhouse if allowed to lose summoning sickness while Jodah is on the board.</li>
+          <li><strong>Arcane Signet</strong> and the <em>Crystal</em> cycle (<strong>Zagoth Crystal</strong>, etc.) provide mid-game acceleration and color fixing.</li>
         </ul>
+        <h4>Tactical Warnings</h4>
+        <p style="color: var(--badge-remove);">The land base is incredibly slow. Running numerous lands that enter the battlefield tapped (<strong>Arcane Sanctum</strong>, <strong>Crumbling Necropolis</strong>, <strong>Rupture Spire</strong>) severely hampers your early-game development. You will consistently find yourself a full turn behind opponents running optimized, untapped land packages. Furthermore, 3-drop mana rocks like the Crystals are outclassed in modern high-power casual environments.</p>
       </div>
     </div>
 
     <div class="pillar-card">
       <div class="pillar-header">
-        <div class="pillar-title">5. Win Conditions & Closeness to "Infinite"</div>
-        <div class="pillar-score">6.5 / 10</div>
-      </div>
-      <div class="pillar-content">
-        <p>The path to victory relies on traditional combat pressure combined with high-impact casting turns, rather than precise looping sequences.</p>
-        <ul>
-          <li><strong>Combat Overwhelm:</strong> Deployed threats like <strong>Etali, Primal Conqueror</strong>, <strong>Ghalta, Stampede Tyrant</strong>, and <strong>Vorinclex, Voice of Hunger</strong> quickly create lethal scenarios.</li>
-          <li><strong>Voltron Direct Lines:</strong> <strong>Blackblade Reforged</strong> shifts any legendary piece or your Commander into a serious single-target threat.</li>
-          <li><strong>Loop Proximity:</strong> True infinite loops are absent. High-velocity engine states can occur via <strong>Omniscience</strong> combined with <strong>Jhoira, Weatherlight Captain</strong>, but they remain non-deterministic values determined by continuous top-deck interaction.</li>
-        </ul>
-      </div>
-    </div>
-
-  </div>
-
-  <blockquote>
-    Strategic Summary: This profile exhibits high tactical value once established, but requires curve adjustments and faster interaction structures to reach its full mechanical potential.
-  </blockquote>
-
-  <script>
-    const toggleBtn = document.getElementById('themeToggle');
-    toggleBtn.addEventListener('click', () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      if (currentTheme === 'light') {
-        document.documentElement.removeAttribute('data-theme');
-        toggleBtn.textContent = '☀️ Light Mode';
-      } else {
-        document.documentElement.setAttribute('data-theme', 'light');
-        toggleBtn.textContent = '🌙 Dark Mode';
-      }
-    });
-  </script>
-</body>
-</html>
+        <span class="pillar-title">Win Conditions & Closeness to "Infinite
