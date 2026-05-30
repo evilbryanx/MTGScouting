@@ -1,379 +1,463 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Commander Profile - Loot, Exuberant Explorer</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
-      color: #1e293b;
-      background-color: #f8fafc;
-      margin: 0;
-      padding: 15px;
-      line-height: 1.4;
-      font-size: 13px;
-    }
-    .sheet-container {
-      background-color: #ffffff;
-      max-width: 850px;
-      margin: 0 auto;
-      padding: 25px;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-    h1, h2, h3 {
-      margin: 0;
-      color: #0f172a;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .header-container {
-      border-bottom: 3px solid #475569;
-      padding-bottom: 8px;
-      margin-bottom: 15px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    @media (min-width: 600px) {
-      .header-container {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: flex-end;
-      }
-    }
-    .main-title {
-      font-size: 24px;
-      font-weight: 800;
-      color: #1e293b;
-    }
-    .deck-title {
-      font-weight: 700;
-      color: #475569;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .deck-title-value {
-      font-weight: 800;
-      color: #1e293b;
-      text-transform: none;
-      letter-spacing: normal;
-      font-size: 18px;
-      margin-left: 6px;
-    }
-    .profile-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-      margin-bottom: 12px;
-    }
-    @media (min-width: 650px) {
-      .profile-grid {
-        grid-template-columns: 240px 1fr;
-      }
-    }
-    .visual-column {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .card-frame {
-      width: 230px;
-      height: 321px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-      background: #0f172a url('https://cards.scryfall.io/large/front/0/9/09980ce6-425b-4e03-94d0-0f02043cb361.jpg?1730488991') no-repeat center/cover;
-    }
-    .score-badge {
-      margin-top: 15px;
-      background: #0f172a;
-      color: #ffffff;
-      padding: 10px 15px;
-      border-radius: 8px;
-      text-align: center;
-      width: 180px;
-    }
-    .score-title {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #94a3b8;
-    }
-    .score-num {
-      font-size: 28px;
-      font-weight: 800;
-      line-height: 1;
-      margin-top: 2px;
-    }
-    .data-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 12px;
-    }
-    .data-table td {
-      padding: 8px 10px;
-      border-bottom: 1px solid #e2e8f0;
-    }
-    .data-table tr:last-child td {
-      border-bottom: none;
-    }
-    .label {
-      font-weight: 700;
-      color: #475569;
-      width: 110px;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    @media (min-width: 400px) {
-      .label { width: 140px; font-size: 11px; }
-    }
-    .value {
-      color: #0f172a;
-      font-size: 13px;
-    }
-    .decklist-btn {
-      display: inline-block;
-      color: #2563eb;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 12px;
-    }
-    .decklist-btn:hover {
-      text-decoration: underline;
-    }
-    .callout-box {
-      background-color: #f8fafc;
-      border-left: 4px solid #475569;
-      padding: 12px 15px;
-      border-radius: 0 8px 8px 0;
-      margin-top: 5px;
-    }
-    .callout-title {
-      font-size: 11px;
-      font-weight: 700;
-      color: #334155;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-      letter-spacing: 0.5px;
-    }
-    .callout-text {
-      font-size: 12.5px;
-      color: #334155;
-      font-style: italic;
-    }
-    .section-heading {
-      font-size: 14px;
-      font-weight: 700;
-      border-bottom: 2px solid #e2e8f0;
-      padding-bottom: 4px;
-      margin-top: 20px;
-      margin-bottom: 10px;
-      color: #334155;
-    }
-    .pillar-stack {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .pillar-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-    }
-    .pillar-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-    }
-    .pillar-name {
-      font-weight: 700;
-      font-size: 13px;
-      color: #1e293b;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .pillar-score {
-      font-weight: 800;
-      font-size: 12px;
-      background: #f1f5f9;
-      padding: 2px 8px;
-      border-radius: 4px;
-      color: #0f172a;
-    }
-    .pillar-desc {
-      font-size: 12.5px;
-      color: #334155;
-      text-align: justify;
-      line-height: 1.5;
-    }
-    .pillar-desc ul {
-      margin: 8px 0 0 0;
-      padding-left: 20px;
-    }
-    .pillar-desc li {
-      margin-bottom: 6px;
-    }
-    @media print {
-      @page {
-        size: letter;
-        margin: 0.4in 0.5in 0.4in 0.5in;
-      }
-      body {
-        background-color: #ffffff;
-        padding: 0;
-      }
-      .sheet-container {
-        box-shadow: none;
-        padding: 0;
-        max-width: 100%;
-      }
-      .profile-grid {
-        grid-template-columns: 240px 1fr !important;
-      }
-      .header-container {
-        flex-direction: row !important;
-        justify-content: space-between !important;
-        align-items: flex-end !important;
-      }
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loot Pile - Core Analysis & Audit</title>
+    <style>
+        /* Default Dark Mode Palette */
+        :root {
+            --bg-main: #0d1117;
+            --bg-card: #161b22;
+            --border-color: #30363d;
+            --text-main: #c9d1d9;
+            --text-light: #8b949e;
+            --accent: #58a6ff;
+            --accent-green: #2ea44f;
+            --badge-remove: #f85149;
+            --badge-unrestricted: #a371f7;
+            --badge-budget: #3fb950;
+
+            /* Shared structural constants */
+            --card-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            --text-dark-heading: #ffffff;
+            --pill-bg-light: #30363d;
+            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        }
+
+        /* Extracted Light Mode Palette */
+        [data-theme="light"] {
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --border-color: #e2e8f0;
+            --text-main: #1e293b;
+            --text-light: #475569;
+            --accent: #2563eb;
+            --accent-green: #16a34a;
+            --badge-remove: #ef4444;
+            --badge-unrestricted: #7c3aed;
+            --badge-budget: #22c55e;
+
+            /* Light mode structural overrides */
+            --text-dark-heading: #0f172a;
+            --pill-bg-light: #f1f5f9;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: var(--font-stack);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            color: var(--text-dark-heading);
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            color: var(--text-main);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background-color: var(--pill-bg-light);
+        }
+
+        .nav-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+            gap: 0.5rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-light);
+            padding: 0.75rem 1rem;
+            font-weight: 500;
+            border-radius: 6px 6px 0 0;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--accent);
+            background-color: var(--pill-bg-light);
+        }
+
+        .nav-link.active {
+            color: var(--accent);
+            background-color: var(--pill-bg-light);
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .left-col {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .card-frame {
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: top center;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 63 / 88;
+            box-shadow: var(--card-shadow);
+            border-radius: 4.75% / 3.5%;
+        }
+
+        .score-badge-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+        }
+
+        .score-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .score-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--accent-green);
+            line-height: 1;
+        }
+
+        .right-col {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .meta-table-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .meta-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .meta-table td {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .meta-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .meta-label {
+            font-weight: 600;
+            color: var(--text-light);
+            width: 35%;
+        }
+
+        .meta-val {
+            color: var(--text-main);
+        }
+
+        .meta-val a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .meta-val a:hover {
+            text-decoration: underline;
+        }
+
+        .summary-callout {
+            background-color: var(--bg-card);
+            border-left: 4px solid var(--accent);
+            border-top: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            border-radius: 0 8px 8px 0;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .summary-callout h3 {
+            color: var(--text-dark-heading);
+            margin-bottom: 0.5rem;
+        }
+
+        .pillar-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .pillar-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.75rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .pillar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .pillar-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-dark-heading);
+        }
+
+        .pillar-score {
+            background-color: var(--pill-bg-light);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 700;
+            color: var(--accent);
+            border: 1px solid var(--border-color);
+        }
+
+        .pillar-card ul {
+            padding-left: 1.25rem;
+            margin-top: 0.5rem;
+        }
+
+        .pillar-card li {
+            margin-bottom: 0.5rem;
+        }
+
+        strong {
+            color: var(--text-dark-heading);
+        }
+
+        @media (max-width: 900px) {
+            .grid-layout {
+                grid-template-columns: 1fr;
+            }
+            .left-col {
+                align-items: center;
+            }
+            .card-frame {
+                max-width: 320px;
+            }
+            .score-badge-card {
+                width: 100%;
+                max-width: 320px;
+            }
+        }
+
+        @media print {
+            body {
+                background: white !important;
+                color: #000 !important;
+                padding: 0;
+            }
+            :root {
+                --bg-main: #fff !important;
+                --bg-card: #fff !important;
+                --text-main: #000 !important;
+                --text-dark-heading: #000 !important;
+                --border-color: #ccc !important;
+                --card-shadow: none !important;
+            }
+            .theme-toggle, .nav-tabs {
+                display: none !important;
+            }
+            .pillar-card, .meta-table-card, .summary-callout, .score-badge-card {
+                box-shadow: none !important;
+                page-break-inside: avoid;
+                border: 1px solid #000 !important;
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <div class="sheet-container">
+<div class="container">
     <div class="header-container">
-      <div class="main-title">Loot, Exuberant Explorer</div>
-      <div class="deck-title">Deck Name <span class="deck-title-value">Loot Pile</span></div>
+        <h1>Loot Pile Analysis Dashboard</h1>
+        <button id="themeToggle" class="theme-toggle">☀️ Light Mode</button>
     </div>
 
-    <div class="profile-grid">
-      <div class="visual-column">
-        <div class="card-frame"></div>
-        <div class="score-badge">
-          <div class="score-title">Power Rank Score</div>
-          <div class="score-num">7.5 <span style="font-size: 14px; color: #64748b;">/10</span></div>
-        </div>
-      </div>
-
-      <div>
-        <table class="data-table">
-          <tr>
-            <td class="label">Archetype</td>
-            <td class="value">High-Velocity Mono-Green Stompy Engine</td>
-          </tr>
-          <tr>
-            <td class="label">Power Bracket</td>
-            <td class="value">High-Power Casual (Tier Top)</td>
-          </tr>
-          <tr>
-            <td class="label">Est. Turn to Win</td>
-            <td class="value">Turn 5 - 6</td>
-          </tr>
-          <tr>
-            <td class="label">Archidekt Link</td>
-            <td class="value">
-              <a class="decklist-btn" href="https://archidekt.com/decks/22293905/bill_deck_loot" target="_blank">↗ View Full Decklist</a>
-            </td>
-          </tr>
-        </table>
-
-        <div class="callout-box">
-          <div class="callout-title">Definitive Playstyle Mechanics & Win Conditions</div>
-          <div class="callout-text">
-            The deck operates as a <strong>High-Velocity Mono-Green Stompy Engine</strong> that abuses explosive mana generation to chain massive, card-drawing creatures together in a single turn. It aims to flood the board using creature-based flash and cheat mechanics, ultimately securing victory through <strong>table-shattering lethal stampedes</strong> powered by colossal stat-multipliers or sudden, game-ending combat keywords.
-          </div>
-        </div>
-      </div>
+    <div class="nav-tabs">
+        <a href="../index.html" class="nav-link">Back to list</a>
+        <a href="Loot.html" class="nav-link active">Core Analysis & Audit</a>
+        <a href="Loot_upgrade.html" class="nav-link">Upgrade Blueprint</a>
     </div>
 
-    <div class="section-heading">Strategic Pillar Breakdown</div>
-     
-    <div class="pillar-stack">
-      <div class="pillar-card">
-        <div class="pillar-header">
-          <span class="pillar-name">1. Synergy & Engine</span>
-          <span class="pillar-score">9 / 10</span>
+    <div class="grid-layout">
+        <div class="left-col">
+            <div class="card-frame" style="background-image: url('https://cards.scryfall.io/large/front/0/9/09980ce6-425b-4e03-94d0-0f02043cb361.jpg?1730488991');"></div>
+            <div class="score-badge-card">
+                <div class="score-title">Overall Power Score</div>
+                <div class="score-number">7.5</div>
+            </div>
         </div>
-        <div class="pillar-desc">
-          The internal mechanics of this deck hum with remarkable synergy. By utilizing <strong>Loot, Exuberant Explorer</strong> as a flexible engine piece, you gain incredible early-game land velocity or late-game card filtering. The creature package is perfectly curated to trigger your <strong>jaw-dropping casual card advantage</strong> engines.
-          <ul>
-             <li><strong>The Beast Whisperer Package:</strong> Massive draw engines like <strong>The Great Henge</strong>, <strong>Tribute to the World Tree</strong>, <strong>Elemental Bond</strong>, and <strong>Beast Whisperer</strong> turn every creature into a cantrip.</li>
-             <li><strong>Power-Based Draw Synergy:</strong> High-power threats perfectly feed <strong>Greater Good</strong>, <strong>Momentous Fall</strong>, and <strong>Return of the Wildspeaker</strong>, allowing you to draw 5 to 10+ cards at instant speed in response to removal.</li>
-             <li><strong>Flash & Cheat Synergies:</strong> The inclusion of <strong>Yeva, Nature's Herald</strong>, <strong>Vedalken Orrery</strong>, and <strong>Kodama of the East Tree</strong> means you can break the fundamental rules of turn structure, deploying your entire hand on an opponent's end step to completely bypass sorcery-speed board wipes.</li>
-          </ul>
-        </div>
-      </div>
 
-      <div class="pillar-card">
-        <div class="pillar-header">
-          <span class="pillar-name">2. Interaction & Board Control</span>
-          <span class="pillar-score">7 / 10</span>
-        </div>
-        <div class="pillar-desc">
-          For a Mono-Green deck, your interaction suite is incredibly versatile, leaning heavily into proactive, repeatable creature-based control rather than standard instants.
-          <ul>
-             <li><strong>Fight & Removal Engines:</strong> <strong>Kogla, the Titan Ape</strong> provides an immediate, uncounterable ETB removal spell that doubles as repeatable artifact/enchantment destruction. <strong>Ulvenwald Tracker</strong> turns your massive beaters into repeatable target removal, while <strong>Duplicant</strong> and <strong>Terastodon</strong> handle pesky non-land permanents or indestructible threats.</li>
-             <li><strong>The Sniper Package:</strong> <strong>Silklash Spider</strong> acts as an impassable wall against flying decks, giving you a repeatable, asymmetrical board wipe against fliers.</li>
-             <li><strong>Silver Bullets:</strong> <strong>Spike Weaver</strong> provides an inescapable combat lock that can stall out aggressive opponents for multiple turns, and <strong>Archdruid's Charm</strong> offers brilliant instant-speed flexibility as a bite spell, artifact/enchantment removal, or a crucial land/creature tutor.</li>
-          </ul>
-        </div>
-      </div>
+        <div class="right-col">
+            <div class="meta-table-card">
+                <table class="meta-table">
+                    <tr>
+                        <td class="meta-label">Commander</td>
+                        <td class="meta-val">Loot, Exuberant Explorer</td>
+                    </tr>
+                    <tr>
+                        <td class="meta-label">Archetype</td>
+                        <td class="meta-val">Mono-Green Stompy / Big Mana</td>
+                    </tr>
+                    <tr>
+                        <td class="meta-label">Turn to Win</td>
+                        <td class="meta-val">Turns 5 - 6 (Uninterrupted)</td>
+                    </tr>
+                    <tr>
+                        <td class="meta-label">Decklist Link</td>
+                        <td class="meta-val"><a href="https://archidekt.com/decks/22293905/bill_deck_loot" target="_blank">Archidekt Link</a></td>
+                    </tr>
+                </table>
+            </div>
 
-      <div class="pillar-card">
-        <div class="pillar-header">
-          <span class="pillar-name">3. Consistency & Tutors</span>
-          <span class="pillar-score">8 / 10</span>
+            <div class="summary-callout">
+                <h3>Executive Summary</h3>
+                <p>This is a high-velocity Mono-Green Stompy and Big Mana deck built around a heavy creature-based engine. The deck utilizes explosive mana-generation tools like <strong>Gaea's Cradle</strong>, <strong>Karametra's Acolyte</strong>, and <strong>Selvala, Heart of the Wilds</strong> to out-ramp the table and deploy massive, high-impact threats. <strong>Loot, Exuberant Explorer</strong> acts as a reliable mid-game value engine, dropping lands into play and digging for additional threats or card draw. The primary path to victory is traditional combat damage, utilizing lethal over-run effects like <strong>Craterhoof Behemoth</strong>, <strong>Kamahl, Fist of Krosa</strong>, and <strong>Zopandrel, Hunger Dominus</strong> to turn a wide board of mana dorks and utility creatures into an unstoppable, lethal army in a single turn.</p>
+            </div>
         </div>
-        <div class="pillar-desc">
-          The deck is remarkably consistent due to its redundant card-draw engines and high-quality tutoring package, ensuring you can grab the exact piece you need to answer a threat or win the game.
-          <ul>
-             <li><strong>Elite Creature Tutors:</strong> <strong>Green Sun's Zenith</strong> and <strong>Chord of Calling</strong> let you pull utility creatures or finishers straight to the battlefield. <strong>Natural Order</strong> is an absolute powerhouse here, sacrificing a small token or utility creature to drop a game-ending threat like <strong>Craterhoof Behemoth</strong> or <strong>Apex Devastator</strong> as early as turn 4.</li>
-             <li><strong>The Ultimate Tool:</strong> <strong>Tooth and Nail</strong> is your primary silver bullet, allowing you to pay the entwine cost to immediately assemble game-winning pairs directly onto the battlefield.</li>
-             <li><strong>Late-Game Recovery:</strong> If your engines are disrupted, <strong>Praetor's Counsel</strong> and <strong>Eternal Witness</strong> provide massive recursion, completely refilling your hand with every single resource you used in the early game.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="pillar-card">
-        <div class="pillar-header">
-          <span class="pillar-name">4. Speed & Mana Base</span>
-          <span class="pillar-score">9 / 10</span>
-        </div>
-        <div class="pillar-desc">
-          Your mana base and acceleration package are exceptionally well-optimized for a high-power casual list. The decision to run a <strong>Snow-Covered Forest</strong> package allows you to maximize high-upside utilities like <strong>Scrying Sheets</strong> and <strong>Extraplanar Lens</strong> for asymmetric mana doubling.
-          <ul>
-             <li><strong>God-Tier Utility Lands:</strong> the inclusion of <strong>Gaea's Cradle</strong> and <strong>Nykthos, Shrine to Nyx</strong> gives this deck a competitive-level speed boost, capable of generating 10+ mana from a single land template. <strong>Yavimaya Hollow</strong> provides elite protection for your key creatures.</li>
-             <li><strong>Explosive Creature Ramp:</strong> <strong>Selvala, Heart of the Wilds</strong>, <strong>Fanatic of Rhonas</strong>, and <strong>Karametra's Acolyte</strong> scale exponentially with your high-power creatures, turning single turns into massive, 20+ mana explosive plays.</li>
-             <li><strong>Cost Reducers:</strong> <strong>Throne of Eldraine</strong>, <strong>Emerald Medallion</strong>, and <strong>Goreclaw, Terror of Qal Sisma</strong> significantly lower your curve, allowing you to chain multiple 5+ drop creatures together effortlessly.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="pillar-card">
-        <div class="pillar-header">
-          <span class="pillar-name">5. Win Conditions & Closeness to "Infinite"</span>
-          <span class="pillar-score">8 / 10</span>
-        </div>
-        <div class="pillar-desc">
-          This deck features a terrifyingly lethal closing package. True to your deck-building philosophy, <strong>the deck completely avoids infinite combos</strong>, relying instead on overwhelming combat steps and unstoppable, heavy-hitting damage multipliers.
-          <ul>
-             <li><strong>The Overrun Finishers:</strong> <strong>Craterhoof Behemoth</strong> remains the king of casual finishers, routinely providing a <strong>table-shattering lethal stampede</strong> when paired with a moderate board state. <strong>Kamahl, Fist of Krosa</strong> acts as a brilliant, repeatable mana-sink overrun alternative that can also animate opponents' lands in response to a board wipe to deter sweeps.</li>
-             <li><strong>Damage Multipliers:</strong> <strong>Zopandrel, Hunger Dominus</strong> instantly doubles your entire board's power and toughness every single combat, turning mid-sized utility creatures into lethal threats.</li>
-             <li><strong>Keywords & Enablers:</strong> <strong>Akroma's Memorial</strong> grants your massive green army haste and flying, completely eliminating the weakness of summoning sickness and allowing for immediate, lethal alpha strikes the turn your creatures hit the board.</li>
-          </ul>
-        </div>
-      </div>
     </div>
-  </div>
 
+    <div class="pillar-section">
+        <div class="pillar-card">
+            <div class="pillar-header">
+                <div class="pillar-title">1. Synergy & Engine</div>
+                <div class="pillar-score">8.5 / 10</div>
+            </div>
+            <p>The deck functions as a cohesive ecosystem where mana generation and card advantage are tightly interwoven. <strong>Loot, Exuberant Explorer</strong> synergizes well with the 31 <strong>Snow-Covered Forest</strong> lands, ensuring its land-drop ability hits consistently while its upkeep trigger digs deeper into the library.</p>
+            <ul>
+                <li><strong>The Draw Engines:</strong> Mass draw spells like <strong>Greater Good</strong>, <strong>Return of the Wildspeaker</strong>, <strong>Momentous Fall</strong>, and <strong>Regal Force</strong> capitalize on high-power creatures to refill your hand instantly, preventing the deck from running out of steam.</li>
+                <li><strong>Creature Storm Loops:</strong> Permanent-based value engines such as <strong>The Great Henge</strong>, <strong>Tribute to the World Tree</strong>, <strong>Elemental Bond</strong>, and <strong>Beast Whisperer</strong> turn every subsequent creature spell into a self-replacing cantrip or better.</li>
+                <li><strong>Implicit Synergies:</strong> <strong>Goreclaw, Terror of Qal Sisma</strong> and <strong>Defiler of Vigor</strong> act as strong enablers, lowering the structural casting cost of your high-end threats while simultaneously pumping the team.</li>
+            </ul>
+        </div>
+
+        <div class="pillar-card">
+            <div class="pillar-header">
+                <div class="pillar-title">2. Interaction & Board Control</div>
+                <div class="pillar-score">5.0 / 10</div>
+            </div>
+            <p>While highly proactive, interaction is the clear weak point of this build. The deck relies almost exclusively on creature-based fight or bite mechanics and high-cost utility spells, leaving it vulnerable to fast combo strategies or non-creature permanents.</p>
+            <ul>
+                <li><strong>Targeted Removal:</strong> <strong>Kogla, the Titan Ape</strong> and <strong>Ulvenwald Tracker</strong> handle opposing creature threats effectively by leveraging your creatures' massive power stats, while <strong>Silverback Elder</strong> handles artifacts and enchantments upon casting creatures.</li>
+                <li><strong>Massive Cleaners:</strong> <strong>Terastodon</strong> acts as a catch-all answer for problematic lands, planeswalkers, or artifacts, while <strong>Silklash Spider</strong> handles flying sweeps.</li>
+                <li><strong>Stack/Board Protection:</strong> <strong>Heroic Intervention</strong> is your lone true piece of instant-speed stack protection against board wipes. The lack of low-cost, instant-speed interactions makes the deck vulnerable to faster, more interactive opponents.</li>
+            </ul>
+        </div>
+
+        <div class="pillar-card">
+            <div class="pillar-header">
+                <div class="pillar-title">3. Consistency & Tutors</div>
+                <div class="pillar-score">8.0 / 10</div>
+            </div>
+            <p>Mono-Green excels at locating exactly what it needs, and this deck utilizes a premier selection of creature-focused tutors to guarantee consistent execution of its game plan.</p>
+            <ul>
+                <li><strong>The Tutor Suite:</strong> <strong>Green Sun's Zenith</strong>, <strong>Chord of Calling</strong>, and <strong>Natural Order</strong> allow you to cheat key utility pieces or silver-bullet answers directly into play at minimal cost.</li>
+                <li><strong>Game-Enders:</strong> <strong>Tooth and Nail</strong> serves as a direct 9-mana tutor payload that wins the game on the spot by fetching lethal two-card combinations (e.g., <strong>Craterhoof Behemoth</strong> + <strong>Avenger of Zendikar</strong>).</li>
+                <li><strong>Recursion:</strong> <strong>Eternal Witness</strong> and <strong>Praetor's Counsel</strong> offer powerful graveyard insurance, with the latter resetting your entire graveyard back into your hand to completely out-grind opponents in prolonged matches.</li>
+            </ul>
+        </div>
+
+        <div class="pillar-card">
+            <div class="pillar-header">
+                <div class="pillar-title">4. Speed & Mana Base</div>
+                <div class="pillar-score">9.0 / 10</div>
+            </div>
+            <p>The mana base and ramp package are highly optimized, allowing the deck to jump from 3 mana to 8+ mana with incredible speed.</p>
+            <ul>
+                <li><strong>Explosive Lands:</strong> The inclusion of <strong>Gaea's Cradle</strong>, <strong>Nykthos, Shrine to Nyx</strong>, and <strong>Castle Garenbrig</strong> ensures that your land base scales exponentially based on your board presence.</li>
+                <li><strong>High-Octane Acceleration:</strong> <strong>Selvala, Heart of the Wilds</strong>, <strong>Karametra's Acolyte</strong>, and <strong>Fanatic of Rhonas</strong> generate massive bursts of mana based on devotion or high power stats, which can then be funneled into X-spells like <strong>Genesis Wave</strong>.</li>
+                <li><strong>Mana Doublers:</strong> <strong>Extraplanar Lens</strong> paired with <strong>Snow-Covered Forest</strong> inputs an asymmetrical doubling engine that leaves opponents behind without accelerating their mana bases.</li>
+            </ul>
+        </div>
+
+        <div class="pillar-card">
+            <div class="pillar-header">
+                <div class="pillar-title">5. Win Conditions & Closeness to Infinite</div>
+                <div class="pillar-score">7.0 / 10</div>
+            </div>
+            <p>The deck relies on overwhelming combat damage rather than complex, dedicated infinite-loop combos. However, its raw damage output is so high that it functions similarly to a combo finish.</p>
+            <ul>
+                <li><strong>Overwhelming Combat:</strong> <strong>Craterhoof Behemoth</strong> paired with a developed board is the definitive finisher. <strong>Zopandrel, Hunger Dominus</strong> and <strong>Kamahl, Fist of Krosa</strong> serve as repeatable, high-damage alternatives that turn modest boards into lethal combat steps.</li>
+                <li><strong>Massive Cheat Effects:</strong> <strong>Apex Devastator</strong> and <strong>Ghalta, Stampede Tyrant</strong> dump vast chunks of power onto the battlefield in a single turn, forcing immediate answers or causing swift deaths on the subsequent combat step.</li>
+                <li><strong>Infinite Potential:</strong> While explicit infinite mana loops (like Ashaya lines) are absent, cards like <strong>Seedborn Muse</strong> paired with <strong>Yeva, Nature's Herald</strong> or <strong>Vedalken Orrery</strong> allow you to play completely on your opponents' turns, effectively multiplying your available mana and turns by four.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    const toggleBtn = document.getElementById('themeToggle');
+    toggleBtn.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        if (currentTheme === 'light') {
+            document.documentElement.removeAttribute('data-theme');
+            toggleBtn.textContent = '☀️ Light Mode';
+        } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            toggleBtn.textContent = '🌙 Dark Mode';
+        }
+    });
+</script>
 </body>
 </html>
